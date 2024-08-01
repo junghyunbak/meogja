@@ -1,4 +1,4 @@
-import { type Server } from "miragejs";
+import { type Server } from 'miragejs';
 
 declare global {
   interface Window {

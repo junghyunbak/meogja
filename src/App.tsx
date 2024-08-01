@@ -1,10 +1,10 @@
-import { useEffect, useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
-import "./App.css";
+import { useEffect, useState } from 'react';
+import reactLogo from './assets/react.svg';
+import viteLogo from '/vite.svg';
+import './App.css';
 
-import { MockApiService } from "./mocking";
-import axios from "axios";
+import { MockApiService } from './mocking';
+import axios from 'axios';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -13,21 +13,21 @@ function App() {
     new MockApiService().register();
 
     (async () => {
-      let userId = localStorage.getItem("userId");
+      let userId = localStorage.getItem('userId');
 
       if (!userId) {
         const {
           data: {
             data: { id },
           },
-        } = await axios.post<ResponseTemplate<{ id: string }>>("/api/join");
+        } = await axios.post<ResponseTemplate<{ id: string }>>('/api/join');
 
         userId = id;
       }
 
-      localStorage.setItem("userId", userId);
+      localStorage.setItem('userId', userId);
 
-      await axios.get("/api/chk-user-id", { params: { userId } });
+      await axios.get('/api/chk-user-id', { params: { userId } });
     })();
   }, []);
 

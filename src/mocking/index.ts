@@ -1,11 +1,11 @@
-import { createServer } from "miragejs";
-import { LOCALSTORAGE_DUMP_KEY } from "@/constants";
-import { GET } from "./get";
-import { POST } from "./post";
+import { createServer } from 'miragejs';
+import { LOCALSTORAGE_DUMP_KEY } from '@/constants';
+import { GET } from './get';
+import { POST } from './post';
 
 export class MockApiService {
   register() {
-    console.log("[miragejs] mock api 활성화");
+    console.log('[miragejs] mock api 활성화');
 
     if (window.server) {
       window.server.shutdown();
@@ -17,10 +17,10 @@ export class MockApiService {
         POST(this);
 
         this.pretender.handledRequest = (verb) => {
-          if (verb === "POST") {
+          if (verb === 'POST') {
             localStorage.setItem(
               LOCALSTORAGE_DUMP_KEY,
-              JSON.stringify(server.db.dump()),
+              JSON.stringify(server.db.dump())
             );
           }
         };
@@ -28,7 +28,7 @@ export class MockApiService {
     });
 
     const dumpData = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_DUMP_KEY) || "{}",
+      localStorage.getItem(LOCALSTORAGE_DUMP_KEY) || '{}'
     );
 
     const defaultData: { room: RoomInfo } = {
@@ -47,7 +47,7 @@ export class MockApiService {
     };
 
     server.db.loadData(
-      Object.keys(dumpData).length !== 0 ? dumpData : defaultData,
+      Object.keys(dumpData).length !== 0 ? dumpData : defaultData
     );
 
     window.server = server;

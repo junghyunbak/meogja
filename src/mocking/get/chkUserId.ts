@@ -1,7 +1,7 @@
-import { type Server, Response } from "miragejs";
+import { type Server, Response } from 'miragejs';
 
 export const chkUserId = function (this: Server) {
-  this.get("/api/chk-user-id", (schema, request) => {
+  this.get('/api/chk-user-id', (schema, request) => {
     const {
       queryParams: { userId },
     } = request;

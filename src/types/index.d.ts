@@ -4,14 +4,14 @@ type UserName = string;
 type RestaurantId = string;
 
 type RestaurantKind =
-  | "korean"
-  | "western"
-  | "japan"
-  | "snack"
-  | "pizza"
-  | "chinese"
-  | "hamburger"
-  | "chicken";
+  | 'korean'
+  | 'western'
+  | 'japan'
+  | 'snack'
+  | 'pizza'
+  | 'chinese'
+  | 'hamburger'
+  | 'chicken';
 
 type Restaurant = {
   id: RestaurantId;
@@ -25,7 +25,7 @@ type Restaurant = {
 type Chat = {
   id: string;
   date: number;
-  type: "notice" | "message";
+  type: 'notice' | 'message';
   content: string;
   userId?: UserId; // type이 message인 경우에만 포함
 };

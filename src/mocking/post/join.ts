@@ -1,9 +1,9 @@
-import { NICKNAME_ADJECTIVE, NICKNAME_NOUN } from "@/constants";
-import { v4 as uuidv4 } from "uuid";
-import { type Server, Response } from "miragejs";
+import { NICKNAME_ADJECTIVE, NICKNAME_NOUN } from '@/constants';
+import { v4 as uuidv4 } from 'uuid';
+import { type Server, Response } from 'miragejs';
 
 export const join = function (this: Server) {
-  this.post("/api/join", (schema) => {
+  this.post('/api/join', (schema) => {
     const state = schema.db.room[0] as RoomInfo;
 
     if (Object.keys(state.user).length === state.capacity) {
@@ -15,7 +15,7 @@ export const join = function (this: Server) {
       NICKNAME_ADJECTIVE[
         Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)
       ] +
-      " " +
+      ' ' +
       NICKNAME_NOUN[Math.floor(Math.random() * NICKNAME_NOUN.length)];
 
     const newUser: User = {
