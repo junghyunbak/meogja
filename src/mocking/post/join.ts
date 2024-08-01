@@ -1,4 +1,4 @@
-import { NICKNAME_ADJECTIVE, NICKNAME_NOUN } from "../../constants";
+import { NICKNAME_ADJECTIVE, NICKNAME_NOUN } from "@/constants";
 import { v4 as uuidv4 } from "uuid";
 import { type Server, Response } from "miragejs";
 

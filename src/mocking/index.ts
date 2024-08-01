@@ -1,5 +1,5 @@
 import { createServer } from "miragejs";
-import { LOCALSTORAGE_DUMP_KEY } from "../constants";
+import { LOCALSTORAGE_DUMP_KEY } from "@/constants"
 import { GET } from "./get";
 import { POST } from "./post";
 
