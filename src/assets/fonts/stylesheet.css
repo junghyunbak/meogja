@@ -1,0 +1,34 @@
+@font-face {
+  font-family: "pretendard";
+  src: url("./Pretendard-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "pretendard";
+  src: url("./Pretendard-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "pretendard";
+  src: url("./Pretendard-SemiBold.ttf") format("truetype");
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "sebang";
+  src: url("./SEBANG-Gothic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "sebang";
+  src: url("./SEBANG-Gothic-Bold.ttf") format("truetype");
+  font-weight: bold;
+  font-style: normal;
+}
