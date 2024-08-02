@@ -12,9 +12,13 @@ export function Home() {
           함께하고 싶은 <span className="font-bold text-primary">식당</span>을
           다같이 골라보세요.
         </p>
-        <div className="flex w-full items-center justify-center rounded bg-primary py-2 text-white">
+        <div className="flex w-full cursor-pointer items-center justify-center rounded bg-primary py-2 text-white">
           시작하기
         </div>
+
+        <p className="text-xs text-gray-400">
+          또는 아래로 스크롤하여 사용법 읽기
+        </p>
       </div>
 
       <AutoPlayFD reverse />
