@@ -31,8 +31,8 @@ export class MockApiService {
       localStorage.getItem(LOCALSTORAGE_DUMP_KEY) || '{}'
     );
 
-    const defaultData: { room: RoomInfo } = {
-      room: {
+    const defaultData: { '0': RoomInfo } = {
+      '0': {
         lat: 30,
         lng: 30,
         endTime: new Date(Date.now() + 1000 * 60).getTime(),
