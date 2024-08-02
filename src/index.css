@@ -6,14 +6,6 @@
   @apply font-sebang text-[16px] max-md:text-[14px];
 }
 
-html {
-  @apply size-full;
-}
-
 body {
-  @apply mx-auto h-full max-w-[600px] p-0;
-}
-
-#root {
-  @apply flex size-full items-center justify-center;
+  @apply p-0;
 }
