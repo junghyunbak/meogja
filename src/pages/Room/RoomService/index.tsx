@@ -1,13 +1,15 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
+import { Header } from './_components/Header';
 
 interface RoomServiceProps {
   roomId: string;
+  userId: string;
 }
 
-export function RoomService({ roomId }: RoomServiceProps) {
+export function RoomService({ roomId, userId }: RoomServiceProps) {
   const { data } = useQuery({
-    queryKey: [],
+    queryKey: ['room-service', roomId],
     queryFn: async () => {
       const {
         data: { data },
@@ -24,7 +26,11 @@ export function RoomService({ roomId }: RoomServiceProps) {
     return null;
   }
 
-  console.log('서버 상태', data);
+  const userName = data.user[userId];
 
-  return <div>{`방: ${roomId}`}</div>;
+  return (
+    <div>
+      <Header userName={userName} userId={userId} roomId={roomId} />
+    </div>
+  );
 }

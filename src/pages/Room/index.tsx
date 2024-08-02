@@ -6,8 +6,13 @@ import { RoomService } from './RoomService';
 export function Room() {
   const { roomId } = useParams();
 
-  const { isLoading, isError, error } = useQuery({
-    queryKey: [],
+  const {
+    data: userId,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ['join-room'],
     queryFn: async () => {
       if (!roomId) {
         return;
@@ -42,6 +47,8 @@ export function Room() {
        * 3. 접속에 성공했을경우 식별자를 초기화
        */
       localStorage.setItem(roomId, userId);
+
+      return userId;
     },
     onError(err) {
       if (!roomId || !(err instanceof AxiosError)) {
@@ -57,7 +64,7 @@ export function Room() {
     },
   });
 
-  if (!roomId) {
+  if (!roomId || !userId) {
     return null;
   }
 
@@ -75,5 +82,5 @@ export function Room() {
     return <div>로딩중입니다.</div>;
   }
 
-  return <RoomService roomId={roomId} />;
+  return <RoomService roomId={roomId} userId={userId} />;
 }

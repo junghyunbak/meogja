@@ -1,4 +1,4 @@
-import Logo from '@/assets/svgs/Logo.svg?react';
+import Logo from '@/assets/svgs/logo.svg?react';
 import { AutoPlayFD } from '@/components/molecule/AutoPlayFD';
 import { useNavigate } from 'react-router-dom';
 

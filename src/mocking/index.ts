@@ -2,6 +2,7 @@ import { createServer } from 'miragejs';
 import { LOCALSTORAGE_DUMP_KEY } from '@/constants';
 import { GET } from './get';
 import { POST } from './post';
+import { PATCH } from './patch';
 
 export class MockApiService {
   register() {
@@ -15,9 +16,10 @@ export class MockApiService {
       routes: function () {
         GET(this);
         POST(this);
+        PATCH(this);
 
         this.pretender.handledRequest = (verb) => {
-          if (verb === 'POST') {
+          if (verb !== 'GET') {
             localStorage.setItem(
               LOCALSTORAGE_DUMP_KEY,
               JSON.stringify(server.db.dump())
