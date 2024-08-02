@@ -3,6 +3,7 @@ import { LOCALSTORAGE_DUMP_KEY } from '@/constants';
 import { GET } from './get';
 import { POST } from './post';
 import { PATCH } from './patch';
+import mockRestaurants from './restaurants.json';
 
 export class MockApiService {
   register() {
@@ -33,13 +34,26 @@ export class MockApiService {
       localStorage.getItem(LOCALSTORAGE_DUMP_KEY) || '{}'
     );
 
+    const restaurants: Restaurant[] = [];
+
+    mockRestaurants.documents.forEach((document) => {
+      restaurants.push({
+        id: document.id,
+        category: 'pizza',
+        name: document.place_name,
+        lat: +document.x,
+        lng: +document.y,
+        placeUrl: document.place_url,
+      });
+    });
+
     const defaultData: { '0': RoomInfo } = {
       '0': {
-        lat: 30,
-        lng: 30,
-        endTime: new Date(Date.now() + 1000 * 60).getTime(),
+        lat: 33.450701,
+        lng: 126.570667,
+        endTime: new Date(Date.now() + 1000 * 60 * 60).getTime(),
         radius: 1000,
-        restaurants: [],
+        restaurants,
         select: {},
         picky: {},
         chats: [],
