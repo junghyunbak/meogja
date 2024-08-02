@@ -2,8 +2,8 @@ import { NICKNAME_ADJECTIVE, NICKNAME_NOUN } from '@/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { type Server, Response } from 'miragejs';
 
-export const join = function (this: Server) {
-  this.post('/api/join', (schema, request) => {
+export const joinRoom = function (this: Server) {
+  this.post('/api/join-room', (schema, request) => {
     const { requestBody } = request;
 
     const { roomId } = JSON.parse(requestBody);

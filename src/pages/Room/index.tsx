@@ -43,16 +43,19 @@ export function Room() {
           data: {
             data: { id },
           },
-        } = await axios.post<ResponseTemplate<{ id: string }>>('/api/join', {
-          roomId,
-        });
+        } = await axios.post<ResponseTemplate<{ id: string }>>(
+          '/api/join-room',
+          {
+            roomId,
+          }
+        );
 
         userId = id;
       } else {
         /**
          * 2-2. 첫 접속이 아니라면 식별자 유효성 검사
          */
-        await axios.get('/api/chk-user-id', { params: { userId, roomId } });
+        await axios.get('/api/check-user-id', { params: { userId, roomId } });
       }
 
       /**
