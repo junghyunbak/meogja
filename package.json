@@ -20,7 +20,8 @@
     "react-router-dom": "^6.26.0",
     "react-slick": "^0.30.2",
     "slick-carousel": "^1.8.1",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "zustand": "^4.5.4"
   },
   "devDependencies": {
     "@types/navermaps": "^3.7.5",
