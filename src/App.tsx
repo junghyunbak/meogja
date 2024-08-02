@@ -1,9 +1,7 @@
 import { useEffect } from 'react';
-import Logo from '@/assets/svgs/Logo.svg?react';
-import './App.css';
-
 import { MockApiService } from './mocking';
 import axios from 'axios';
+import { Home } from './pages/Home';
 
 function App() {
   useEffect(() => {
@@ -28,18 +26,7 @@ function App() {
     })();
   }, []);
 
-  return (
-    <div className="flex flex-col items-center gap-8">
-      <Logo className="text-bg" />
-      <p>
-        함께하고 싶은 <span className="font-bold text-primary">식당</span>을
-        다같이 골라보세요.
-      </p>
-      <div className="flex w-full items-center justify-center rounded bg-primary py-2 text-white">
-        시작하기
-      </div>
-    </div>
-  );
+  return <Home />;
 }
 
 export default App;
