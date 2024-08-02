@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { Header } from './_components/Header';
 import { useContext } from 'react';
 import { IdentifierContext } from '..';
+import { Timer } from './_components/Timer';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
@@ -18,7 +19,7 @@ export function RoomService() {
 
       return data;
     },
-    refetchInterval: 10000,
+    refetchInterval: 1000,
   });
 
   if (!data) {
@@ -26,10 +27,19 @@ export function RoomService() {
   }
 
   const userName = data.user[userId];
+  const endTime = data.endTime;
+
+  if (endTime < Date.now()) {
+    return <div>사용이 종료되었습니다.</div>;
+  }
 
   return (
-    <div>
-      <Header userName={userName} userId={userId} roomId={roomId} />
+    <div className="relative size-full">
+      <Header userName={userName} />
+
+      <div className="absolute bottom-3 left-3">
+        <Timer endTime={endTime} />
+      </div>
     </div>
   );
 }

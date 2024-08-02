@@ -4,6 +4,7 @@ import React, {
   useRef,
   useState,
   useContext,
+  memo,
 } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
@@ -15,7 +16,7 @@ interface HeaderProps {
   userName: string;
 }
 
-export function Header({ userName }: HeaderProps) {
+export const Header = memo(({ userName }: HeaderProps) => {
   const [myName, setMyName] = useState(userName);
   const [isEdit, setIsEdit] = useState(false);
 
@@ -117,7 +118,7 @@ export function Header({ userName }: HeaderProps) {
       <div className="w-9" />
     </div>
   );
-}
+});
 
 interface AutoSizeInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}
