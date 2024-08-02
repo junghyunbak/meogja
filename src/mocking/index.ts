@@ -41,8 +41,8 @@ export class MockApiService {
         id: document.id,
         category: 'pizza',
         name: document.place_name,
-        lat: +document.x,
-        lng: +document.y,
+        lat: +document.y,
+        lng: +document.x,
         placeUrl: document.place_url,
       });
     });
