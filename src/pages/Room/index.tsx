@@ -42,14 +42,32 @@ export function Room() {
        */
       localStorage.setItem(roomId, userId);
     },
+    onError(err) {
+      if (!roomId || !(err instanceof AxiosError)) {
+        return;
+      }
+
+      /**
+       * 잘못된 접근으로 인한 에러 시, 해당 방의 사용자 식별자 제거
+       */
+      if (err.response?.status === 401) {
+        localStorage.removeItem(roomId);
+      }
+    },
   });
 
   if (isError) {
-    return <div>{error instanceof AxiosError && error.message}</div>;
+    if (error instanceof AxiosError && error.response?.status === 403) {
+      return <div>접속 가능한 방 최대인원을 초과하였습니다.</div>;
+    }
+
+    if (error instanceof AxiosError && error.response?.status === 401) {
+      return <div>잘못된 접근입니다.</div>;
+    }
   }
 
   if (isLoading) {
-    return <div>로딩중</div>;
+    return <div>로딩중입니다.</div>;
   }
 
   return <div>{roomId}</div>;
