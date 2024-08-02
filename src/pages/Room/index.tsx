@@ -1,6 +1,7 @@
 import { useParams } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
+import { RoomService } from './RoomService';
 
 export function Room() {
   const { roomId } = useParams();
@@ -56,6 +57,10 @@ export function Room() {
     },
   });
 
+  if (!roomId) {
+    return null;
+  }
+
   if (isError) {
     if (error instanceof AxiosError && error.response?.status === 403) {
       return <div>접속 가능한 방 최대인원을 초과하였습니다.</div>;
@@ -70,5 +75,5 @@ export function Room() {
     return <div>로딩중입니다.</div>;
   }
 
-  return <div>{roomId}</div>;
+  return <RoomService roomId={roomId} />;
 }
