@@ -1,20 +1,29 @@
-import { memo, useEffect, useRef, useContext } from 'react';
+import { memo, useEffect, useContext, useState } from 'react';
 import { ImmutableRoomInfoContext } from '@/pages/Room';
+import { MapMarker } from './MapMarker';
 
 export const Map = memo(() => {
-  const mapRef = useRef<HTMLDivElement | null>(null);
+  const { lat, lng, restaurants } = useContext(ImmutableRoomInfoContext);
 
-  const { lat, lng } = useContext(ImmutableRoomInfoContext);
+  const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
-    if (!mapRef.current) {
-      return;
-    }
-
-    const map = new kakao.maps.Map(mapRef.current, {
-      center: new kakao.maps.LatLng(lat, lng),
+    const map = new naver.maps.Map('map', {
+      center: new naver.maps.LatLng(lat, lng),
     });
+
+    setMap(map);
   }, []);
 
-  return <div className="flex-1" ref={mapRef} />;
+  return (
+    <>
+      <div className="flex-1" id="map" />
+      {map &&
+        restaurants.map((restaurant) => {
+          return (
+            <MapMarker map={map} restaurant={restaurant} key={restaurant.id} />
+          );
+        })}
+    </>
+  );
 });
