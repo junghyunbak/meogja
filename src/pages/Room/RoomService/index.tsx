@@ -5,6 +5,7 @@ import { useContext } from 'react';
 import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Timer } from './_components/Timer';
 import { Map } from './_components/Map';
+import { Nav } from './_components/Nav';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
@@ -41,12 +42,13 @@ export function RoomService() {
   return (
     <div className="relative flex size-full flex-col">
       <Header userName={userName} />
+      <Nav />
+
+      <Map />
 
       <div className="absolute bottom-3 left-3">
         <Timer />
       </div>
-
-      <Map />
     </div>
   );
 }
