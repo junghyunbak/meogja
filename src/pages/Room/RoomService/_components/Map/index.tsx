@@ -4,6 +4,7 @@ import { MapMarker } from './MapMarker';
 import { MapRadius } from './MapRadius';
 
 import * as geolib from 'geolib';
+import useStore from '@/store';
 
 export const Map = memo(() => {
   const { lat, lng, restaurants, radius } = useContext(
@@ -12,17 +13,27 @@ export const Map = memo(() => {
 
   const [map, setMap] = useState<naver.maps.Map | null>(null);
 
+  const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
+
   useEffect(() => {
     const map = new naver.maps.Map('map', {
       center: new naver.maps.LatLng(lat, lng),
     });
 
+    const listener = naver.maps.Event.addListener(map, 'click', () => {
+      setRestaurantId(null);
+    });
+
     setMap(map);
+
+    return () => {
+      naver.maps.Event.removeListener(listener);
+    };
   }, []);
 
   return (
     <>
-      <div className="flex-1" id="map" />
+      <div className="size-full" id="map" />
       {map && (
         <>
           {restaurants.map((restaurant) => {

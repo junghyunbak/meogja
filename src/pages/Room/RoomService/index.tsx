@@ -6,6 +6,7 @@ import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Timer } from './_components/Timer';
 import { Map } from './_components/Map';
 import { Nav } from './_components/Nav';
+import { RestaurantCards } from './_components/RestaurantCards';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
@@ -40,14 +41,19 @@ export function RoomService() {
   }
 
   return (
-    <div className="relative flex size-full flex-col">
-      <Header userName={userName} />
-      <Nav />
+    <div className="relative flex size-full flex-col justify-between">
+      <div className="bg-red absolute inset-0">
+        <Map />
+      </div>
 
-      <Map />
+      <div className="absolute top-0 flex w-full flex-col">
+        <Header userName={userName} />
+        <Nav />
+      </div>
 
-      <div className="absolute bottom-3 left-3">
+      <div className="absolute bottom-0 z-[9999] flex w-full flex-col gap-3 p-3">
         <Timer />
+        <RestaurantCards />
       </div>
     </div>
   );

@@ -2,7 +2,7 @@ import { type StateCreator } from 'zustand';
 
 type RestaurantSlice = {
   restaurantId: string | null;
-  setRestaurantId: (restaurantId: string) => void;
+  setRestaurantId: (restaurantId: string | null) => void;
 };
 
 export const createRestaurantSlice: StateCreator<RestaurantSlice> = (

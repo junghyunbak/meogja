@@ -3,6 +3,7 @@ import { renderToString } from 'react-dom/server';
 import Chicken from '@/assets/svgs/chicken.svg?react';
 import Marker from '@/assets/svgs/marker.svg?react';
 import MarkerShadow from '@/assets/svgs/marker-shadow.svg?react';
+import useStore from '@/store';
 
 interface MapMarkerProps {
   map: naver.maps.Map;
@@ -10,6 +11,8 @@ interface MapMarkerProps {
 }
 
 export function MapMarker({ map, restaurant }: MapMarkerProps) {
+  const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
+
   useEffect(() => {
     const { lat, lng } = restaurant;
 
@@ -29,12 +32,14 @@ export function MapMarker({ map, restaurant }: MapMarkerProps) {
       },
     });
 
-    naver.maps.Event.addListener(marker, 'click', () => {
-      console.log(restaurant.name);
+    const listener = naver.maps.Event.addListener(marker, 'click', () => {
+      setRestaurantId(restaurant.id);
     });
 
     return () => {
       marker.setMap(null);
+
+      naver.maps.Event.removeListener(listener);
     };
   }, [map, restaurant]);
 

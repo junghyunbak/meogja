@@ -25,7 +25,7 @@ export const Timer = memo(() => {
   const h = Math.floor(m / 60);
 
   return (
-    <div className="rounded-md bg-primary px-4 py-3">
+    <div className="w-fit rounded-md bg-primary px-4 py-3">
       <p className="text-white">
         종료까지 남은시간{' '}
         {`${(h % 24).toString().padStart(2, '0')}:${(m % 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`}
