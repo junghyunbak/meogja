@@ -6,12 +6,15 @@ import {
   type RouteObject,
 } from 'react-router-dom';
 import { RootLayout } from './_components/RootLayout';
+import { QueryProvider } from './_components/QueryProvider';
 
 function Root() {
   return (
-    <RootLayout>
-      <Outlet />
-    </RootLayout>
+    <QueryProvider>
+      <RootLayout>
+        <Outlet />
+      </RootLayout>
+    </QueryProvider>
   );
 }
 
