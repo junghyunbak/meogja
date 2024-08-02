@@ -2,6 +2,16 @@ import { useParams } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { useQuery } from 'react-query';
 import { RoomService } from './RoomService';
+import { createContext } from 'react';
+
+type IdentifierContextValue = {
+  userId: string;
+  roomId: string;
+};
+
+export const IdentifierContext = createContext<IdentifierContextValue>(
+  {} as IdentifierContextValue
+);
 
 export function Room() {
   const { roomId } = useParams();
@@ -82,5 +92,9 @@ export function Room() {
     return <div>로딩중입니다.</div>;
   }
 
-  return <RoomService roomId={roomId} userId={userId} />;
+  return (
+    <IdentifierContext.Provider value={{ roomId, userId }}>
+      <RoomService />
+    </IdentifierContext.Provider>
+  );
 }

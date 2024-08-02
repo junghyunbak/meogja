@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Header } from './_components/Header';
+import { useContext } from 'react';
+import { IdentifierContext } from '..';
 
-interface RoomServiceProps {
-  roomId: string;
-  userId: string;
-}
+export function RoomService() {
+  const { userId, roomId } = useContext(IdentifierContext);
 
-export function RoomService({ roomId, userId }: RoomServiceProps) {
   const { data } = useQuery({
     queryKey: ['room-service', roomId],
     queryFn: async () => {

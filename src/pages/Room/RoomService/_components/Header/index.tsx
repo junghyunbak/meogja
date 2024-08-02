@@ -1,20 +1,25 @@
+import React, {
+  forwardRef,
+  useEffect,
+  useRef,
+  useState,
+  useContext,
+} from 'react';
+import axios, { AxiosError } from 'axios';
+import { useMutation } from 'react-query';
 import Logo from '@/assets/svgs/logo.svg?react';
 import Pen from '@/assets/svgs/pen.svg?react';
-import axios, { AxiosError } from 'axios';
-import React, { forwardRef, useEffect, useRef, useState } from 'react';
-import { useMutation } from 'react-query';
+import { IdentifierContext } from '@/pages/Room';
 
 interface HeaderProps {
   userName: string;
-  // [ ]: context api로 props drilling 개선하기
-  userId: string;
-  roomId: string;
 }
 
-export function Header({ userName, userId, roomId }: HeaderProps) {
+export function Header({ userName }: HeaderProps) {
   const [myName, setMyName] = useState(userName);
-
   const [isEdit, setIsEdit] = useState(false);
+
+  const { userId, roomId } = useContext(IdentifierContext);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
