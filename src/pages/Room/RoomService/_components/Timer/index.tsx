@@ -1,10 +1,9 @@
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useState, useContext } from 'react';
+import { ImmutableRoomInfoContext } from '@/pages/Room';
 
-interface TimerProps {
-  endTime: number;
-}
+export const Timer = memo(() => {
+  const { endTime } = useContext(ImmutableRoomInfoContext);
 
-export const Timer = memo(({ endTime }: TimerProps) => {
   const [remainSecond, setRemainSecond] = useState(
     Math.floor((endTime - Date.now()) / 1000)
   );

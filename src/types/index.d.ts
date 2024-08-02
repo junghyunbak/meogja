@@ -49,6 +49,13 @@ type RoomInfo = {
   user: User;
 };
 
+type MutableRoomInfo = Pick<RoomInfo, 'chats' | 'select' | 'picky' | 'user'>;
+
+type ImmutableRoomInfo = Pick<
+  RoomInfo,
+  'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants'
+>;
+
 type ResponseTemplate<T> = {
   data: T;
 };

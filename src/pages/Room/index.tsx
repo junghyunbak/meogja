@@ -13,16 +13,18 @@ export const IdentifierContext = createContext<IdentifierContextValue>(
   {} as IdentifierContextValue
 );
 
+type ImmutableRoomInfoContextValue = ImmutableRoomInfo;
+
+export const ImmutableRoomInfoContext =
+  createContext<ImmutableRoomInfoContextValue>(
+    {} as ImmutableRoomInfoContextValue
+  );
+
 export function Room() {
   const { roomId } = useParams();
 
-  const {
-    data: userId,
-    isLoading,
-    isError,
-    error,
-  } = useQuery({
-    queryKey: ['join-room'],
+  const { data, isLoading, isError, error } = useQuery({
+    queryKey: ['join-room', roomId],
     queryFn: async () => {
       if (!roomId) {
         return;
@@ -58,7 +60,17 @@ export function Room() {
        */
       localStorage.setItem(roomId, userId);
 
-      return userId;
+      /**
+       * 4. 변하지 않는 방 정보를 가져와 반환
+       */
+      const {
+        data: { data },
+      } = await axios.get<ResponseTemplate<ImmutableRoomInfo>>(
+        '/api/immutable-room-state',
+        { params: { roomId } }
+      );
+
+      return { userId, ...data };
     },
     onError(err) {
       if (!roomId || !(err instanceof AxiosError)) {
@@ -74,7 +86,7 @@ export function Room() {
     },
   });
 
-  if (!roomId || !userId) {
+  if (!data || !roomId) {
     return null;
   }
 
@@ -92,9 +104,15 @@ export function Room() {
     return <div>로딩중입니다.</div>;
   }
 
+  const { userId, capacity, lat, lng, radius, restaurants, endTime } = data;
+
   return (
-    <IdentifierContext.Provider value={{ roomId, userId }}>
-      <RoomService />
-    </IdentifierContext.Provider>
+    <ImmutableRoomInfoContext.Provider
+      value={{ capacity, lat, lng, radius, restaurants, endTime }}
+    >
+      <IdentifierContext.Provider value={{ roomId, userId }}>
+        <RoomService />
+      </IdentifierContext.Provider>
+    </ImmutableRoomInfoContext.Provider>
   );
 }

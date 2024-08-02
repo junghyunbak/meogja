@@ -2,20 +2,26 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Header } from './_components/Header';
 import { useContext } from 'react';
-import { IdentifierContext } from '..';
+import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Timer } from './_components/Timer';
+import { Map } from './_components/Map';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
+
+  const { endTime } = useContext(ImmutableRoomInfoContext);
 
   const { data } = useQuery({
     queryKey: ['room-service', roomId],
     queryFn: async () => {
       const {
         data: { data },
-      } = await axios.get<ResponseTemplate<RoomInfo>>('/api/state', {
-        params: { roomId },
-      });
+      } = await axios.get<ResponseTemplate<RoomInfo>>(
+        '/api/mutable-room-state',
+        {
+          params: { roomId },
+        }
+      );
 
       return data;
     },
@@ -27,19 +33,20 @@ export function RoomService() {
   }
 
   const userName = data.user[userId];
-  const endTime = data.endTime;
 
   if (endTime < Date.now()) {
     return <div>사용이 종료되었습니다.</div>;
   }
 
   return (
-    <div className="relative size-full">
+    <div className="relative flex size-full flex-col">
       <Header userName={userName} />
 
       <div className="absolute bottom-3 left-3">
-        <Timer endTime={endTime} />
+        <Timer />
       </div>
+
+      <Map />
     </div>
   );
 }
