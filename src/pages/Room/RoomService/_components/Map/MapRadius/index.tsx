@@ -9,8 +9,6 @@ export function MapRadius({ map }: MapRadiusProps) {
   const { lat, lng, radius } = useContext(ImmutableRoomInfoContext);
 
   useEffect(() => {
-    console.log(naver.maps.LatLngBounds);
-
     const standardLatLng = new naver.maps.LatLng(lat, lng);
 
     const latMin = 28.7905313;
