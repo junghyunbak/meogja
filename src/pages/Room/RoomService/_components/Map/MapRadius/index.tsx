@@ -34,8 +34,8 @@ export function MapRadius({ map }: MapRadiusProps) {
           new naver.maps.LatLng(latMin, lngMin),
         ],
       ],
-      fillColor: '#D1D5DB',
-      fillOpacity: 0.4,
+      fillColor: '#000000',
+      fillOpacity: 0.1,
       strokeOpacity: 0,
       strokeWeight: 1,
     });
