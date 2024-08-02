@@ -20,7 +20,7 @@ export function MapMarker({ map, restaurant }: MapMarkerProps) {
         content: renderToString(
           <div className="relative aspect-[1/1.22] w-12">
             <MarkerShadow className="absolute bottom-[-3px] left-[7px]" />
-            <Marker className="absolute left-0 top-0 text-bg" />
+            <Marker className="absolute left-0 top-0 text-bg-secondary" />
             <div className="absolute left-0 top-0 flex items-center justify-center p-2.5">
               <Chicken className="w-full" />
             </div>
