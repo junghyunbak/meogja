@@ -11,6 +11,7 @@ import { RestaurantMarker } from './_components/RestaurantMarker';
 import { MapRadius } from './_components/MapRadius';
 import { Geolocation } from './_components/Geolocation';
 import useStore from '@/store';
+import { BottomSheetModal } from './_components/BottomSheetModal';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
@@ -73,6 +74,10 @@ export function RoomService() {
         <RestaurantCards />
         <MapRadius />
         <Geolocation />
+
+        <BottomSheetModal>
+          <BottomSheetModal.Rank user={data.user} />
+        </BottomSheetModal>
 
         {restaurants.map((restaurant) => {
           return (
