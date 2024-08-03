@@ -36,9 +36,12 @@ export function RoomService() {
 
   const { userName, select } = data.user[userId];
 
+  // [ ]: 개발 중 불편하여 주석처리
+  /*
   if (endTime < Date.now()) {
     return <div>사용이 종료되었습니다.</div>;
   }
+    */
 
   return (
     <div className="relative flex size-full flex-col justify-between">
@@ -51,8 +54,10 @@ export function RoomService() {
         <Nav />
       </div>
 
-      <div className="absolute bottom-0 z-[9999] flex w-full flex-col gap-3 p-3">
-        <Timer />
+      <div className="absolute bottom-0 z-[9999] flex w-full flex-col">
+        <div className="p-3">
+          <Timer />
+        </div>
         <RestaurantCards select={select} />
       </div>
     </div>

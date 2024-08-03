@@ -4,18 +4,98 @@ import { memo, useContext, useEffect, useState } from 'react';
 import Checkbox from '@/assets/svgs/checkbox.svg?react';
 import { useMutation } from 'react-query';
 import axios from 'axios';
+import Slider from 'react-slick';
 
 interface RestaurantCardsProps {
   select: string[];
 }
 
 export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
-  const { userId, roomId } = useContext(IdentifierContext);
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
-  const [restaurantId] = useStore((state) => [state.restaurantId]);
+  const [restaurantId, setRestaurantId] = useStore((state) => [
+    state.restaurantId,
+    state.setRestaurantId,
+  ]);
 
+  const [map] = useStore((state) => [state.map]);
+
+  const [slideIndex, setSlideIndex] = useState<number>(0);
+
+  const [slides, setSlides] = useState<Restaurant[]>([]);
+
+  const handleSlideIndexChange = (slideIndex: number) => {
+    const restaurant = slides[slideIndex];
+
+    if (!restaurant) {
+      return;
+    }
+
+    const { id, lat, lng } = restaurant;
+
+    setRestaurantId(id);
+    setSlideIndex(slideIndex);
+    map?.setCenter(new naver.maps.LatLng(lat, lng));
+  };
+
+  useEffect(() => {
+    if (restaurantId === null) {
+      return;
+    }
+
+    const idx = restaurants.findIndex(({ id }) => id === restaurantId);
+
+    if (idx === -1) {
+      return;
+    }
+
+    const prev =
+      restaurants[(idx - 1 + restaurants.length) % restaurants.length];
+    const cur = restaurants[idx];
+    const next = restaurants[(idx + 1) % restaurants.length];
+
+    const tmp = [cur, next, prev];
+
+    /**
+     * 현재 슬라이드의 인덱스를 고려하여 오차 계산
+     */
+    for (let i = 0; i < slideIndex; i++) {
+      tmp.unshift(tmp.pop()!);
+    }
+
+    setSlides(tmp);
+  }, [restaurantId, slideIndex, setSlides, restaurants]);
+
+  if (!restaurantId) {
+    return null;
+  }
+
+  return (
+    <Slider
+      initialSlide={0}
+      centerMode
+      centerPadding="20px"
+      afterChange={handleSlideIndexChange}
+      arrows={false}
+    >
+      {slides.map((restaurant) => {
+        return (
+          <Card key={restaurant.id} restaurant={restaurant} select={select} />
+        );
+      })}
+    </Slider>
+  );
+});
+
+interface CardProps {
+  restaurant: Restaurant;
+  select: RestaurantId[];
+}
+
+function Card({ restaurant, select }: CardProps) {
   const [mySelect, setMySelect] = useState<string[]>([...select]);
+
+  const { userId, roomId } = useContext(IdentifierContext);
 
   const updateMySelectMutation = useMutation({
     mutationKey: [],
@@ -23,7 +103,7 @@ export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
       await axios.patch('/api/update-user-select', {
         userId,
         roomId,
-        restaurantId,
+        restaurantId: restaurant.id,
       });
     },
   });
@@ -33,20 +113,16 @@ export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
   }, [select]);
 
   const handleChooseButtonClick = () => {
-    if (!restaurantId) {
-      return;
-    }
-
     /**
      * 낙관적 처리
      */
     setMySelect((prev) => {
       const next = [...prev];
 
-      const idx = next.indexOf(restaurantId);
+      const idx = next.indexOf(restaurant.id);
 
       if (idx === -1) {
-        next.push(restaurantId);
+        next.push(restaurant.id);
       } else {
         next.splice(idx, 1);
       }
@@ -57,34 +133,30 @@ export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
     updateMySelectMutation.mutate();
   };
 
-  const restaurant = restaurants.find(({ id }) => restaurantId === id);
-
-  if (!restaurantId || !restaurant) {
-    return null;
-  }
-
   const isSelect = mySelect.includes(restaurant.id);
 
   return (
-    <div className="flex w-full gap-3 rounded-md bg-bg p-3">
-      <div
-        className="flex aspect-square h-12 cursor-pointer"
-        onClick={handleChooseButtonClick}
-      >
-        <Checkbox
-          className={[
-            'size-full',
-            isSelect ? 'text-primary' : 'text-bg-secondary',
-          ].join(' ')}
-        />
-      </div>
+    <div className="px-1.5 pb-3">
+      <div className="flex w-full gap-3 rounded-md bg-bg p-3">
+        <div
+          className="flex aspect-square h-12 cursor-pointer"
+          onClick={handleChooseButtonClick}
+        >
+          <Checkbox
+            className={[
+              'size-full',
+              isSelect ? 'text-primary' : 'text-bg-secondary',
+            ].join(' ')}
+          />
+        </div>
 
-      <div className="flex flex-col justify-between">
-        <p className="text-white">{restaurant.name}</p>
-        <p className="text-sm text-gray-400">
-          현재 내 위치로부터 떨어져 있습니다.
-        </p>
+        <div className="flex flex-col justify-between">
+          <p className="text-white">{restaurant.name}</p>
+          <p className="text-sm text-gray-400">
+            현재 내 위치로부터 떨어져 있습니다.
+          </p>
+        </div>
       </div>
     </div>
   );
-});
+}

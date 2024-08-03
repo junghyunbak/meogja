@@ -1,4 +1,4 @@
-import { memo, useEffect, useContext, useState } from 'react';
+import { memo, useEffect, useContext } from 'react';
 import { ImmutableRoomInfoContext } from '@/pages/Room';
 import { MapMarker } from './MapMarker';
 import { MapRadius } from './MapRadius';
@@ -11,7 +11,7 @@ export const Map = memo(() => {
     ImmutableRoomInfoContext
   );
 
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
+  const [map, setMap] = useStore((state) => [state.map, state.setMap]);
 
   const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
 
