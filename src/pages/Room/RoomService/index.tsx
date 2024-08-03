@@ -9,6 +9,7 @@ import { Nav } from './_components/Nav';
 import { RestaurantCards } from './_components/RestaurantCards';
 import { RestaurantMarker } from './_components/RestaurantMarker';
 import { MapRadius } from './_components/MapRadius';
+import { Geolocation } from './_components/Geolocation';
 import useStore from '@/store';
 
 export function RoomService() {
@@ -68,8 +69,10 @@ export function RoomService() {
         <div className="p-3">
           <Timer />
         </div>
+
         <RestaurantCards />
         <MapRadius />
+        <Geolocation />
 
         {restaurants.map((restaurant) => {
           return (

@@ -5,16 +5,19 @@ import { devtools } from 'zustand/middleware';
 import { createRestaurantSlice } from './slices/restaurant';
 import { createMapSlice } from './slices/map';
 import { createMySelectSlice } from './slices/mySelect';
+import { createMyLatLngSlice } from './slices/myLatLng';
 
 export type StoreState = ReturnType<typeof createRestaurantSlice> &
   ReturnType<typeof createMapSlice> &
-  ReturnType<typeof createMySelectSlice>;
+  ReturnType<typeof createMySelectSlice> &
+  ReturnType<typeof createMyLatLngSlice>;
 
 const useStoreBase = create<StoreState>()(
   devtools((...a) => ({
     ...createRestaurantSlice(...a),
     ...createMapSlice(...a),
     ...createMySelectSlice(...a),
+    ...createMyLatLngSlice(...a),
   }))
 );
 
