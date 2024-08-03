@@ -5,6 +5,7 @@ import Checkbox from '@/assets/svgs/checkbox.svg?react';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import Slider from 'react-slick';
+import * as geolib from 'geolib';
 
 export const RestaurantCards = memo(() => {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
@@ -89,6 +90,8 @@ function Card({ restaurant }: CardProps) {
     state.setMySelect,
   ]);
 
+  const [myLatLng] = useStore((state) => [state.myLatLng]);
+
   const { userId, roomId } = useContext(IdentifierContext);
 
   const updateMySelectMutation = useMutation({
@@ -125,6 +128,13 @@ function Card({ restaurant }: CardProps) {
 
   const isSelect = mySelect.includes(restaurant.id);
 
+  const km = Math.floor(
+    geolib.getDistance(
+      { latitude: myLatLng.lat, longitude: myLatLng.lng },
+      { latitude: restaurant.lat, longitude: restaurant.lng }
+    ) / 1000
+  );
+
   return (
     <div className="px-1.5 pb-3">
       <div className="flex w-full gap-3 rounded-md bg-bg p-3">
@@ -143,7 +153,8 @@ function Card({ restaurant }: CardProps) {
         <div className="flex flex-col justify-between">
           <p className="text-white">{restaurant.name}</p>
           <p className="text-sm text-gray-400">
-            현재 내 위치로부터 떨어져 있습니다.
+            현재 내 위치로부터 약 <span className="text-primary">{km}km</span>
+            떨어져 있습니다.
           </p>
         </div>
       </div>
