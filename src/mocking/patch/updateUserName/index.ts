@@ -22,9 +22,13 @@ export function updateUserName(this: Server) {
       return new Response(400);
     }
 
+    const newUserInfo = { ...state.user[userId] };
+
+    newUserInfo.userName = newName;
+
     const newUser = { ...state.user };
 
-    newUser[userId] = newName;
+    newUser[userId] = newUserInfo;
 
     const newState: RoomInfo = { ...state, user: newUser };
 

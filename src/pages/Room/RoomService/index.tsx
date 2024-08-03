@@ -34,7 +34,7 @@ export function RoomService() {
     return null;
   }
 
-  const userName = data.user[userId];
+  const { userName, select } = data.user[userId];
 
   if (endTime < Date.now()) {
     return <div>사용이 종료되었습니다.</div>;
@@ -53,7 +53,7 @@ export function RoomService() {
 
       <div className="absolute bottom-0 z-[9999] flex w-full flex-col gap-3 p-3">
         <Timer />
-        <RestaurantCards />
+        <RestaurantCards select={select} />
       </div>
     </div>
   );

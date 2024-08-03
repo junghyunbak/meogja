@@ -30,11 +30,10 @@ type Chat = {
   userId?: UserId; // type이 message인 경우에만 포함
 };
 
-type Select = Record<UserId, RestaurantId[]>;
-
-type Picky = Record<UserId, RestaurantId>;
-
-type User = Record<UserId, userName>;
+type User = Record<
+  UserId,
+  { userName: UserName; select: RestaurantId[]; picky: RestaurantId | null }
+>;
 
 type RoomInfo = {
   lat: number;
@@ -44,12 +43,10 @@ type RoomInfo = {
   radius: number; // 미터(m)
   restaurants: Restaurant[];
   chats: Chat[];
-  select: Select;
-  picky: Picky;
   user: User;
 };
 
-type MutableRoomInfo = Pick<RoomInfo, 'chats' | 'select' | 'picky' | 'user'>;
+type MutableRoomInfo = Pick<RoomInfo, 'chats' | 'user'>;
 
 type ImmutableRoomInfo = Pick<
   RoomInfo,

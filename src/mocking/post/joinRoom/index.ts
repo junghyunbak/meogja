@@ -37,7 +37,7 @@ export const joinRoom = function (this: Server) {
       ...state.user,
     };
 
-    newUser[id] = nickName;
+    newUser[id] = { userName: nickName, select: [], picky: null };
 
     const newState: RoomInfo = {
       ...state,
