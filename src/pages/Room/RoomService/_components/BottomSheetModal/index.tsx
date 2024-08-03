@@ -39,7 +39,7 @@ const BottomSheetModalMain = ({ children }: ResponsiveBottomSheetProps) => {
       return;
     }
 
-    sheetRef.current?.snapTo(1);
+    sheetRef.current?.snapTo(sheetState.value === 'close' ? 2 : 1);
   }, [sheetState]);
 
   /**
