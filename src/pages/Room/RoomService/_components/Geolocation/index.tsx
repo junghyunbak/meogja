@@ -22,9 +22,17 @@ export function Geolocation({}: GeolocationProps) {
     };
 
     const updateMyLatLng = async () => {
-      const { lat, lng } = await getMyLatLng();
+      try {
+        const { lat, lng } = await getMyLatLng();
 
-      setMyLatLng(lat, lng);
+        setMyLatLng(lat, lng);
+      } catch (e) {
+        /**
+         * Promise의 잘못된 사용으로 에러가 발생할 수 있겠다고 판단되어 try-catch문 사용
+         *
+         * [ ]: Promise 코드 개선
+         */
+      }
     };
 
     updateMyLatLng();
