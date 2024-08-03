@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import useStore from '@/store';
 import { Sheet, SheetRef } from 'react-modal-sheet';
 import { BottomSheetModalRank } from './BottomSheetModalRank';
@@ -25,31 +25,22 @@ const BottomSheetModalMain = ({ children }: ResponsiveBottomSheetProps) => {
     .filter((child) => React.isValidElement(child))
     .find(({ type }) => type === sheetStateToType[sheetState]);
 
-  /**
-   * 시트 현재 상태에 따른 snap point 설정
-   *
-   * [ ]: `maximum call stack size exceeded` 에러 발생으로 비활성화
-   */
-
-  /*
   useEffect(() => {
     if (!sheetRef.current) {
       return;
     }
 
-    switch (sheetState) {
-      case 'picky':
-      case 'rank':
-      case 'select':
-        sheetRef.current.snapTo(1);
-        break;
-
-      case 'chat':
-        sheetRef.current.snapTo(0);
-        break;
+    /**
+     * "Snap point is out of bounds. Sheet height is `0` but snap point is 150"
+     *
+     * 에러를 해결하기 위해 현재 `MotionValue`가 0일 경우 snap하지 않도록 구현
+     */
+    if (!sheetRef.current.y.get()) {
+      return;
     }
+
+    sheetRef.current?.snapTo(1);
   }, [sheetState]);
-  */
 
   /**
    * react-`modal`-sheet 이지만, 항상 열어두고 snapTo로 위치만 이동하는 식으로 구현
