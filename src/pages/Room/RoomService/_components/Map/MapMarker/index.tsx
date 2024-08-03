@@ -13,18 +13,29 @@ interface MapMarkerProps {
 export function MapMarker({ map, restaurant }: MapMarkerProps) {
   const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
 
+  const [restaurantId] = useStore((state) => [state.restaurantId]);
+
   useEffect(() => {
-    const { lat, lng } = restaurant;
+    const { id, lat, lng } = restaurant;
 
     const marker = new naver.maps.Marker({
       map,
       position: new naver.maps.LatLng(lat, lng),
-      animation: naver.maps.Animation.DROP,
       icon: {
         content: renderToString(
-          <div className="relative aspect-[1/1.22] w-12 -translate-x-[50%] -translate-y-full">
+          <div
+            className={[
+              'relative aspect-[1/1.22] w-12 -translate-x-[50%] -translate-y-full',
+              restaurantId === id ? 'z-50' : '',
+            ].join(' ')}
+          >
             <MarkerShadow className="absolute bottom-[-10px] left-[30%] w-12" />
-            <Marker className="absolute left-0 top-0 text-bg-secondary" />
+            <Marker
+              className={[
+                'absolute left-0 top-0 text-bg-secondary',
+                restaurantId === id ? 'text-primary' : '',
+              ].join(' ')}
+            />
             <div className="absolute left-0 top-0 flex items-center justify-center p-2.5">
               <Chicken className="w-full" />
             </div>
@@ -46,7 +57,7 @@ export function MapMarker({ map, restaurant }: MapMarkerProps) {
 
       naver.maps.Event.removeListener(listener);
     };
-  }, [map, restaurant, setRestaurantId]);
+  }, [restaurantId, map, restaurant, setRestaurantId]);
 
   return <div>{/* MapMarker 함수 컴포넌트 */}</div>;
 }
