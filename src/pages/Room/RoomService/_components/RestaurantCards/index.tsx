@@ -70,7 +70,7 @@ export const RestaurantCards = memo(() => {
     <Slider
       initialSlide={0}
       centerMode
-      centerPadding="20px"
+      centerPadding="12px"
       afterChange={handleSlideIndexChange}
       arrows={false}
     >
@@ -137,7 +137,7 @@ function Card({ restaurant }: CardProps) {
   );
 
   return (
-    <div className="px-1.5 pb-3">
+    <div className="px-[4px] pb-3">
       <div className="flex w-full gap-3 rounded-md bg-bg p-3">
         <div
           className="flex aspect-square h-12 cursor-pointer"

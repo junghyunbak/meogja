@@ -66,7 +66,7 @@ export function RoomService() {
       </div>
 
       <div className="absolute bottom-0 z-[9999] flex w-full flex-col">
-        <div className="p-3">
+        <div className="px-[16px] pb-3">
           <Timer />
         </div>
 
