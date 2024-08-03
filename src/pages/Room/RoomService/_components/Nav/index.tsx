@@ -50,7 +50,9 @@ function NavItem({ state, title }: NavItemProps) {
 
   return (
     <div className="cursor-pointer" onClick={handleNavItemClick}>
-      <p className={`${sheetState === state ? 'text-primary' : 'text-white'}`}>
+      <p
+        className={`${sheetState.value === state ? 'text-primary' : 'text-white'}`}
+      >
         {title}
       </p>
     </div>

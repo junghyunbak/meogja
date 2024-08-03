@@ -23,7 +23,7 @@ const BottomSheetModalMain = ({ children }: ResponsiveBottomSheetProps) => {
 
   const SheetContent = React.Children.toArray(children)
     .filter((child) => React.isValidElement(child))
-    .find(({ type }) => type === sheetStateToType[sheetState]);
+    .find(({ type }) => type === sheetStateToType[sheetState.value]);
 
   useEffect(() => {
     if (!sheetRef.current) {
