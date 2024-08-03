@@ -155,6 +155,7 @@ function Card({ restaurant }: CardProps) {
           <a
             className="flex cursor-pointer items-center gap-2 text-white"
             target="_blank"
+            onDragStart={(e) => e.preventDefault()}
             href={restaurant.placeUrl}
           >
             <p>{restaurant.name}</p>
