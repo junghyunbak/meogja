@@ -1,4 +1,5 @@
 import { ImmutableRoomInfoContext } from '@/pages/Room';
+import useStore from '@/store';
 import { useContext } from 'react';
 
 interface BottomSheetModalRankProps {
@@ -7,6 +8,10 @@ interface BottomSheetModalRankProps {
 
 export function BottomSheetModalRank({ user }: BottomSheetModalRankProps) {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
+
+  const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
+
+  const [map] = useStore((state) => [state.map]);
 
   const restaurantIdToPoint: Map<
     RestaurantId,
@@ -42,7 +47,17 @@ export function BottomSheetModalRank({ user }: BottomSheetModalRankProps) {
           return (
             <li className="flex justify-around text-white" key={restaurant.id}>
               {i < 3 && <p>{i + 1}위</p>}
-              <p>{restaurant.name}</p>
+              <p
+                className="cursor-pointer"
+                onClick={() => {
+                  setRestaurantId(restaurant.id);
+                  map?.setCenter(
+                    new naver.maps.LatLng(restaurant.lat, restaurant.lng)
+                  );
+                }}
+              >
+                {restaurant.name}
+              </p>
               <p>{point}</p>
             </li>
           );

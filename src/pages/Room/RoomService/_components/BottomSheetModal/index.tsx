@@ -79,7 +79,7 @@ const BottomSheetModalMain = ({ children }: ResponsiveBottomSheetProps) => {
           </div>
         </Sheet.Header>
 
-        <Sheet.Content className="mx-[16px] bg-bg">
+        <Sheet.Content className="mx-[16px] cursor-default bg-bg">
           {SheetContent}
         </Sheet.Content>
       </Sheet.Container>
