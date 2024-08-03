@@ -25,8 +25,6 @@ export function BottomSheetModalRank({ user }: BottomSheetModalRankProps) {
     }
   }
 
-  console.log(restaurantIdToPoint);
-
   return (
     <div className="flex w-full flex-col items-center">
       <p className="text-white">실시간 순위</p>
