@@ -7,12 +7,13 @@ import useStore from '@/store';
 
 interface RestaurantMarkerProps {
   restaurant: Restaurant;
-  mySelect: RestaurantId[];
 }
 
 export const RestaurantMarker = memo(
-  ({ restaurant, mySelect }: RestaurantMarkerProps) => {
+  ({ restaurant }: RestaurantMarkerProps) => {
     const [map] = useStore((state) => [state.map]);
+
+    const [mySelect] = useStore((state) => [state.mySelect]);
 
     const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
 
@@ -37,7 +38,7 @@ export const RestaurantMarker = memo(
             <div
               className={`relative aspect-[1/1.22] -translate-x-[50%] -translate-y-full transition-all ${isActive ? 'z-50 w-14' : 'w-12'}`}
             >
-              <MarkerShadow className="w-13 absolute bottom-[-10px] left-[30%]" />
+              <MarkerShadow className="w-13 absolute bottom-[-6px] left-[40%]" />
               <Marker
                 className={`absolute left-0 top-0 text-bg-secondary ${isSelect ? 'text-primary' : isActive ? 'text-bg' : ''} ${isActive ? 'stroke-white' : ''}`}
               />

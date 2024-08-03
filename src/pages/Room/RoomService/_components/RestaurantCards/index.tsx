@@ -6,22 +6,16 @@ import { useMutation } from 'react-query';
 import axios from 'axios';
 import Slider from 'react-slick';
 
-interface RestaurantCardsProps {
-  select: string[];
-}
-
-export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
+export const RestaurantCards = memo(() => {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
   const [restaurantId, setRestaurantId] = useStore((state) => [
     state.restaurantId,
     state.setRestaurantId,
   ]);
-
   const [map] = useStore((state) => [state.map]);
 
   const [slideIndex, setSlideIndex] = useState<number>(0);
-
   const [slides, setSlides] = useState<Restaurant[]>([]);
 
   const handleSlideIndexChange = (slideIndex: number) => {
@@ -79,9 +73,7 @@ export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
       arrows={false}
     >
       {slides.map((restaurant) => {
-        return (
-          <Card key={restaurant.id} restaurant={restaurant} select={select} />
-        );
+        return <Card key={restaurant.id} restaurant={restaurant} />;
       })}
     </Slider>
   );
@@ -89,11 +81,13 @@ export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
 
 interface CardProps {
   restaurant: Restaurant;
-  select: RestaurantId[];
 }
 
-function Card({ restaurant, select }: CardProps) {
-  const [mySelect, setMySelect] = useState<string[]>([...select]);
+function Card({ restaurant }: CardProps) {
+  const [mySelect, setMySelect] = useStore((state) => [
+    state.mySelect,
+    state.setMySelect,
+  ]);
 
   const { userId, roomId } = useContext(IdentifierContext);
 
@@ -107,10 +101,6 @@ function Card({ restaurant, select }: CardProps) {
       });
     },
   });
-
-  useEffect(() => {
-    setMySelect(select);
-  }, [select]);
 
   const handleChooseButtonClick = () => {
     /**

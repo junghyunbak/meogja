@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Header } from './_components/Header';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Timer } from './_components/Timer';
 import { Map } from './_components/Map';
@@ -9,11 +9,14 @@ import { Nav } from './_components/Nav';
 import { RestaurantCards } from './_components/RestaurantCards';
 import { RestaurantMarker } from './_components/RestaurantMarker';
 import { MapRadius } from './_components/MapRadius';
+import useStore from '@/store';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
 
   const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
+
+  const [setMySelect] = useStore((state) => [state.setMySelect]);
 
   const { data } = useQuery({
     queryKey: ['room-service', roomId],
@@ -32,11 +35,19 @@ export function RoomService() {
     refetchInterval: 1000,
   });
 
+  useEffect(() => {
+    if (!data) {
+      return;
+    }
+
+    const { select } = data.user[userId];
+
+    setMySelect(select);
+  }, [data, userId, setMySelect]);
+
   if (!data) {
     return null;
   }
-
-  const { userName, select } = data.user[userId];
 
   if (endTime < Date.now()) {
     return <div>사용이 종료되었습니다.</div>;
@@ -49,7 +60,7 @@ export function RoomService() {
       </div>
 
       <div className="absolute top-0 flex w-full flex-col">
-        <Header userName={userName} />
+        <Header userName={data.user[userId].userName} />
         <Nav />
       </div>
 
@@ -57,16 +68,12 @@ export function RoomService() {
         <div className="p-3">
           <Timer />
         </div>
-        <RestaurantCards select={select} />
+        <RestaurantCards />
         <MapRadius />
 
         {restaurants.map((restaurant) => {
           return (
-            <RestaurantMarker
-              key={restaurant.id}
-              restaurant={restaurant}
-              mySelect={select}
-            />
+            <RestaurantMarker key={restaurant.id} restaurant={restaurant} />
           );
         })}
       </div>
