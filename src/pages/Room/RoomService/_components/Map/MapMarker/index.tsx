@@ -23,7 +23,7 @@ export function MapMarker({ map, restaurant }: MapMarkerProps) {
       icon: {
         content: renderToString(
           <div className="relative aspect-[1/1.22] w-12 -translate-x-[50%] -translate-y-full">
-            <MarkerShadow className="absolute bottom-[-3px] left-[7px]" />
+            <MarkerShadow className="absolute bottom-[-10px] left-[30%] w-12" />
             <Marker className="absolute left-0 top-0 text-bg-secondary" />
             <div className="absolute left-0 top-0 flex items-center justify-center p-2.5">
               <Chicken className="w-full" />
@@ -46,7 +46,7 @@ export function MapMarker({ map, restaurant }: MapMarkerProps) {
 
       naver.maps.Event.removeListener(listener);
     };
-  }, [map, restaurant]);
+  }, [map, restaurant, setRestaurantId]);
 
   return <div>{/* MapMarker 함수 컴포넌트 */}</div>;
 }
