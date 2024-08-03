@@ -66,7 +66,7 @@ const BottomSheetModalMain = ({ children }: ResponsiveBottomSheetProps) => {
       className="mx-auto max-w-[600px]"
     >
       <Sheet.Container className="!left-auto cursor-grab !bg-transparent !shadow-none active:cursor-grabbing">
-        <div className="flex h-[120px] flex-col justify-end">
+        <div className="flex h-[120px] cursor-default flex-col justify-end">
           <div className="mb-3 ml-[16px]">
             <Timer />
           </div>

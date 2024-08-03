@@ -138,7 +138,7 @@ function Card({ restaurant }: CardProps) {
 
   return (
     <div className="px-[4px] pb-3">
-      <div className="flex w-full gap-3 rounded-md bg-bg p-3">
+      <div className="flex w-full cursor-grab gap-3 rounded-md bg-bg p-3 active:cursor-grabbing">
         <div
           className="flex aspect-square h-12 cursor-pointer"
           onClick={handleChooseButtonClick}
@@ -158,7 +158,7 @@ function Card({ restaurant }: CardProps) {
             onDragStart={(e) => e.preventDefault()}
             href={restaurant.placeUrl}
           >
-            <p>{restaurant.name}</p>
+            <p className="truncate">{restaurant.name}</p>
             <Chevron className="h-3 rotate-180" />
           </a>
           <p className="text-sm text-gray-400">
