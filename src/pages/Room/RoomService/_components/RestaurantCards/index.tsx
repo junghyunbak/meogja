@@ -1,36 +1,82 @@
-import { ImmutableRoomInfoContext } from '@/pages/Room';
+import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
 import useStore from '@/store';
-import { memo, useContext } from 'react';
-import ChkboxFrame from '@/assets/svgs/chkbox-frame.svg?react';
-import Check from '@/assets/svgs/check.svg?react';
+import { useContext, useEffect, useState } from 'react';
+import Checkbox from '@/assets/svgs/checkbox.svg?react';
+import { useMutation } from 'react-query';
+import axios from 'axios';
 
-interface RestaurantCardsProps {}
+interface RestaurantCardsProps {
+  select: string[];
+}
 
-export const RestaurantCards = memo(() => {
+export const RestaurantCards = ({ select }: RestaurantCardsProps) => {
+  const { userId, roomId } = useContext(IdentifierContext);
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
   const [restaurantId] = useStore((state) => [state.restaurantId]);
 
-  const restaurantIdx = restaurants.findIndex(({ id }) => id === restaurantId);
+  const [mySelect, setMySelect] = useState<string[]>([...select]);
 
-  const restaurant = restaurants[restaurantIdx];
+  const updateMySelectMutation = useMutation({
+    mutationKey: [],
+    mutationFn: async () => {
+      await axios.patch('/api/update-user-select', {
+        userId,
+        roomId,
+        restaurantId,
+      });
+    },
+  });
 
-  const prevRestaurant = restaurants[restaurantIdx - 1];
-  const nextRestaurant = restaurants[restaurantIdx + 1];
+  useEffect(() => {
+    setMySelect(select);
+  }, [select]);
+
+  const handleChooseButtonClick = () => {
+    if (!restaurantId) {
+      return;
+    }
+
+    /**
+     * 낙관적 처리
+     */
+    setMySelect((prev) => {
+      const next = [...prev];
+
+      const idx = next.indexOf(restaurantId);
+
+      if (idx === -1) {
+        next.push(restaurantId);
+      } else {
+        next.splice(idx, 1);
+      }
+
+      return next;
+    });
+
+    updateMySelectMutation.mutate();
+  };
+
+  const restaurant = restaurants.find(({ id }) => restaurantId === id);
 
   if (!restaurantId || !restaurant) {
     return null;
   }
 
-  console.log(restaurant.name);
-
-  //console.log(prevRestaurant.name, nextRestaurant.name);
+  const isSelect = mySelect.includes(restaurant.id);
 
   return (
     <div className="flex w-full gap-3 rounded-md bg-bg p-3">
-      <div className="relative flex aspect-square h-12 items-center justify-center">
-        <Check className="absolute w-[60%] text-primary" />
-        <ChkboxFrame className="absolute left-0 top-0 h-full text-bg-secondary" />
+      <div
+        className="flex aspect-square h-12 cursor-pointer"
+        onClick={handleChooseButtonClick}
+      >
+        <Checkbox
+          className={[
+            'size-full',
+            isSelect ? 'text-primary' : 'text-bg-secondary',
+          ].join(' ')}
+        />
       </div>
 
       <div className="flex flex-col justify-between">
@@ -41,4 +87,4 @@ export const RestaurantCards = memo(() => {
       </div>
     </div>
   );
-});
+};
