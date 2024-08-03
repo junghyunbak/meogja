@@ -18,25 +18,23 @@ export function MapMarker({ map, restaurant }: MapMarkerProps) {
   useEffect(() => {
     const { id, lat, lng } = restaurant;
 
+    const isActive = restaurantId === id;
+
     const marker = new naver.maps.Marker({
       map,
       position: new naver.maps.LatLng(lat, lng),
       icon: {
         content: renderToString(
           <div
-            className={[
-              'relative aspect-[1/1.22] w-12 -translate-x-[50%] -translate-y-full',
-              restaurantId === id ? 'z-50' : '',
-            ].join(' ')}
+            className={`relative aspect-[1/1.22] -translate-x-[50%] -translate-y-full transition-all ${isActive ? 'z-50 w-14' : 'w-12'}`}
           >
-            <MarkerShadow className="absolute bottom-[-10px] left-[30%] w-12" />
+            <MarkerShadow className="w-13 absolute bottom-[-10px] left-[30%]" />
             <Marker
-              className={[
-                'absolute left-0 top-0 text-bg-secondary',
-                restaurantId === id ? 'text-primary' : '',
-              ].join(' ')}
+              className={`absolute left-0 top-0 text-bg-secondary ${isActive ? 'stroke-white text-bg' : ''}`}
             />
-            <div className="absolute left-0 top-0 flex items-center justify-center p-2.5">
+            <div
+              className={`absolute left-0 top-0 flex items-center justify-center ${isActive ? 'p-3' : 'p-2.5'}`}
+            >
               <Chicken className="w-full" />
             </div>
           </div>
