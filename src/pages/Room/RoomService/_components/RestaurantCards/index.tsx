@@ -2,6 +2,7 @@ import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
 import useStore from '@/store';
 import { memo, useContext, useEffect, useState } from 'react';
 import Checkbox from '@/assets/svgs/checkbox.svg?react';
+import Chevron from '@/assets/svgs/chevron.svg?react';
 import { useMutation } from 'react-query';
 import axios from 'axios';
 import Slider from 'react-slick';
@@ -151,7 +152,14 @@ function Card({ restaurant }: CardProps) {
         </div>
 
         <div className="flex flex-col justify-between">
-          <p className="text-white">{restaurant.name}</p>
+          <a
+            className="flex cursor-pointer items-center gap-2 text-white"
+            target="_blank"
+            href={restaurant.placeUrl}
+          >
+            <p>{restaurant.name}</p>
+            <Chevron className="h-3 rotate-180" />
+          </a>
           <p className="text-sm text-gray-400">
             현재 내 위치로부터 약 <span className="text-primary">{km}km</span>
             떨어져 있습니다.
