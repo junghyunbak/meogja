@@ -1,14 +1,17 @@
 import { ImmutableRoomInfoContext } from '@/pages/Room';
+import useStore from '@/store';
 import { useContext, useEffect } from 'react';
 
-interface MapRadiusProps {
-  map: naver.maps.Map;
-}
+export function MapRadius() {
+  const [map] = useStore((state) => [state.map]);
 
-export function MapRadius({ map }: MapRadiusProps) {
   const { lat, lng, radius } = useContext(ImmutableRoomInfoContext);
 
   useEffect(() => {
+    if (!map) {
+      return;
+    }
+
     const standardLatLng = new naver.maps.LatLng(lat, lng);
 
     const latMin = 28.7905313;
@@ -41,7 +44,7 @@ export function MapRadius({ map }: MapRadiusProps) {
     return () => {
       ploygon.setMap(null);
     };
-  }, []);
+  }, [map, lat, lng, radius]);
 
-  return <div>{/* MapRadius 함수 컴포넌트 */}</div>;
+  return <div />;
 }

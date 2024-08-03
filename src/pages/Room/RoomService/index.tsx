@@ -7,18 +7,20 @@ import { Timer } from './_components/Timer';
 import { Map } from './_components/Map';
 import { Nav } from './_components/Nav';
 import { RestaurantCards } from './_components/RestaurantCards';
+import { RestaurantMarker } from './_components/RestaurantMarker';
+import { MapRadius } from './_components/MapRadius';
 
 export function RoomService() {
   const { userId, roomId } = useContext(IdentifierContext);
 
-  const { endTime } = useContext(ImmutableRoomInfoContext);
+  const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
 
   const { data } = useQuery({
     queryKey: ['room-service', roomId],
     queryFn: async () => {
       const {
         data: { data },
-      } = await axios.get<ResponseTemplate<RoomInfo>>(
+      } = await axios.get<ResponseTemplate<MutableRoomInfo>>(
         '/api/mutable-room-state',
         {
           params: { roomId },
@@ -36,16 +38,13 @@ export function RoomService() {
 
   const { userName, select } = data.user[userId];
 
-  // [ ]: 개발 중 불편하여 주석처리
-  /*
   if (endTime < Date.now()) {
     return <div>사용이 종료되었습니다.</div>;
   }
-    */
 
   return (
     <div className="relative flex size-full flex-col justify-between">
-      <div className="bg-red absolute inset-0">
+      <div className="absolute inset-0">
         <Map />
       </div>
 
@@ -59,6 +58,17 @@ export function RoomService() {
           <Timer />
         </div>
         <RestaurantCards select={select} />
+        <MapRadius />
+
+        {restaurants.map((restaurant) => {
+          return (
+            <RestaurantMarker
+              key={restaurant.id}
+              restaurant={restaurant}
+              mySelect={select}
+            />
+          );
+        })}
       </div>
     </div>
   );
