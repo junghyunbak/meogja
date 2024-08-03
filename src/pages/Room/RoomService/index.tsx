@@ -3,10 +3,8 @@ import { useQuery } from 'react-query';
 import { Header } from './_components/Header';
 import { useContext, useEffect } from 'react';
 import { IdentifierContext, ImmutableRoomInfoContext } from '..';
-import { Timer } from './_components/Timer';
 import { Map } from './_components/Map';
 import { Nav } from './_components/Nav';
-import { RestaurantCards } from './_components/RestaurantCards';
 import { RestaurantMarker } from './_components/RestaurantMarker';
 import { MapRadius } from './_components/MapRadius';
 import { Geolocation } from './_components/Geolocation';
@@ -66,25 +64,17 @@ export function RoomService() {
         <Nav />
       </div>
 
-      <div className="absolute bottom-0 z-[9999] flex w-full flex-col">
-        <div className="px-[16px] pb-3">
-          <Timer />
-        </div>
+      <MapRadius />
 
-        <RestaurantCards />
-        <MapRadius />
-        <Geolocation />
+      <Geolocation />
 
-        <BottomSheetModal>
-          <BottomSheetModal.Rank user={data.user} />
-        </BottomSheetModal>
+      <BottomSheetModal>
+        <BottomSheetModal.Rank user={data.user} />
+      </BottomSheetModal>
 
-        {restaurants.map((restaurant) => {
-          return (
-            <RestaurantMarker key={restaurant.id} restaurant={restaurant} />
-          );
-        })}
-      </div>
+      {restaurants.map((restaurant) => {
+        return <RestaurantMarker key={restaurant.id} restaurant={restaurant} />;
+      })}
     </div>
   );
 }
