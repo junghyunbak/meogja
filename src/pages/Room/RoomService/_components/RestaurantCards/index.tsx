@@ -1,6 +1,6 @@
 import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
 import useStore from '@/store';
-import { useContext, useEffect, useState } from 'react';
+import { memo, useContext, useEffect, useState } from 'react';
 import Checkbox from '@/assets/svgs/checkbox.svg?react';
 import { useMutation } from 'react-query';
 import axios from 'axios';
@@ -9,7 +9,7 @@ interface RestaurantCardsProps {
   select: string[];
 }
 
-export const RestaurantCards = ({ select }: RestaurantCardsProps) => {
+export const RestaurantCards = memo(({ select }: RestaurantCardsProps) => {
   const { userId, roomId } = useContext(IdentifierContext);
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
@@ -87,4 +87,4 @@ export const RestaurantCards = ({ select }: RestaurantCardsProps) => {
       </div>
     </div>
   );
-};
+});
