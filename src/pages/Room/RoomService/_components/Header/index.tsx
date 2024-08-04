@@ -5,60 +5,51 @@ import React, {
   useState,
   useContext,
 } from 'react';
-import axios, { AxiosError } from 'axios';
-import { useMutation } from 'react-query';
 import Logo from '@/assets/svgs/logo.svg?react';
 import Pen from '@/assets/svgs/pen.svg?react';
 import { IdentifierContext } from '@/pages/Room';
 import useStore from '@/store';
+import { useUpdateUserName } from '@/hooks/useUpdateUserName';
 
 export const Header = () => {
-  const [isEdit, setIsEdit] = useState(false);
-
-  const [myName, setMyName] = useStore((state) => [
-    state.myName,
-    state.setMyName,
-  ]);
-
   const { userId, roomId } = useContext(IdentifierContext);
+
+  const [isEdit, setIsEdit] = useState(false);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
-  const updateUserNameMutation = useMutation<UserName, AxiosError, UserName>({
-    mutationFn: async (newName) => {
-      const {
-        data: {
-          data: { userName },
-        },
-      } = await axios.patch<ResponseTemplate<{ userName: string }>>(
-        '/api/update-username',
-        {
-          newName,
-          userId,
-          roomId,
-        }
-      );
+  /**
+   * 헤더 내 input에 사용될 이름
+   */
+  const [name, setName] = useState('');
 
-      return userName;
-    },
-    onSuccess(updatedName) {
-      setMyName(updatedName);
-    },
-  });
+  /**
+   * 실제 서버의 이름
+   */
+  const [myName] = useStore((state) => [state.myName]);
+
+  const { updateUserNameMutation } = useUpdateUserName(roomId, userId);
 
   const handleEditButtonClick = () => {
     setIsEdit(true);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMyName(e.target.value);
+    setName(e.target.value);
   };
 
   const handleInputBlur = () => {
     setIsEdit(false);
 
-    updateUserNameMutation.mutate(myName);
+    updateUserNameMutation.mutate(name);
   };
+
+  /**
+   * 서버에 저장된 이름과 동기화
+   */
+  useEffect(() => {
+    setName(myName);
+  }, [myName]);
 
   /**
    * 편집이 시작되면 input에 포커스, 텍스트 드래그
@@ -99,7 +90,7 @@ export const Header = () => {
 
       <div className="flex translate-x-4 items-center gap-3">
         <AutoSizeInput
-          value={myName}
+          value={name}
           ref={inputRef}
           onChange={handleInputChange}
           onBlur={handleInputBlur}
