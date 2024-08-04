@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { shallow } from 'zustand/shallow';
-import { devtools } from 'zustand/middleware';
+import { devtools, persist } from 'zustand/middleware';
 
 import { createRestaurantSlice } from './slices/restaurant';
 import { createMapSlice } from './slices/map';
@@ -15,13 +15,23 @@ export type StoreState = ReturnType<typeof createRestaurantSlice> &
   ReturnType<typeof createMyRoomInfoSlice>;
 
 const useStoreBase = create<StoreState>()(
-  devtools((...a) => ({
-    ...createRestaurantSlice(...a),
-    ...createMapSlice(...a),
-    ...createBottomSheetSlice(...a),
-    ...createMutableRoomInfoSlice(...a),
-    ...createMyRoomInfoSlice(...a),
-  }))
+  devtools(
+    persist(
+      (...a) => ({
+        ...createRestaurantSlice(...a),
+        ...createMapSlice(...a),
+        ...createBottomSheetSlice(...a),
+        ...createMutableRoomInfoSlice(...a),
+        ...createMyRoomInfoSlice(...a),
+      }),
+      {
+        name: 'zustandStore',
+        partialize: (state) => ({
+          sheetState: state.sheetState,
+        }),
+      }
+    )
+  )
 );
 
 const useStore = <T>(selector: (state: StoreState) => T) => {
