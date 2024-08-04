@@ -6,6 +6,7 @@ import Pizza from '@/assets/svgs/pizza.svg?react';
 import Snack from '@/assets/svgs/snack.svg?react';
 import Western from '@/assets/svgs/western.svg?react';
 import Japan from '@/assets/svgs/japan.svg?react';
+import React from 'react';
 
 export const RESTAURANT_SVG_FC = [
   Chicken,
@@ -16,6 +17,21 @@ export const RESTAURANT_SVG_FC = [
   Japan,
   Western,
   Chinese,
+];
+
+export const RESTAURANT_KIND: {
+  kind: RestaurantKind;
+  svg: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  name: string;
+}[] = [
+  { kind: 'chicken', svg: Chicken, name: '치킨' },
+  { kind: 'hamburger', svg: Hamburger, name: '햄버거' },
+  { kind: 'korean', svg: Korean, name: '한식' },
+  { kind: 'pizza', svg: Pizza, name: '피자' },
+  { kind: 'snack', svg: Snack, name: '분식' },
+  { kind: 'japan', svg: Japan, name: '일식' },
+  { kind: 'western', svg: Western, name: '양식' },
+  { kind: 'chinese', svg: Chinese, name: '중식' },
 ];
 
 export const LOCALSTORAGE_DUMP_KEY = 'miragejs-dump';

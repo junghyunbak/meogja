@@ -32,7 +32,7 @@ type Chat = {
 
 type User = Record<
   UserId,
-  { userName: UserName; select: RestaurantId[]; picky: RestaurantId | null }
+  { userName: UserName; select: RestaurantId[]; picky: RestaurantKind | null }
 >;
 
 type RoomInfo = {

@@ -1,7 +1,10 @@
 import React, { useRef, useEffect } from 'react';
 import useStore from '@/store';
 import { Sheet, SheetRef } from 'react-modal-sheet';
-import { BottomSheetContentRank } from './BottomSheetContent';
+import {
+  BottomSheetContentPicky,
+  BottomSheetContentRank,
+} from './BottomSheetContent';
 import {
   BottomSheetExternalRestaurantPreview,
   BottomSheetExternalRoomTimer,
@@ -14,11 +17,13 @@ const bottomSheetType = {
   },
   content: {
     rank: (<BottomSheetContentRank />).type,
+    picky: (<BottomSheetContentPicky />).type,
   },
 };
 
 const sheetStateToType: Partial<Record<SheetState, unknown>> = {
   rank: bottomSheetType.content.rank,
+  picky: bottomSheetType.content.picky,
 };
 
 interface BottomSheetMainProps {
@@ -117,5 +122,6 @@ export const BottomSheet = Object.assign(BottomSheetMain, {
   },
   Content: {
     Rank: BottomSheetContentRank,
+    Picky: BottomSheetContentPicky,
   },
 });

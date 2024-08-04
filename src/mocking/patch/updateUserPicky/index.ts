@@ -29,9 +29,14 @@ export function updateUserPicky(this: Server) {
 
     const newState = JSON.parse(JSON.stringify(state)) as RoomInfo;
 
-    newState.user[userId].picky = !newState.user[userId].picky
-      ? restaurantKind
-      : null;
+    const picky = newState.user[userId].picky;
+
+    newState.user[userId].picky =
+      picky === null
+        ? restaurantKind
+        : picky !== restaurantKind
+          ? restaurantKind
+          : null;
 
     schema.db[roomId].update(newState);
 
