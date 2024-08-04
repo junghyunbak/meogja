@@ -82,7 +82,7 @@ function createMarkerIcon(isActive: boolean, isSelect: boolean) {
       <div
         className={`absolute left-0 top-0 flex items-center justify-center ${isActive ? 'p-3' : 'p-2.5'}`}
       >
-        <Chicken className="w-full" />
+        <Chicken className="w-full text-white" />
       </div>
     </div>
   );

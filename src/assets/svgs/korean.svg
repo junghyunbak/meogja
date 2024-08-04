@@ -1,49 +1,49 @@
 <svg viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
   <path
     d="M19.7785 7.93547C19.7785 10.6244 20.6748 17.5741 10.3536 17.5741C0.0323895 17.5741 0.928685 10.6244 0.928685 7.93547C0.928685 7.93547 4.39666 9.52812 10.3536 9.52812C16.3105 9.52812 19.7785 7.93547 19.7785 7.93547Z"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M14.518 17.0846V17.7947C14.4421 18.9047 13.7389 19.0909 10.3537 19.0909C6.96152 19.0909 6.26517 18.9047 6.18933 17.7947V17.0846"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M1.43891 8.1561C1.43891 8.1561 0.880453 6.47383 2.23869 5.57753"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M2.56963 6.14287C2.56963 6.14287 2.02496 4.12965 4.06576 3.99866"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M19.1924 8.1561C19.1924 8.1561 19.4406 6.09462 18.0686 5.15695C18.0686 5.15695 17.7239 3.21958 16.0968 3.12995C16.0968 3.12995 15.5176 0.585845 12.877 1.49593C12.877 1.49593 11.4429 0.792682 10.064 1.1581C9.10565 0.765104 8.06457 0.792682 7.48542 1.56488C6.43055 1.38562 5.63078 1.72345 5.16195 2.72317C5.16195 2.72317 3.28662 2.25433 3.28662 4.18482"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M14.511 6.01878C14.511 6.01878 14.8143 5.44653 15.6624 5.78436C16.5104 6.1222 16.2829 6.86681 16.2829 6.86681"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M13.2562 3.62636C13.2562 3.62636 13.5182 3.12305 14.2559 3.41952C15.0006 3.70909 14.8006 4.36408 14.8006 4.36408"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />
   <path
     d="M6.14796 7.20464C6.14796 7.20464 6.06523 6.64618 6.83742 6.44624C7.60961 6.2463 7.83024 6.89439 7.83024 6.89439"
-    stroke="white"
+    stroke="currentColor"
     stroke-linecap="round"
     stroke-linejoin="round"
   />

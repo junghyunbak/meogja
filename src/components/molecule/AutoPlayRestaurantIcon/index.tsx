@@ -34,7 +34,7 @@ export function AutoPlayRestaurantIcon({
             return (
               <div className="h-8" key={i}>
                 <div className="flex size-full items-center justify-center">
-                  <RestaurantSvg className="h-full" />
+                  <RestaurantSvg className="h-full text-white" />
                 </div>
               </div>
             );

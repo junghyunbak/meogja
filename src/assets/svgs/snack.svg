@@ -2,50 +2,50 @@
   <g clip-path="url(#clip0_57_2897)">
     <path
       d="M6.49316 13.6069L14.2248 5.87525C14.2248 5.87525 15.3075 5.51632 16.755 6.95792C18.2025 8.40541 17.8377 9.48808 17.8377 9.48808L10.106 17.2198"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M9.41158 14.3013C10.4119 15.3016 10.7237 16.6078 10.1059 17.2198C9.49396 17.8376 8.18181 17.5257 7.1874 16.5255C6.1871 15.531 5.87525 14.2189 6.49307 13.6069C7.10502 12.995 8.41128 13.301 9.41158 14.3013Z"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M1.55042 8.98205L9.28798 1.24448C9.28798 1.24448 10.3648 0.885552 11.8123 2.33304C13.2597 3.78052 12.9008 4.85731 12.9008 4.85731L5.16913 12.5949"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M4.47486 9.67638C5.46927 10.6708 5.78113 11.9771 5.16918 12.5949C4.55136 13.2068 3.24509 12.895 2.24479 11.9006C1.25038 10.9003 0.938528 9.594 1.55047 8.98206C2.1683 8.36423 3.47457 8.67608 4.47486 9.67638Z"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M14.0482 13.2774L19.5498 18.7791"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M9.26453 8.49367L11.1827 10.4119"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
     <path
       d="M3.35693 2.59193L6.49315 5.72227"
-      stroke="white"
+      stroke="currentColor"
       stroke-linecap="round"
       stroke-linejoin="round"
     />
   </g>
   <defs>
     <clipPath id="clip0_57_2897">
-      <rect width="20.9091" height="20" fill="white" />
+      <rect width="20.9091" height="20" fill="currentColor" />
     </clipPath>
   </defs>
 </svg>
