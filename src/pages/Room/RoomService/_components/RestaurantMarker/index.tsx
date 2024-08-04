@@ -19,6 +19,11 @@ export const RestaurantMarker = memo(
 
     const [restaurantId] = useStore((state) => [state.restaurantId]);
 
+    /**
+     * 매번 마커객체를 재생성할 필요가 없다.
+     *
+     * // [ ]: 최적화 필요
+     */
     useEffect(() => {
       if (!map) {
         return;
@@ -38,7 +43,9 @@ export const RestaurantMarker = memo(
             <div
               className={`relative aspect-[1/1.22] -translate-x-[50%] -translate-y-full transition-all ${isActive ? 'z-50 w-14' : 'w-12'}`}
             >
-              <MarkerShadow className="w-13 absolute bottom-[-6px] left-[40%]" />
+              <MarkerShadow
+                className={`absolute bottom-0 left-[50%] ${isActive ? 'w-16' : 'w-12'}`}
+              />
               <Marker
                 className={`absolute left-0 top-0 text-bg-secondary ${isSelect ? 'text-primary' : isActive ? 'text-bg' : ''} ${isActive ? 'stroke-white' : ''}`}
               />
