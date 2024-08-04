@@ -48,6 +48,7 @@ export function RoomService() {
   );
 }
 
+// [ ]: 두번 리렌더링되는 이슈 존재
 function RefetchIntervalMutableRoomState() {
   const { userId, roomId } = useContext(IdentifierContext);
 
@@ -86,5 +87,5 @@ function RefetchIntervalMutableRoomState() {
     setUser(user);
   }, [data, userId, setMySelect, setMyName, setUser]);
 
-  return <div />;
+  return null;
 }
