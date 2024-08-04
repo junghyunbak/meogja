@@ -7,12 +7,16 @@ import { createMapSlice } from './slices/map';
 import { createMySelectSlice } from './slices/mySelect';
 import { createMyLatLngSlice } from './slices/myLatLng';
 import { createBottomSheetSlice } from './slices/bottomSheet';
+import { createMyNameSlice } from './slices/myName';
+import { createMutableRoomInfoSlice } from './slices/mutableRoomInfo';
 
 export type StoreState = ReturnType<typeof createRestaurantSlice> &
   ReturnType<typeof createMapSlice> &
   ReturnType<typeof createMySelectSlice> &
   ReturnType<typeof createMyLatLngSlice> &
-  ReturnType<typeof createBottomSheetSlice>;
+  ReturnType<typeof createBottomSheetSlice> &
+  ReturnType<typeof createMutableRoomInfoSlice> &
+  ReturnType<typeof createMyNameSlice>;
 
 const useStoreBase = create<StoreState>()(
   devtools((...a) => ({
@@ -21,6 +25,8 @@ const useStoreBase = create<StoreState>()(
     ...createMySelectSlice(...a),
     ...createMyLatLngSlice(...a),
     ...createBottomSheetSlice(...a),
+    ...createMyNameSlice(...a),
+    ...createMutableRoomInfoSlice(...a),
   }))
 );
 

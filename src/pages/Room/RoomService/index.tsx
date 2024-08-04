@@ -5,18 +5,55 @@ import { useContext, useEffect } from 'react';
 import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Map } from './_components/Map';
 import { Nav } from './_components/Nav';
-import { RestaurantMarker } from './_components/RestaurantMarker';
-import { MapRadius } from './_components/MapRadius';
 import { Geolocation } from './_components/Geolocation';
 import useStore from '@/store';
-import { BottomSheetModal } from './_components/BottomSheetModal';
+import { BottomSheet } from './_components/BottomSheet';
 
 export function RoomService() {
-  const { userId, roomId } = useContext(IdentifierContext);
-
   const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
 
+  if (endTime < Date.now()) {
+    return <div>사용이 종료되었습니다.</div>;
+  }
+
+  return (
+    <>
+      <div className="relative flex size-full flex-col">
+        <Header />
+        <Nav />
+        <Map>
+          <Map.ActivityRadius />
+          {restaurants.map((restaurant) => {
+            return (
+              <Map.RestaurantMarker
+                key={restaurant.id}
+                restaurant={restaurant}
+              />
+            );
+          })}
+        </Map>
+      </div>
+
+      <Geolocation />
+
+      <RefetchIntervalMutableRoomState />
+
+      <BottomSheet>
+        <BottomSheet.External.Timer />
+        <BottomSheet.External.RestaurantPreview />
+
+        <BottomSheet.Content.Rank />
+      </BottomSheet>
+    </>
+  );
+}
+
+function RefetchIntervalMutableRoomState() {
+  const { userId, roomId } = useContext(IdentifierContext);
+
   const [setMySelect] = useStore((state) => [state.setMySelect]);
+  const [setMyName] = useStore((state) => [state.setMyName]);
+  const [setUser] = useStore((state) => [state.setUser]);
 
   const { data } = useQuery({
     queryKey: ['room-service', roomId],
@@ -40,41 +77,14 @@ export function RoomService() {
       return;
     }
 
-    const { select } = data.user[userId];
+    const { user } = data;
+
+    const { select, userName } = user[userId];
 
     setMySelect(select);
-  }, [data, userId, setMySelect]);
+    setMyName(userName);
+    setUser(user);
+  }, [data, userId, setMySelect, setMyName, setUser]);
 
-  if (!data) {
-    return null;
-  }
-
-  if (endTime < Date.now()) {
-    return <div>사용이 종료되었습니다.</div>;
-  }
-
-  return (
-    <div className="relative flex size-full flex-col justify-between">
-      <div className="absolute inset-0">
-        <Map />
-      </div>
-
-      <div className="absolute top-0 flex w-full flex-col">
-        <Header userName={data.user[userId].userName} />
-        <Nav />
-      </div>
-
-      <MapRadius />
-
-      <Geolocation />
-
-      <BottomSheetModal>
-        <BottomSheetModal.Rank user={data.user} />
-      </BottomSheetModal>
-
-      {restaurants.map((restaurant) => {
-        return <RestaurantMarker key={restaurant.id} restaurant={restaurant} />;
-      })}
-    </div>
-  );
+  return <div />;
 }

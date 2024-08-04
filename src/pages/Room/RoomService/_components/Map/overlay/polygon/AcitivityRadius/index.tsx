@@ -1,8 +1,8 @@
+import { useContext, useEffect } from 'react';
 import { ImmutableRoomInfoContext } from '@/pages/Room';
 import useStore from '@/store';
-import { useContext, useEffect } from 'react';
 
-export function MapRadius() {
+export function AcitivityRadius() {
   const [map] = useStore((state) => [state.map]);
 
   const { lat, lng, radius } = useContext(ImmutableRoomInfoContext);
@@ -46,5 +46,5 @@ export function MapRadius() {
     };
   }, [map, lat, lng, radius]);
 
-  return <div />;
+  return null;
 }

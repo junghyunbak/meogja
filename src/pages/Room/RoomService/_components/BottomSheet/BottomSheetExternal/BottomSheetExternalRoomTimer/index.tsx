@@ -1,7 +1,7 @@
-import { memo, useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext } from 'react';
 import { ImmutableRoomInfoContext } from '@/pages/Room';
 
-export const Timer = memo(() => {
+export function BottomSheetExternalRoomTimer() {
   const { endTime } = useContext(ImmutableRoomInfoContext);
 
   const [remainSecond, setRemainSecond] = useState(
@@ -25,11 +25,11 @@ export const Timer = memo(() => {
   const h = Math.floor(m / 60);
 
   return (
-    <div className="pointer-events-auto w-fit rounded-md bg-primary px-4 py-3">
+    <div className="rounded-md bg-primary px-4 py-3">
       <p className="text-white">
         종료까지 남은시간{' '}
         {`${(h % 24).toString().padStart(2, '0')}:${(m % 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`}
       </p>
     </div>
   );
-});
+}

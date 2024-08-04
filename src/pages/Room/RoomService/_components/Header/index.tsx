@@ -4,21 +4,21 @@ import React, {
   useRef,
   useState,
   useContext,
-  memo,
 } from 'react';
 import axios, { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 import Logo from '@/assets/svgs/logo.svg?react';
 import Pen from '@/assets/svgs/pen.svg?react';
 import { IdentifierContext } from '@/pages/Room';
+import useStore from '@/store';
 
-interface HeaderProps {
-  userName: string;
-}
-
-export const Header = memo(({ userName }: HeaderProps) => {
-  const [myName, setMyName] = useState(userName);
+export const Header = () => {
   const [isEdit, setIsEdit] = useState(false);
+
+  const [myName, setMyName] = useStore((state) => [
+    state.myName,
+    state.setMyName,
+  ]);
 
   const { userId, roomId } = useContext(IdentifierContext);
 
@@ -43,9 +43,6 @@ export const Header = memo(({ userName }: HeaderProps) => {
     },
     onSuccess(updatedName) {
       setMyName(updatedName);
-    },
-    onError() {
-      setMyName(userName);
     },
   });
 
@@ -118,7 +115,7 @@ export const Header = memo(({ userName }: HeaderProps) => {
       <div className="w-9" />
     </div>
   );
-});
+};
 
 interface AutoSizeInputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}

@@ -1,14 +1,11 @@
 import { ImmutableRoomInfoContext } from '@/pages/Room';
-import useStore from '@/store';
 import { useContext } from 'react';
+import useStore from '@/store';
 
-interface BottomSheetModalRankProps {
-  user: User;
-}
-
-export function BottomSheetModalRank({ user }: BottomSheetModalRankProps) {
+export function BottomSheetContentRank() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
+  const [user] = useStore((state) => [state.user]);
   const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
 
   const [map] = useStore((state) => [state.map]);
