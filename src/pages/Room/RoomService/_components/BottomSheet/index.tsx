@@ -85,7 +85,7 @@ const BottomSheetMain = ({ children }: BottomSheetMainProps) => {
       isOpen
       onClose={handleButtonSheetOnClose}
       snapPoints={[0.85, 0.6, 180]}
-      initialSnap={1}
+      initialSnap={2}
       className="mx-auto max-w-[600px]"
     >
       <Sheet.Container className="!pointer-events-none !left-auto cursor-grab !bg-transparent !shadow-none active:cursor-grabbing">
