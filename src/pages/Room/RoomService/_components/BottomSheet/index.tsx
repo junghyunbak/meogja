@@ -93,11 +93,11 @@ const BottomSheetMain = ({ children }: BottomSheetMainProps) => {
           <div className="pointer-events-auto mb-3 ml-[16px] w-fit">
             {roomTimer}
           </div>
-          <div className="pointer-events-auto">{restaurantPreview}</div>
+          {restaurantPreview}
         </div>
 
-        <Sheet.Header className="pointer-events-auto px-[16px]">
-          <div className={`h-[30px] rounded-t-md bg-bg pt-[7px]`}>
+        <Sheet.Header className="pointer-events-none">
+          <div className="pointer-events-auto mx-[16px] h-[30px] rounded-t-md bg-bg pt-[7px]">
             <div className="mx-auto h-[4px] w-[33%] bg-white" />
           </div>
         </Sheet.Header>

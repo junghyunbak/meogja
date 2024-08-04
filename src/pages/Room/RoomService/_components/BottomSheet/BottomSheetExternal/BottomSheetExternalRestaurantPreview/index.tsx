@@ -50,6 +50,8 @@ export function BottomSheetExternalRestaurantPreview() {
 
     /**
      * 현재 슬라이드의 인덱스를 고려하여 오차 계산
+     *
+     * [ ]: 계산은 맞지만 간헐적으로 slick이 올바르지 않게 표시되는 경우가 있다.
      */
     for (let i = 0; i < slideIndex; i++) {
       tmp.unshift(tmp.pop()!);
@@ -70,9 +72,9 @@ export function BottomSheetExternalRestaurantPreview() {
       afterChange={handleSlideIndexChange}
       arrows={false}
       /**
-       * [ ]: 슬라이더에 마진을 추가하는것은 역할에 맞지 않다고 생각
+       * [ ]: 슬라이더에 마진을 직접 추가하는것은 SOC가 잘 되어있지 않다고 생각
        */
-      className="mb-3"
+      className="pointer-events-none mb-3"
     >
       {slides.map((restaurant) => {
         return (
