@@ -1,3 +1,23 @@
+import Chicken from '@/assets/svgs/chicken.svg?react';
+import Chinese from '@/assets/svgs/chicken.svg?react';
+import Hamburger from '@/assets/svgs/hamburger.svg?react';
+import Korean from '@/assets/svgs/korean.svg?react';
+import Pizza from '@/assets/svgs/pizza.svg?react';
+import Snack from '@/assets/svgs/snack.svg?react';
+import Western from '@/assets/svgs/western.svg?react';
+import Japan from '@/assets/svgs/japan.svg?react';
+
+export const RESTAURANT_SVG_FC = [
+  Chicken,
+  Hamburger,
+  Korean,
+  Pizza,
+  Snack,
+  Japan,
+  Western,
+  Chinese,
+];
+
 export const LOCALSTORAGE_DUMP_KEY = 'miragejs-dump';
 
 export const NICKNAME_ADJECTIVE = [

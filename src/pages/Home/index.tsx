@@ -1,5 +1,5 @@
 import Logo from '@/assets/svgs/logo.svg?react';
-import { AutoPlayFD } from '@/components/molecule/AutoPlayFD';
+import { AutoPlayRestaurantIcon } from '@/components/molecule/AutoPlayRestaurantIcon';
 import { useNavigate } from 'react-router-dom';
 
 export function Home() {
@@ -14,7 +14,7 @@ export function Home() {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-between bg-bg">
-      <AutoPlayFD />
+      <AutoPlayRestaurantIcon />
 
       <div className="flex flex-col items-center gap-8">
         <Logo className="w-[50%] text-white" />
@@ -34,7 +34,7 @@ export function Home() {
         </p>
       </div>
 
-      <AutoPlayFD reverse />
+      <AutoPlayRestaurantIcon reverse />
     </div>
   );
 }
