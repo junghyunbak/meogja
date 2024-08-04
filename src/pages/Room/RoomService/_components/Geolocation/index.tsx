@@ -1,9 +1,7 @@
 import useStore from '@/store';
 import { useEffect } from 'react';
 
-interface GeolocationProps {}
-
-export function Geolocation({}: GeolocationProps) {
+export function Geolocation() {
   const [setMyLatLng] = useStore((state) => [state.setMyLatLng]);
 
   useEffect(() => {

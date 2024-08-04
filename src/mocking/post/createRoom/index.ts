@@ -1,7 +1,7 @@
 import { type Server, Response } from 'miragejs';
 
 export function createRoom(this: Server) {
-  this.post('/api/create-room', (schema, request) => {
+  this.post('/api/create-room', (_, request) => {
     const { requestBody } = request;
 
     const { lat, lng, capacity, minute, radius } = JSON.parse(requestBody);
