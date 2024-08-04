@@ -1,1 +1,1 @@
-type SheetState = 'chat' | 'picky' | 'rank' | 'select' | 'close';
+type SheetState = 'chat' | 'picky' | 'rank' | 'select';

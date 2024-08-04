@@ -45,12 +45,6 @@ function NavItem({ state, title }: NavItemProps) {
   ]);
 
   const handleNavItemClick = () => {
-    if (sheetState.value === state) {
-      setSheetState('close');
-
-      return;
-    }
-
     setSheetState(state);
   };
 

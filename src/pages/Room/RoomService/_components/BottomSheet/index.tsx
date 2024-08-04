@@ -52,14 +52,10 @@ const BottomSheetMain = ({ children }: BottomSheetMainProps) => {
       return;
     }
 
-    sheetRef.current?.snapTo(
-      sheetState.value === 'close' ? 2 : sheetState.value === 'chat' ? 0 : 1
-    );
+    sheetRef.current?.snapTo(1);
   }, [sheetState]);
 
   const handleButtonSheetOnClose = () => {
-    setSheetState('close');
-
     sheetRef.current?.snapTo(2);
   };
 
@@ -86,8 +82,8 @@ const BottomSheetMain = ({ children }: BottomSheetMainProps) => {
       ref={sheetRef}
       isOpen
       onClose={handleButtonSheetOnClose}
-      snapPoints={[0.9, 0.5, 180]}
-      initialSnap={2}
+      snapPoints={[0.85, 0.6, 180]}
+      initialSnap={1}
       className="mx-auto max-w-[600px]"
     >
       <Sheet.Container className="!pointer-events-none !left-auto cursor-grab !bg-transparent !shadow-none active:cursor-grabbing">

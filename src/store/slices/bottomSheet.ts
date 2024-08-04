@@ -11,7 +11,7 @@ type BottomSheetSlice = {
 export const createBottomSheetSlice: StateCreator<BottomSheetSlice> = (
   set
 ): BottomSheetSlice => ({
-  sheetState: { value: 'close' },
+  sheetState: { value: 'picky' },
   setSheetState: (state: SheetState) => {
     set(() => ({
       sheetState: { value: state },
