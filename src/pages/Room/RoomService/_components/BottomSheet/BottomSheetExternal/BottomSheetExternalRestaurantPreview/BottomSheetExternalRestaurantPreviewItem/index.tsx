@@ -1,11 +1,10 @@
 import { IdentifierContext } from '@/pages/Room';
 import useStore from '@/store';
 import { useContext } from 'react';
-import { useMutation } from 'react-query';
-import axios from 'axios';
 import Checkbox from '@/assets/svgs/checkbox.svg?react';
 import Chevron from '@/assets/svgs/chevron.svg?react';
 import * as geolib from 'geolib';
+import { useUpdateSelect } from '@/hooks/useUpdateSelect';
 
 interface BottomSheetExternalRestaurantPreviewItemProps {
   restaurant: Restaurant;
@@ -18,21 +17,15 @@ export function BottomSheetExternalRestaurantPreviewItem({
     state.mySelect,
     state.setMySelect,
   ]);
-
   const [myLatLng] = useStore((state) => [state.myLatLng]);
 
   const { userId, roomId } = useContext(IdentifierContext);
 
-  const updateMySelectMutation = useMutation({
-    mutationKey: [],
-    mutationFn: async () => {
-      await axios.patch('/api/update-user-select', {
-        userId,
-        roomId,
-        restaurantId: restaurant.id,
-      });
-    },
-  });
+  const { updateMySelectMutation } = useUpdateSelect(
+    roomId,
+    userId,
+    restaurant.id
+  );
 
   const handleChooseButtonClick = () => {
     /**

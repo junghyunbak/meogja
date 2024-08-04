@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Header } from './_components/Header';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useRef } from 'react';
 import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Map } from './_components/Map';
 import { Nav } from './_components/Nav';
@@ -48,15 +48,21 @@ export function RoomService() {
   );
 }
 
-// [ ]: 두번 리렌더링되는 이슈 존재
 function RefetchIntervalMutableRoomState() {
   const { userId, roomId } = useContext(IdentifierContext);
+
+  const isUpdatingRef = useRef<boolean>(false);
 
   const [setMySelect] = useStore((state) => [state.setMySelect]);
   const [setMyName] = useStore((state) => [state.setMyName]);
   const [setUser] = useStore((state) => [state.setUser]);
+  const [setIsUpdatingRef] = useStore((state) => [state.setIsUpdatingRef]);
 
-  const { data } = useQuery({
+  useEffect(() => {
+    setIsUpdatingRef(isUpdatingRef);
+  }, [isUpdatingRef, setIsUpdatingRef]);
+
+  useQuery({
     queryKey: ['room-service', roomId],
     queryFn: async () => {
       const {
@@ -70,22 +76,20 @@ function RefetchIntervalMutableRoomState() {
 
       return data;
     },
+    onSuccess(data) {
+      if (isUpdatingRef.current) {
+        return;
+      }
+
+      const { user } = data;
+      const { select, userName } = user[userId];
+
+      setMyName(userName);
+      setMySelect(select);
+      setUser(user);
+    },
     refetchInterval: 1000,
   });
-
-  useEffect(() => {
-    if (!data) {
-      return;
-    }
-
-    const { user } = data;
-
-    const { select, userName } = user[userId];
-
-    setMySelect(select);
-    setMyName(userName);
-    setUser(user);
-  }, [data, userId, setMySelect, setMyName, setUser]);
 
   return null;
 }
