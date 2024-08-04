@@ -28,7 +28,7 @@ export const Header = () => {
    */
   const [myName] = useStore((state) => [state.myName]);
 
-  const { updateUserNameMutation } = useUpdateUserName(roomId, userId);
+  const { updateUserNameMutation } = useUpdateUserName(roomId, userId, setName);
 
   const handleEditButtonClick = () => {
     setIsEdit(true);

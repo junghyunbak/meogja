@@ -34,6 +34,6 @@ export function updateUserName(this: Server) {
 
     schema.db[roomId].update(newState);
 
-    return new Response(200, {}, { data: { userName: newName } });
+    return new Response(204);
   });
 }
