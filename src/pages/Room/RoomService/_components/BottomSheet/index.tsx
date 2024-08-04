@@ -26,12 +26,14 @@ interface BottomSheetMainProps {
 }
 
 const BottomSheetMain = ({ children }: BottomSheetMainProps) => {
-  const sheetRef = useRef<SheetRef>();
+  const sheetRef = useRef<SheetRef | null>(null);
 
-  const [sheetState, setSheetState] = useStore((state) => [
-    state.sheetState,
-    state.setSheetState,
-  ]);
+  const [sheetState] = useStore((state) => [state.sheetState]);
+  const [setSheetRef] = useStore((state) => [state.setSheetRef]);
+
+  useEffect(() => {
+    setSheetRef(sheetRef.current);
+  }, [sheetRef, setSheetRef]);
 
   /**
    * 시트 상태변화에 따른 snap 위치 변경

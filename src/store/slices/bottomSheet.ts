@@ -1,3 +1,4 @@
+import { type SheetRef } from 'react-modal-sheet';
 import { type StateCreator } from 'zustand';
 
 type BottomSheetSlice = {
@@ -6,6 +7,9 @@ type BottomSheetSlice = {
    */
   sheetState: { value: SheetState };
   setSheetState: (state: SheetState) => void;
+
+  sheetRef: SheetRef | null;
+  setSheetRef: (sheetRef: SheetRef | null) => void;
 };
 
 export const createBottomSheetSlice: StateCreator<BottomSheetSlice> = (
@@ -16,5 +20,10 @@ export const createBottomSheetSlice: StateCreator<BottomSheetSlice> = (
     set(() => ({
       sheetState: { value: state },
     }));
+  },
+
+  sheetRef: null,
+  setSheetRef: (sheetRef: SheetRef | null) => {
+    set(() => ({ sheetRef }));
   },
 });

@@ -20,7 +20,11 @@ function MapMain({ children }: MapMainProps) {
   const [setCurrentRestaurantId] = useStore((state) => [
     state.setCurrentRestaurantId,
   ]);
+  const [sheetRef] = useStore((state) => [state.sheetRef]);
 
+  /**
+   * map 객체 초기화 및 이벤트 등록
+   */
   useEffect(() => {
     const map = new naver.maps.Map('map', {
       center: new naver.maps.LatLng(lat, lng),
@@ -28,6 +32,8 @@ function MapMain({ children }: MapMainProps) {
 
     const listener = naver.maps.Event.addListener(map, 'click', () => {
       setCurrentRestaurantId(null);
+
+      sheetRef?.snapTo(2);
     });
 
     setMap(map);
@@ -35,7 +41,7 @@ function MapMain({ children }: MapMainProps) {
     return () => {
       naver.maps.Event.removeListener(listener);
     };
-  }, [setMap, setCurrentRestaurantId, lat, lng]);
+  }, [setMap, setCurrentRestaurantId, lat, lng, sheetRef]);
 
   const restaurantMarkers = React.Children.toArray(children).filter(
     (child) =>
