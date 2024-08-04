@@ -91,13 +91,11 @@ const BottomSheetMain = ({ children }: BottomSheetMainProps) => {
       className="mx-auto max-w-[600px]"
     >
       <Sheet.Container className="!pointer-events-none !left-auto cursor-grab !bg-transparent !shadow-none active:cursor-grabbing">
-        <div className={`relative h-[150px] cursor-default`}>
-          <div className="absolute bottom-0 w-full">
-            <div className="pointer-events-auto mb-3 ml-[16px] w-fit">
-              {roomTimer}
-            </div>
-            <div className="pointer-events-auto my-3">{restaurantPreview}</div>
+        <div className={`flex h-[150px] cursor-default flex-col justify-end`}>
+          <div className="pointer-events-auto mb-3 ml-[16px] w-fit">
+            {roomTimer}
           </div>
+          <div className="pointer-events-auto">{restaurantPreview}</div>
         </div>
 
         <Sheet.Header className="pointer-events-auto px-[16px]">

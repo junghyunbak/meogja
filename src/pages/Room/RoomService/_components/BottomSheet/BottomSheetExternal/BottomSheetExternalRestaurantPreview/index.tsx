@@ -58,6 +58,10 @@ export function BottomSheetExternalRestaurantPreview() {
     setSlides(tmp);
   }, [currentRestaurantId, slideIndex, setSlides, restaurants]);
 
+  if (!currentRestaurantId) {
+    return null;
+  }
+
   return (
     <Slider
       initialSlide={0}
@@ -65,6 +69,10 @@ export function BottomSheetExternalRestaurantPreview() {
       centerPadding="12px"
       afterChange={handleSlideIndexChange}
       arrows={false}
+      /**
+       * [ ]: 슬라이더에 마진을 추가하는것은 역할에 맞지 않다고 생각
+       */
+      className="mb-3"
     >
       {slides.map((restaurant) => {
         return (
