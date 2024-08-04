@@ -4,14 +4,12 @@ import useStore from '@/store';
 import Slider from 'react-slick';
 import { BottomSheetExternalRestaurantPreviewItem } from './BottomSheetExternalRestaurantPreviewItem';
 
-interface BottomSheetExternalRestaurantPreviewProps {}
-
-export function BottomSheetExternalRestaurantPreview({}: BottomSheetExternalRestaurantPreviewProps) {
+export function BottomSheetExternalRestaurantPreview() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
-  const [restaurantId, setRestaurantId] = useStore((state) => [
-    state.restaurantId,
-    state.setRestaurantId,
+  const [currentRestaurantId, setCurrentRestaurantId] = useStore((state) => [
+    state.currentRestaurantId,
+    state.setCurrentRestaurantId,
   ]);
   const [map] = useStore((state) => [state.map]);
 
@@ -25,19 +23,19 @@ export function BottomSheetExternalRestaurantPreview({}: BottomSheetExternalRest
       return;
     }
 
-    const { id, lat, lng } = restaurant;
-
-    setRestaurantId(id);
+    setCurrentRestaurantId(restaurant.id);
     setSlideIndex(slideIndex);
-    map?.setCenter(new naver.maps.LatLng(lat, lng));
+    map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
   };
 
   useEffect(() => {
-    if (restaurantId === null) {
+    if (currentRestaurantId === null) {
       return;
     }
 
-    const idx = restaurants.findIndex(({ id }) => id === restaurantId);
+    const idx = restaurants.findIndex(
+      (restaurant) => restaurant.id === currentRestaurantId
+    );
 
     if (idx === -1) {
       return;
@@ -58,11 +56,7 @@ export function BottomSheetExternalRestaurantPreview({}: BottomSheetExternalRest
     }
 
     setSlides(tmp);
-  }, [restaurantId, slideIndex, setSlides, restaurants]);
-
-  if (!restaurantId) {
-    return null;
-  }
+  }, [currentRestaurantId, slideIndex, setSlides, restaurants]);
 
   return (
     <Slider

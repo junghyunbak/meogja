@@ -5,10 +5,11 @@ import useStore from '@/store';
 export function BottomSheetContentRank() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
-  const [user] = useStore((state) => [state.user]);
-  const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
-
   const [map] = useStore((state) => [state.map]);
+  const [user] = useStore((state) => [state.user]);
+  const [setCurrentRestaurantId] = useStore((state) => [
+    state.setCurrentRestaurantId,
+  ]);
 
   const restaurantIdToPoint: Map<
     RestaurantId,
@@ -47,7 +48,7 @@ export function BottomSheetContentRank() {
               <p
                 className="cursor-pointer"
                 onClick={() => {
-                  setRestaurantId(restaurant.id);
+                  setCurrentRestaurantId(restaurant.id);
                   map?.setCenter(
                     new naver.maps.LatLng(restaurant.lat, restaurant.lng)
                   );

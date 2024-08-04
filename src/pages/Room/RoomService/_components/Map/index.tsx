@@ -17,8 +17,9 @@ function MapMain({ children }: MapMainProps) {
   const { lat, lng } = useContext(ImmutableRoomInfoContext);
 
   const [setMap] = useStore((state) => [state.setMap]);
-
-  const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
+  const [setCurrentRestaurantId] = useStore((state) => [
+    state.setCurrentRestaurantId,
+  ]);
 
   useEffect(() => {
     const map = new naver.maps.Map('map', {
@@ -26,7 +27,7 @@ function MapMain({ children }: MapMainProps) {
     });
 
     const listener = naver.maps.Event.addListener(map, 'click', () => {
-      setRestaurantId(null);
+      setCurrentRestaurantId(null);
     });
 
     setMap(map);
@@ -34,7 +35,7 @@ function MapMain({ children }: MapMainProps) {
     return () => {
       naver.maps.Event.removeListener(listener);
     };
-  }, [setMap, setRestaurantId, lat, lng]);
+  }, [setMap, setCurrentRestaurantId, lat, lng]);
 
   const restaurantMarkers = React.Children.toArray(children).filter(
     (child) =>

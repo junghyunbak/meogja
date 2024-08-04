@@ -12,8 +12,10 @@ interface RestaurantMarkerProps {
 export const RestaurantMarker = ({ restaurant }: RestaurantMarkerProps) => {
   const [map] = useStore((state) => [state.map]);
   const [mySelect] = useStore((state) => [state.mySelect]);
-  const [restaurantId] = useStore((state) => [state.restaurantId]);
-  const [setRestaurantId] = useStore((state) => [state.setRestaurantId]);
+  const [currentRestaurantId, setCurrentRestaurantId] = useStore((state) => [
+    state.currentRestaurantId,
+    state.setCurrentRestaurantId,
+  ]);
 
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
@@ -38,7 +40,7 @@ export const RestaurantMarker = ({ restaurant }: RestaurantMarkerProps) => {
 
       map.setCenter(new naver.maps.LatLng(lat, lng));
 
-      setRestaurantId(id);
+      setCurrentRestaurantId(id);
     });
 
     return () => {
@@ -46,7 +48,7 @@ export const RestaurantMarker = ({ restaurant }: RestaurantMarkerProps) => {
 
       naver.maps.Event.removeListener(listener);
     };
-  }, [map, setRestaurantId, restaurant]);
+  }, [map, setCurrentRestaurantId, restaurant]);
 
   /**
    * restaurantId가 변경될 때 마다 마커 아이콘을 변경
@@ -56,12 +58,12 @@ export const RestaurantMarker = ({ restaurant }: RestaurantMarkerProps) => {
       return;
     }
 
-    const isActive = restaurantId === restaurant.id;
+    const isActive = currentRestaurantId === restaurant.id;
 
     const isSelect = mySelect.includes(restaurant.id);
 
     marker.setIcon({ content: createMarkerIcon(isActive, isSelect) });
-  }, [restaurantId, restaurant, mySelect, marker]);
+  }, [currentRestaurantId, restaurant, mySelect, marker]);
 
   return null;
 };
