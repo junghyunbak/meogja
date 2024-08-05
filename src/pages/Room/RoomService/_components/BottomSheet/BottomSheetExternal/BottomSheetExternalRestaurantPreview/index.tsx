@@ -5,7 +5,11 @@ import Slider from 'react-slick';
 import { BottomSheetExternalRestaurantPreviewItem } from './BottomSheetExternalRestaurantPreviewItem';
 
 export function BottomSheetExternalRestaurantPreview() {
-  const { restaurants } = useContext(ImmutableRoomInfoContext);
+  const { restaurants: originRestaurants } = useContext(
+    ImmutableRoomInfoContext
+  );
+
+  const [myPicky] = useStore((state) => [state.myPicky]);
 
   const [currentRestaurantId, setCurrentRestaurantId] = useStore((state) => [
     state.currentRestaurantId,
@@ -33,11 +37,17 @@ export function BottomSheetExternalRestaurantPreview() {
       return;
     }
 
+    const restaurants = originRestaurants.filter(
+      (restaurant) => restaurant.category !== myPicky
+    );
+
     const idx = restaurants.findIndex(
       (restaurant) => restaurant.id === currentRestaurantId
     );
 
     if (idx === -1) {
+      setSlides([]);
+
       return;
     }
 
@@ -58,7 +68,7 @@ export function BottomSheetExternalRestaurantPreview() {
     }
 
     setSlides(tmp);
-  }, [currentRestaurantId, slideIndex, setSlides, restaurants]);
+  }, [currentRestaurantId, slideIndex, setSlides, originRestaurants, myPicky]);
 
   if (!currentRestaurantId) {
     return null;

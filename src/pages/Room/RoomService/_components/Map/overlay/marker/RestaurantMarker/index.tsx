@@ -12,6 +12,7 @@ interface RestaurantMarkerProps {
 export const RestaurantMarker = ({ restaurant }: RestaurantMarkerProps) => {
   const [map] = useStore((state) => [state.map]);
   const [mySelect] = useStore((state) => [state.mySelect]);
+  const [myPicky] = useStore((state) => [state.myPicky]);
   const [currentRestaurantId, setCurrentRestaurantId] = useStore((state) => [
     state.currentRestaurantId,
     state.setCurrentRestaurantId,
@@ -64,6 +65,18 @@ export const RestaurantMarker = ({ restaurant }: RestaurantMarkerProps) => {
 
     marker.setIcon({ content: createMarkerIcon(isActive, isSelect) });
   }, [currentRestaurantId, restaurant, mySelect, marker]);
+
+  useEffect(() => {
+    if (!marker || !map) {
+      return;
+    }
+
+    if (restaurant.category === myPicky) {
+      marker.setMap(null);
+    } else {
+      marker.setMap(map);
+    }
+  }, [myPicky, marker, map, restaurant]);
 
   return null;
 };
