@@ -1,5 +1,5 @@
 import Chicken from '@/assets/svgs/chicken.svg?react';
-import Chinese from '@/assets/svgs/chicken.svg?react';
+import Chinese from '@/assets/svgs/chinese.svg?react';
 import Hamburger from '@/assets/svgs/hamburger.svg?react';
 import Korean from '@/assets/svgs/korean.svg?react';
 import Pizza from '@/assets/svgs/pizza.svg?react';
