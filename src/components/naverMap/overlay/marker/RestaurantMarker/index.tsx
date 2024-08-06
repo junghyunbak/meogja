@@ -23,7 +23,8 @@ export const RestaurantMarker = memo(({ map, restaurant, count }: RestaurantMark
     const marker = new naver.maps.Marker({
       map,
       position: new naver.maps.LatLng(restaurant.lat, restaurant.lng),
-      animation: naver.maps.Animation.DROP,
+      // [ ]: 두번 애니메이션이 실행되는 이슈로 비활성화
+      //animation: naver.maps.Animation.DROP,
       icon: {
         content: createMarkerIcon(count),
       },
