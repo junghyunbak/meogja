@@ -67,7 +67,7 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
 function createMarkerIcon() {
   return renderToString(
     <div className="-translate-x-[50%] -translate-y-[50%]">
-      <RamenNoodle className="w-10" />
+      <RamenNoodle className="w-12" />
     </div>
   );
 }
