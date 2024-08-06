@@ -1,10 +1,11 @@
 import { useContext, useEffect } from 'react';
 import { ImmutableRoomInfoContext } from '@/pages/Room';
-import useStore from '@/store';
 
-export function AcitivityRadius() {
-  const [map] = useStore((state) => [state.map]);
+interface AcitivityRadiusProps {
+  map: naver.maps.Map | null;
+}
 
+export function AcitivityRadius({ map }: AcitivityRadiusProps) {
   const { lat, lng, radius } = useContext(ImmutableRoomInfoContext);
 
   useEffect(() => {

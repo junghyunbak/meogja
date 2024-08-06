@@ -26,17 +26,7 @@ export function RoomService() {
         </div>
 
         <div className="absolute inset-0 z-10">
-          <Map>
-            <Map.ActivityRadius />
-            {restaurants.map((restaurant) => {
-              return (
-                <Map.RestaurantMarker
-                  key={restaurant.id}
-                  restaurant={restaurant}
-                />
-              );
-            })}
-          </Map>
+          <Map />
         </div>
       </div>
 
@@ -67,12 +57,9 @@ function RefetchIntervalMutableRoomState() {
     queryFn: async () => {
       const {
         data: { data },
-      } = await axios.get<ResponseTemplate<MutableRoomInfo>>(
-        '/api/mutable-room-state',
-        {
-          params: { roomId },
-        }
-      );
+      } = await axios.get<ResponseTemplate<MutableRoomInfo>>('/api/mutable-room-state', {
+        params: { roomId },
+      });
 
       return data;
     },

@@ -1,41 +1,34 @@
-import React, { useEffect, useContext, useRef } from 'react';
-import { ImmutableRoomInfoContext } from '@/pages/Room';
-import useStore from '@/store';
-import { RestaurantMarker, UserMarker } from './overlay/marker';
-import { AcitivityRadius } from './overlay/polygon';
-import { IdentifierContext } from '@/pages/Room';
+import { useEffect, useContext, useRef, useCallback } from 'react';
 import { useMutation } from 'react-query';
+
+import useStore from '@/store';
+
+import { ImmutableRoomInfoContext, IdentifierContext } from '@/pages/Room';
+
+import { UserMarker } from '@/components/naverMap/overlay/marker';
+import { AcitivityRadius } from '@/components/naverMap/overlay/polygon';
+
+import { useNaverMap } from '@/hooks/useNaverMap';
+
 import axios, { type AxiosError } from 'axios';
 
-const restaurantMarkerType = (
-  <RestaurantMarker restaurant={{} as Restaurant} />
-).type;
-const activityRadiusType = (<AcitivityRadius />).type;
-
-interface MapMainProps {
-  children?: React.ReactNode;
-}
-
-function MapMain({ children }: MapMainProps) {
+export function Map() {
   const { lat, lng } = useContext(ImmutableRoomInfoContext);
-
   const { roomId, userId } = useContext(IdentifierContext);
 
-  const [setMap] = useStore((state) => [state.setMap]);
-  const [setCurrentRestaurantId] = useStore((state) => [
-    state.setCurrentRestaurantId,
-  ]);
-  const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
   const [sheetRef] = useStore((state) => [state.sheetRef]);
 
+  const [setMap] = useStore((state) => [state.setMap]);
+  const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
+  const [setCurrentRestaurantId] = useStore((state) => [state.setCurrentRestaurantId]);
+
+  // [ ]: debouncing을 위한 useRef 변수명 수정
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const updateMyLatLngMutation = useMutation<
-    undefined,
-    AxiosError,
-    { lat: number; lng: number }
-  >({
+  const { map } = useNaverMap({ lat, lng, mapId: 'map' });
+
+  const updateMyLatLngMutation = useMutation<undefined, AxiosError, { lat: number; lng: number }>({
     mutationKey: [],
     mutationFn: async ({ lat, lng }) => {
       await axios.patch('/api/update-user-lat-lng', {
@@ -47,18 +40,8 @@ function MapMain({ children }: MapMainProps) {
     },
   });
 
-  /**
-   * map 객체 초기화 및 이벤트 등록
-   */
-  useEffect(() => {
-    const map = new naver.maps.Map('map', {
-      center: new naver.maps.LatLng(lat, lng),
-    });
-
-    const handleCenterChange = (center) => {
-      /**
-       * 낙관적 업데이트
-       */
+  const updateUserMapLatLng = useCallback(
+    (center: naver.maps.Coord) => {
       (() => {
         if (timerRef2.current) {
           clearTimeout(timerRef2.current);
@@ -69,43 +52,48 @@ function MapMain({ children }: MapMainProps) {
         }, 100);
       })();
 
-      /**
-       * 사용자 카메라 위치 api update (debouncing)
-       */
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
+      (() => {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+        }
 
-      timerRef.current = setTimeout(() => {
-        try {
-          const { x, y } = center as naver.maps.LatLng;
+        timerRef.current = setTimeout(() => {
+          const { x, y } = center;
 
           updateMyLatLngMutation.mutate({ lat: y, lng: x });
-        } catch (e) {
-          console.log(e);
-        }
-      }, 2000);
+        }, 1000);
+      })();
+    },
+    [setMyMapLatLng, updateMyLatLngMutation]
+  );
+
+  /**
+   * map 이벤트 등록
+   */
+  useEffect(() => {
+    if (!map) {
+      return;
+    }
+
+    setMap(map);
+
+    const handleMapCenterChange = (center: naver.maps.Coord) => {
+      updateUserMapLatLng(center);
     };
 
-    const centerChangedEventListener = naver.maps.Event.addListener(
-      map,
-      'center_changed',
-      handleCenterChange
-    );
+    const handleMapInit = () => {
+      updateUserMapLatLng(map.getCenter());
+    };
 
-    const initEventListener = naver.maps.Event.addListener(map, 'init', (v) => [
-      handleCenterChange(map.getCenter()),
-    ]);
+    const handleMapClick = () => {
+      setCurrentRestaurantId(null);
 
-    const clickEventListener = naver.maps.Event.addListener(
-      map,
-      'click',
-      () => {
-        setCurrentRestaurantId(null);
+      sheetRef?.snapTo(2);
+    };
 
-        sheetRef?.snapTo(2);
-      }
-    );
+    const centerChangedEventListener = naver.maps.Event.addListener(map, 'center_changed', handleMapCenterChange);
+    const initEventListener = naver.maps.Event.addListener(map, 'init', handleMapInit);
+    const clickEventListener = naver.maps.Event.addListener(map, 'click', handleMapClick);
 
     setMap(map);
 
@@ -114,48 +102,37 @@ function MapMain({ children }: MapMainProps) {
       naver.maps.Event.removeListener(centerChangedEventListener);
       naver.maps.Event.removeListener(initEventListener);
     };
-  }, [setMap, setCurrentRestaurantId, lat, lng, sheetRef]);
+  }, [map, setCurrentRestaurantId, setMap, sheetRef, updateUserMapLatLng]);
 
-  const restaurantMarkers = React.Children.toArray(children).filter(
-    (child) =>
-      React.isValidElement(child) && child.type === restaurantMarkerType
+  return (
+    <>
+      <div className="size-full" id="map" />
+
+      <UserMarkers />
+
+      <AcitivityRadius map={map} />
+    </>
   );
+}
 
-  const [activityRadius] = React.Children.toArray(children).filter(
-    (child) => React.isValidElement(child) && child.type === activityRadiusType
-  );
+function UserMarkers() {
+  const { userId } = useContext(IdentifierContext);
 
-  /**
-   * 나중에 외부로 옮겨야 할 로직
-   */
-
+  const [map] = useStore((state) => [state.map]);
   const [user] = useStore((state) => [state.user]);
-
   const [myMapLatLng] = useStore((state) => [state.myMapLatLng]);
 
   const me = user[userId];
 
   return (
     <>
-      <div className="size-full" id="map" />
-
-      {me && <UserMarker user={{ ...me, ...myMapLatLng }} />}
+      {me && <UserMarker userData={{ ...me, ...myMapLatLng }} map={map} />}
 
       {Object.keys(user)
         .filter((id) => id !== userId)
         .map((otherUserId) => {
-          return <UserMarker user={user[otherUserId]} key={userId} />;
+          return <UserMarker userData={user[otherUserId]} key={userId} map={map} />;
         })}
-
-      {restaurantMarkers}
-
-      {activityRadius}
     </>
   );
 }
-
-export const Map = Object.assign(MapMain, {
-  UserMarker: UserMarker,
-  RestaurantMarker: RestaurantMarker,
-  ActivityRadius: AcitivityRadius,
-});
