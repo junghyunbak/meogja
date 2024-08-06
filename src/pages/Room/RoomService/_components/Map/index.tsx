@@ -13,8 +13,10 @@ import { useNaverMap } from '@/hooks/useNaverMap';
 
 import axios, { type AxiosError } from 'axios';
 
+import * as geolib from 'geolib';
+
 export function Map() {
-  const { lat, lng } = useContext(ImmutableRoomInfoContext);
+  const { lat: roomLat, lng: roomLng, restaurants } = useContext(ImmutableRoomInfoContext);
   const { roomId, userId } = useContext(IdentifierContext);
 
   const [sheetRef] = useStore((state) => [state.sheetRef]);
@@ -26,8 +28,9 @@ export function Map() {
   // [ ]: debouncing을 위한 useRef 변수명 수정
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const timerRef3 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const { map } = useNaverMap({ lat, lng, mapId: 'map' });
+  const { map } = useNaverMap({ lat: roomLat, lng: roomLng, mapId: 'map' });
 
   const updateMyLatLngMutation = useMutation<undefined, AxiosError, { lat: number; lng: number }>({
     mutationKey: [],
@@ -65,11 +68,49 @@ export function Map() {
         }, 1000);
       })();
     },
-    [setMyMapLatLng, updateMyLatLngMutation]
+    // useMutation의 변화에 따라 callback 함수가 다시 생성될 필요가 없다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [setMyMapLatLng /* updateMyLatLngMutation */]
   );
 
+  const updateNearByRestaurant = useCallback(() => {
+    if (timerRef3.current) {
+      clearTimeout(timerRef3.current);
+    }
+
+    timerRef3.current = setTimeout(() => {
+      if (!map) {
+        return;
+      }
+
+      const { x: mapCenterLng, y: mapCenterLat } = map.getCenter();
+
+      const pick = restaurants
+        .map((restaurant) => {
+          const { lat, lng } = restaurant;
+
+          const dist = geolib.getDistance(
+            { latitude: lat, longitude: lng },
+            { latitude: mapCenterLat, longitude: mapCenterLng }
+          );
+
+          return { restaurant, dist };
+        })
+        .filter(({ dist }) => dist <= 200)
+        .sort((a, b) => (a.dist < b.dist ? -1 : 1))[0];
+
+      if (!pick) {
+        setCurrentRestaurantId(null);
+
+        return;
+      }
+
+      setCurrentRestaurantId(pick.restaurant.id);
+    }, 100);
+  }, [restaurants, map, setCurrentRestaurantId]);
+
   /**
-   * map 이벤트 등록
+   * map 전역상태 초기화 및 이벤트 등록
    */
   useEffect(() => {
     if (!map) {
@@ -78,32 +119,27 @@ export function Map() {
 
     setMap(map);
 
+    updateUserMapLatLng(map.getCenter());
+    updateNearByRestaurant();
+
     const handleMapCenterChange = (center: naver.maps.Coord) => {
       updateUserMapLatLng(center);
-    };
 
-    const handleMapInit = () => {
-      updateUserMapLatLng(map.getCenter());
+      updateNearByRestaurant();
     };
 
     const handleMapClick = () => {
-      setCurrentRestaurantId(null);
-
       sheetRef?.snapTo(2);
     };
 
     const centerChangedEventListener = naver.maps.Event.addListener(map, 'center_changed', handleMapCenterChange);
-    const initEventListener = naver.maps.Event.addListener(map, 'init', handleMapInit);
     const clickEventListener = naver.maps.Event.addListener(map, 'click', handleMapClick);
-
-    setMap(map);
 
     return () => {
       naver.maps.Event.removeListener(clickEventListener);
       naver.maps.Event.removeListener(centerChangedEventListener);
-      naver.maps.Event.removeListener(initEventListener);
     };
-  }, [map, setCurrentRestaurantId, setMap, sheetRef, updateUserMapLatLng]);
+  }, [map, setCurrentRestaurantId, setMap, sheetRef, updateNearByRestaurant, updateUserMapLatLng]);
 
   return (
     <>
