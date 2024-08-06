@@ -1,13 +1,12 @@
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { Header } from './_components/Header';
 import { useContext, useEffect, useRef } from 'react';
 import { IdentifierContext, ImmutableRoomInfoContext } from '..';
 import { Map } from './_components/Map';
-import { Nav } from './_components/Nav';
 import { Geolocation } from './_components/Geolocation';
 import useStore from '@/store';
-import { BottomSheet } from './_components/BottomSheet';
+import { JoinList } from './_components/JoinList';
+import { ExitTimer } from './_components/ExitTimer';
 
 export function RoomService() {
   const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
@@ -19,32 +18,31 @@ export function RoomService() {
   return (
     <>
       <div className="relative flex size-full flex-col">
-        <Header />
-        <Nav />
-        <Map>
-          <Map.ActivityRadius />
-          {restaurants.map((restaurant) => {
-            return (
-              <Map.RestaurantMarker
-                key={restaurant.id}
-                restaurant={restaurant}
-              />
-            );
-          })}
-        </Map>
+        <div className="absolute top-0 z-20 w-full">
+          <JoinList />
+          <div className="px-3">
+            <ExitTimer />
+          </div>
+        </div>
+
+        <div className="absolute inset-0 z-10">
+          <Map>
+            <Map.ActivityRadius />
+            {restaurants.map((restaurant) => {
+              return (
+                <Map.RestaurantMarker
+                  key={restaurant.id}
+                  restaurant={restaurant}
+                />
+              );
+            })}
+          </Map>
+        </div>
       </div>
 
       <Geolocation />
 
       <RefetchIntervalMutableRoomState />
-
-      <BottomSheet>
-        <BottomSheet.External.Timer />
-        <BottomSheet.External.RestaurantPreview />
-
-        <BottomSheet.Content.Rank />
-        <BottomSheet.Content.Picky />
-      </BottomSheet>
     </>
   );
 }
