@@ -7,10 +7,12 @@ import { Geolocation } from './_components/Geolocation';
 import useStore from '@/store';
 import { JoinList } from './_components/JoinList';
 import { ExitTimer } from './_components/ExitTimer';
+import { RestaurantController } from './_components/RestaurantController';
 
 export function RoomService() {
-  const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
+  const { endTime } = useContext(ImmutableRoomInfoContext);
 
+  // [ ]: 실시간으로 종료 여부를 판단할 전역 상태가 필요.
   if (endTime < Date.now()) {
     return <div>사용이 종료되었습니다.</div>;
   }
@@ -27,6 +29,10 @@ export function RoomService() {
 
         <div className="absolute inset-0 z-10">
           <Map />
+        </div>
+
+        <div className="pointer-events-none absolute bottom-0 z-20 w-full">
+          <RestaurantController />
         </div>
       </div>
 
