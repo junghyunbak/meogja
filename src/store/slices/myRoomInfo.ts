@@ -11,9 +11,6 @@ type MyRoomInfoSlice = {
   mySelect: RestaurantId[];
   setMySelect: (param: RestaurantId[] | ((prev: RestaurantId[]) => RestaurantId[])) => void;
 
-  myPicky: RestaurantId[];
-  setMyPicky: (param: RestaurantId[] | ((prev: RestaurantId[]) => RestaurantId[])) => void;
-
   myMapLatLng: { lat: number; lng: number };
   setMyMapLatLng: (lat: number, lng: number) => void;
 
@@ -45,21 +42,6 @@ export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (set): MyRoo
     const select = param;
 
     set(() => ({ mySelect: select }));
-  },
-
-  myPicky: [],
-  setMyPicky: (param) => {
-    if (param instanceof Function) {
-      const fn = param;
-
-      set((state) => ({ myPicky: fn(state.myPicky) }));
-
-      return;
-    }
-
-    const picky = param;
-
-    set(() => ({ myPicky: picky }));
   },
 
   myMapLatLng: { lat: 0, lng: 0 },

@@ -53,7 +53,6 @@ function RefetchIntervalMutableRoomState() {
   const [setMyName] = useStore((state) => [state.setMyName]);
   const [setUser] = useStore((state) => [state.setUser]);
   const [setIsUpdatingRef] = useStore((state) => [state.setIsUpdatingRef]);
-  const [setMyPicky] = useStore((state) => [state.setMyPicky]);
 
   useEffect(() => {
     setIsUpdatingRef(isUpdatingRef);
@@ -76,12 +75,11 @@ function RefetchIntervalMutableRoomState() {
       }
 
       const { user } = data;
-      const { select, userName, picky } = user[userId];
+      const { select, userName } = user[userId];
 
       setMyName(userName);
       setMySelect(select);
       setUser(user);
-      setMyPicky(picky);
     },
     refetchInterval: 1000,
   });

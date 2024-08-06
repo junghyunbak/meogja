@@ -41,11 +41,6 @@ type UserData = {
   select: RestaurantId[];
 
   /**
-   * 사용자가 싫어하는 식당 정보
-   */
-  picky: RestaurantId[];
-
-  /**
    * 사용자가 보고있는 지도의 위치
    */
   lat: number | null;

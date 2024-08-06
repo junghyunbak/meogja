@@ -38,7 +38,6 @@ export const joinRoom = function (this: Server) {
     newUser[id] = {
       userName: nickName,
       select: [],
-      picky: [],
       lat: null,
       lng: null,
       direction: 0,
