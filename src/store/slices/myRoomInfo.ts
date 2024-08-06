@@ -2,6 +2,7 @@ import { RIGHT } from '@/constants';
 import { type StateCreator } from 'zustand';
 
 type MyRoomInfoSlice = {
+  // [ ]: myHomeLatLng 으로 네이밍 변경
   myLatLng: { lat: number; lng: number };
   setMyLatLng: (lat: number, lng: number) => void;
 

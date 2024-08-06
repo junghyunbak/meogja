@@ -16,6 +16,7 @@ export function BottomSheet() {
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
   const [sheetIsOpen, setSheetIsOpen] = useStore((state) => [state.sheetIsOpen, state.setSheetIsOpen]);
   const [user] = useStore((state) => [state.user]);
+  // [ ]: 권한이 없어 lat, lng이 올바르지 않을 경우에 대한 예외처리 필요
   const [myGpsLatLng] = useStore((state) => [state.myLatLng]);
 
   const handleButtonSheetOnClose = () => {
