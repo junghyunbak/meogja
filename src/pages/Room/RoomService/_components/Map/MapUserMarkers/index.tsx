@@ -12,12 +12,13 @@ export function MapUserMarkers() {
   const [map] = useStore((state) => [state.map]);
   const [user] = useStore((state) => [state.user]);
   const [myMapLatLng] = useStore((state) => [state.myMapLatLng]);
+  const [myDirection] = useStore((state) => [state.myDirection]);
 
   const me = user[userId];
 
   return (
     <>
-      {me && <UserMarker userData={{ ...me, ...myMapLatLng }} map={map} />}
+      {me && <UserMarker userData={{ ...me, ...myMapLatLng, direction: myDirection }} map={map} />}
 
       {Object.keys(user)
         .filter((id) => id !== userId)

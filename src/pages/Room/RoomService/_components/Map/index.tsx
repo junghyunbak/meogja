@@ -23,6 +23,7 @@ export function Map() {
 
   const [setMap] = useStore((state) => [state.setMap]);
   const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
+  const [setMyDirection] = useStore((state) => [state.setMyDirection]);
   const [setCurrentRestaurantId] = useStore((state) => [state.setCurrentRestaurantId]);
   const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
 
@@ -31,29 +32,43 @@ export function Map() {
   const timerRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef3 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
+  const prevLngRef = useRef<number>(roomLng);
+
   const { map } = useNaverMap({ lat: roomLat, lng: roomLng, mapId: 'map' });
 
-  const updateMyLatLngMutation = useMutation<undefined, AxiosError, { lat: number; lng: number }>({
+  const updateMyLatLngMutation = useMutation<
+    undefined,
+    AxiosError,
+    { lat: number; lng: number; direction: LEFT | RIGHT }
+  >({
     mutationKey: [],
-    mutationFn: async ({ lat, lng }) => {
+    mutationFn: async ({ lat, lng, direction }) => {
       await axios.patch('/api/update-user-lat-lng', {
         roomId,
         userId,
         lat,
         lng,
+        direction,
       });
     },
   });
 
   const updateUserMapLatLng = useCallback(
     (center: naver.maps.Coord) => {
+      const { x: centerLng, y: centerLat } = center;
+
+      const direction: LEFT | RIGHT = centerLng < prevLngRef.current ? 0 : 1;
+
+      prevLngRef.current = centerLng;
+
       (() => {
         if (timerRef2.current) {
           clearTimeout(timerRef2.current);
         }
 
         timerRef2.current = setTimeout(() => {
-          setMyMapLatLng(center.y, center.x);
+          setMyMapLatLng(centerLat, centerLng);
+          setMyDirection(direction);
         }, 100);
       })();
 
@@ -63,9 +78,7 @@ export function Map() {
         }
 
         timerRef.current = setTimeout(() => {
-          const { x, y } = center;
-
-          updateMyLatLngMutation.mutate({ lat: y, lng: x });
+          updateMyLatLngMutation.mutate({ lat: centerLat, lng: centerLng, direction });
         }, 1000);
       })();
     },

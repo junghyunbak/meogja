@@ -3,15 +3,10 @@ type UserName = string;
 
 type RestaurantId = string;
 
-type RestaurantKind =
-  | 'korean'
-  | 'western'
-  | 'japan'
-  | 'snack'
-  | 'pizza'
-  | 'chinese'
-  | 'hamburger'
-  | 'chicken';
+type RIGHT = 0;
+type LEFT = 1;
+
+type RestaurantKind = 'korean' | 'western' | 'japan' | 'snack' | 'pizza' | 'chinese' | 'hamburger' | 'chicken';
 
 type Restaurant = {
   id: RestaurantId;
@@ -37,6 +32,7 @@ type UserData = {
   // [ ]: 사용자의 카메라 위치인지, gps위치인지를 구분해야한다.
   lat: number | null;
   lng: number | null;
+  direction: LEFT | RIGHT;
 };
 
 // [ ]: `User` 이름 바꿔야할듯
@@ -55,10 +51,7 @@ type RoomInfo = {
 
 type MutableRoomInfo = Pick<RoomInfo, 'chats' | 'user'>;
 
-type ImmutableRoomInfo = Pick<
-  RoomInfo,
-  'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants'
->;
+type ImmutableRoomInfo = Pick<RoomInfo, 'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants'>;
 
 type ResponseTemplate<T> = {
   data: T;

@@ -4,6 +4,7 @@ import { renderToString } from 'react-dom/server';
 import ColorDove from '@/assets/svgs/color-dove.svg?react';
 
 import './index.css';
+import { RIGHT } from '@/constants';
 
 interface UserMarkerProps {
   userData: UserData;
@@ -13,6 +14,9 @@ interface UserMarkerProps {
 export function UserMarker({ userData, map }: UserMarkerProps) {
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
+  /**
+   * 마커 초기화
+   */
   useEffect(() => {
     if (!map) {
       return;
@@ -22,11 +26,7 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
       map,
       position: new naver.maps.LatLng(userData.lat || 0, userData.lng || 0),
       icon: {
-        content: renderToString(
-          <div className="user-marker">
-            <ColorDove className="w-14" />
-          </div>
-        ),
+        content: createUserMarkerContent(userData.direction),
       },
     });
 
@@ -39,13 +39,27 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map]);
 
+  /**
+   * 위치 변경 시 마커 정보 변경
+   */
   useEffect(() => {
     if (!marker || !userData.lat || !userData.lng) {
       return;
     }
 
     marker.setPosition(new naver.maps.LatLng(userData.lat, userData.lng));
+    marker.setIcon({
+      content: createUserMarkerContent(userData.direction),
+    });
   }, [marker, userData]);
 
   return null;
+}
+
+function createUserMarkerContent(direction: LEFT | RIGHT) {
+  return renderToString(
+    <div className="user-marker">
+      <ColorDove className={`w-16 ${direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
+    </div>
+  );
 }

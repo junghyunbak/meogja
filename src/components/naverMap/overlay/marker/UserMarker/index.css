@@ -5,17 +5,17 @@
 }
 
 .user-marker {
-  animation: tilt 1.5s ease 0s infinite;
+  animation: tilt 1.2s ease 0s infinite;
 }
 
 @keyframes tilt {
   0% {
-    transform: rotate(-30deg);
+    transform: rotate(-20deg);
   }
   50% {
-    transform: rotate(30deg);
+    transform: rotate(20deg);
   }
   100% {
-    transform: rotate(-30deg);
+    transform: rotate(-20deg);
   }
 }

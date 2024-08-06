@@ -8,16 +8,7 @@ import Western from '@/assets/svgs/western.svg?react';
 import Japan from '@/assets/svgs/japan.svg?react';
 import React from 'react';
 
-export const RESTAURANT_SVG_FC = [
-  Chicken,
-  Hamburger,
-  Korean,
-  Pizza,
-  Snack,
-  Japan,
-  Western,
-  Chinese,
-];
+export const RESTAURANT_SVG_FC = [Chicken, Hamburger, Korean, Pizza, Snack, Japan, Western, Chinese];
 
 export const RESTAURANT_KIND: {
   kind: RestaurantKind;
@@ -81,3 +72,7 @@ export const NICKNAME_NOUN = [
   '탕수육',
   '샌드위치',
 ];
+
+export const RIGHT: RIGHT = 0;
+
+export const LEFT: LEFT = 1;

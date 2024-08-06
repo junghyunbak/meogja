@@ -1,3 +1,4 @@
+import { RIGHT } from '@/constants';
 import { type StateCreator } from 'zustand';
 
 type MyRoomInfoSlice = {
@@ -8,25 +9,21 @@ type MyRoomInfoSlice = {
   setMyName: (myName: string) => void;
 
   mySelect: RestaurantId[];
-  setMySelect: (
-    param: RestaurantId[] | ((prev: RestaurantId[]) => RestaurantId[])
-  ) => void;
+  setMySelect: (param: RestaurantId[] | ((prev: RestaurantId[]) => RestaurantId[])) => void;
 
   myPicky: RestaurantKind | null;
   setMyPicky: (
-    param:
-      | RestaurantKind
-      | null
-      | ((restaurantKind: RestaurantKind | null) => RestaurantKind | null)
+    param: RestaurantKind | null | ((restaurantKind: RestaurantKind | null) => RestaurantKind | null)
   ) => void;
 
   myMapLatLng: { lat: number; lng: number };
   setMyMapLatLng: (lat: number, lng: number) => void;
+
+  myDirection: LEFT | RIGHT;
+  setMyDirection: (direction: LEFT | RIGHT) => void;
 };
 
-export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (
-  set
-): MyRoomInfoSlice => ({
+export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (set): MyRoomInfoSlice => ({
   myLatLng: { lat: 0, lng: 0 },
   setMyLatLng: function (lat: number, lng: number) {
     set(() => ({ myLatLng: { lat, lng } }));
@@ -70,5 +67,10 @@ export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (
   myMapLatLng: { lat: 0, lng: 0 },
   setMyMapLatLng(lat: number, lng: number) {
     set(() => ({ myMapLatLng: { lat, lng } }));
+  },
+
+  myDirection: RIGHT,
+  setMyDirection(direction) {
+    set(() => ({ myDirection: direction }));
   },
 });

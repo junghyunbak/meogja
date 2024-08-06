@@ -27,9 +27,7 @@ export const joinRoom = function (this: Server) {
     const id = uuidv4();
 
     const nickName =
-      NICKNAME_ADJECTIVE[
-        Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)
-      ] +
+      NICKNAME_ADJECTIVE[Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)] +
       ' ' +
       NICKNAME_NOUN[Math.floor(Math.random() * NICKNAME_NOUN.length)];
 
@@ -43,6 +41,7 @@ export const joinRoom = function (this: Server) {
       picky: null,
       lat: null,
       lng: null,
+      direction: 0,
     };
 
     const newState: RoomInfo = {
