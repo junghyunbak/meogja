@@ -36,8 +36,6 @@ export function MapRestaurants() {
     restaurantIdToUserIdSet.get(restaurantId)?.add(userId);
   });
 
-  console.log('myselect변화!', mySelect);
-
   return (
     <>
       {restaurants.map((restaurant) => {
