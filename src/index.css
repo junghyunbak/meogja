@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 :root {
-  @apply font-sebang text-[16px] max-md:text-[14px];
+  @apply font-dove text-[16px] max-md:text-[14px];
 }
 
 body {

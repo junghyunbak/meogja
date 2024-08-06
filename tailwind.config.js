@@ -5,6 +5,7 @@ export default {
     fontFamily: {
       sebang: 'sebang',
       pretendard: 'pretendard',
+      dove: 'dove',
     },
     extend: {
       colors: {
