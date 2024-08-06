@@ -59,7 +59,7 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
 function createUserMarkerContent(direction: LEFT | RIGHT) {
   return renderToString(
     <div className="user-marker">
-      <ColorDove className={`w-16 ${direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
+      <ColorDove className={`z-10 w-16 ${direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
     </div>
   );
 }
