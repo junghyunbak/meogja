@@ -29,7 +29,7 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
       position: new naver.maps.LatLng(restaurant.lat, restaurant.lng),
       animation: naver.maps.Animation.DROP,
       icon: {
-        content: createMarkerIcon(),
+        content: createMarkerIcon(mySelect.includes(restaurant.id)),
       },
     });
 
@@ -38,6 +38,8 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
     return () => {
       marker.setMap(null);
     };
+    // `mySelect`는 초기화 용도로 이용
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [map, restaurant]);
 
   /**
@@ -61,13 +63,24 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
     };
   }, [map, marker, restaurant]);
 
+  /**
+   * 마커 상태변경
+   */
+  useEffect(() => {
+    if (!marker) {
+      return;
+    }
+
+    marker.setIcon({ content: createMarkerIcon(mySelect.includes(restaurant.id)) });
+  }, [mySelect, marker, restaurant]);
+
   return null;
 };
 
-function createMarkerIcon() {
+function createMarkerIcon(isSelect: boolean) {
   return renderToString(
     <div className="-translate-x-[50%] -translate-y-[50%]">
-      <RamenNoodle className="w-12" />
+      <RamenNoodle className={`w-14 ${!isSelect ? 'text-[#E7E9C4]' : 'text-transparent'}`} />
     </div>
   );
 }
