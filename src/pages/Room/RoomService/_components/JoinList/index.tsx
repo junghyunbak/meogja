@@ -1,25 +1,64 @@
 import useStore from '@/store';
 import ColorDove from '@/assets/svgs/color-dove.svg?react';
+import { useRef } from 'react';
+import { type MouseEventHandler } from 'react';
 
-// [ ]: 가로 스크롤 드래구 구현
 export function JoinList() {
   const [user] = useStore((state) => [state.user]);
 
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+
+  const isDragging = useRef<boolean>(false);
+  const startX = useRef<number>(0);
+  const scrollLeft = useRef<number>(0);
+
+  const handleDragStart: MouseEventHandler<HTMLDivElement> = (e) => {
+    if (!scrollRef.current) {
+      return;
+    }
+
+    isDragging.current = true;
+
+    startX.current = e.pageX - scrollRef.current.offsetLeft;
+    scrollLeft.current = scrollRef.current.scrollLeft;
+  };
+
+  const handleDragMove: MouseEventHandler<HTMLDivElement> = (e) => {
+    if (!isDragging.current || !scrollRef.current) {
+      return;
+    }
+
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = x - startX.current;
+    scrollRef.current.scrollLeft = scrollLeft.current - walk;
+  };
+
+  const handleDragEnd: MouseEventHandler<HTMLDivElement> = () => {
+    isDragging.current = false;
+  };
+
   return (
-    <div className="w-full cursor-grab p-3 active:cursor-grabbing">
-      <ul className="flex">
+    <div className="pointer-events-auto w-fit max-w-full cursor-grab active:cursor-grabbing">
+      <div
+        className="scrollbar-hide flex overflow-x-scroll"
+        ref={scrollRef}
+        onMouseDown={handleDragStart}
+        onMouseMove={handleDragMove}
+        onMouseLeave={handleDragEnd}
+        onMouseUp={handleDragEnd}
+      >
         {Object.keys(user).map((userId) => {
           return (
-            <li
-              className="flex flex-col items-center border border-black bg-white p-2 py-1"
+            <div
+              className="ml-3 flex flex-col items-center border border-black bg-white p-2 py-1 last-of-type:mr-3"
               key={userId}
             >
               <ColorDove className="w-10" />
-              <p className="text-xs">{user[userId].userName}</p>
-            </li>
+              <p className="select-none text-nowrap text-xs">{user[userId].userName}</p>
+            </div>
           );
         })}
-      </ul>
+      </div>
     </div>
   );
 }

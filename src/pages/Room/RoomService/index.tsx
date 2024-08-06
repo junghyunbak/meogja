@@ -21,9 +21,9 @@ export function RoomService() {
   return (
     <>
       <div className="relative flex size-full flex-col">
-        <div className="absolute top-0 z-20 w-full">
+        <div className="pointer-events-none absolute top-0 z-20 mt-3 flex w-full flex-col">
           <JoinList />
-          <div className="px-3">
+          <div className="ml-3 mt-3 w-fit">
             <ExitTimer />
           </div>
         </div>
