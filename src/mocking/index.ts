@@ -48,7 +48,6 @@ export class MockApiService {
         endTime: new Date(Date.now() + 1000 * 60 * 60).getTime(),
         radius: 1000,
         restaurants,
-        chats: [],
         user: {},
         capacity: 3,
       },

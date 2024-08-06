@@ -12,10 +12,9 @@ export function mutableRoomState(this: Server) {
 
     const state = schema.db[roomId][0] as RoomInfo;
 
-    const { chats, user } = state;
+    const { user } = state;
 
     const responseData: MutableRoomInfo = {
-      chats,
       user,
     };
 

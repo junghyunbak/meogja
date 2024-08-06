@@ -90,6 +90,6 @@ type RoomInfo = {
   user: Record<UserId, UserData>;
 };
 
-type MutableRoomInfo = Pick<RoomInfo, 'chats' | 'user'>;
+type MutableRoomInfo = Pick<RoomInfo, 'user'>;
 
 type ImmutableRoomInfo = Pick<RoomInfo, 'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants'>;
