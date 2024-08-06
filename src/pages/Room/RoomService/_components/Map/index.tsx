@@ -15,6 +15,8 @@ import axios, { type AxiosError } from 'axios';
 
 import * as geolib from 'geolib';
 
+const USER_RADIUS = 150; // meter
+
 export function Map() {
   const { lat: roomLat, lng: roomLng, restaurants } = useContext(ImmutableRoomInfoContext);
   const { roomId, userId } = useContext(IdentifierContext);
@@ -95,7 +97,7 @@ export function Map() {
 
           return { restaurant, dist };
         })
-        .filter(({ dist }) => dist <= 200)
+        .filter(({ dist }) => dist <= USER_RADIUS)
         .sort((a, b) => (a.dist < b.dist ? -1 : 1))[0];
 
       if (!pick) {
