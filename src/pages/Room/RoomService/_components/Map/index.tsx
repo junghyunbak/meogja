@@ -108,7 +108,7 @@ export function Map() {
 
       setCurrentRestaurantId(pick.restaurant.id);
     }, 100);
-  }, [restaurants, map, setCurrentRestaurantId]);
+  }, [map, restaurants, setCurrentRestaurantId, setSheetIsOpen]);
 
   /**
    * map 전역상태 초기화 및 이벤트 등록
