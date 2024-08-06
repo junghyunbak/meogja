@@ -77,15 +77,17 @@ export function BottomSheet() {
                 <p>먹은 흔적</p>
               </div>
 
-              <ul className="w-full border-t border-black p-3">
-                {selectUserIds.map((userId) => {
-                  if (!user[userId]) {
-                    return null;
-                  }
+              {selectUserIds.length > 0 && (
+                <ul className="w-full border-t border-black p-3">
+                  {selectUserIds.map((userId) => {
+                    if (!user[userId]) {
+                      return null;
+                    }
 
-                  return <li key={userId}>{user[userId].userName}</li>;
-                })}
-              </ul>
+                    return <li key={userId}>{user[userId].userName}</li>;
+                  })}
+                </ul>
+              )}
 
               <iframe src={restaurant.placeUrl} className="size-full border-t border-black" />
             </div>
