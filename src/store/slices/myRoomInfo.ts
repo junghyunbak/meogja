@@ -19,6 +19,9 @@ type MyRoomInfoSlice = {
       | null
       | ((restaurantKind: RestaurantKind | null) => RestaurantKind | null)
   ) => void;
+
+  myMapLatLng: { lat: number; lng: number };
+  setMyMapLatLng: (lat: number, lng: number) => void;
 };
 
 export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (
@@ -62,5 +65,10 @@ export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (
     const restaurantKind = param;
 
     set(() => ({ myPicky: restaurantKind }));
+  },
+
+  myMapLatLng: { lat: 0, lng: 0 },
+  setMyMapLatLng(lat: number, lng: number) {
+    set(() => ({ myMapLatLng: { lat, lng } }));
   },
 });
