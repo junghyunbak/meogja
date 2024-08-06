@@ -57,6 +57,8 @@ type UserData = {
   direction: LEFT | RIGHT;
 };
 
+type User = Record<UserId, UserData>;
+
 type RoomInfo = {
   /**
    * 모일 장소의 위치
@@ -87,7 +89,7 @@ type RoomInfo = {
   /**
    * 실시간 사용자의 정보
    */
-  user: Record<UserId, UserData>;
+  user: User;
 };
 
 type MutableRoomInfo = Pick<RoomInfo, 'user'>;
