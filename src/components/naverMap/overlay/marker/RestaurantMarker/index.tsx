@@ -1,20 +1,15 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 
 import RamenNoodle from '@/assets/svgs/ramen-noodle.svg?react';
-import DoveShit from '@/assets/svgs/dove-shit.svg?react';
-
-import useStore from '@/store';
 
 interface RestaurantMarkerProps {
   map: naver.maps.Map | null;
   restaurant: Restaurant;
+  count: number;
 }
 
-export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => {
-  const [mySelect] = useStore((state) => [state.mySelect]);
-  const [myPicky] = useStore((state) => [state.myPicky]);
-
+export const RestaurantMarker = memo(({ map, restaurant, count }: RestaurantMarkerProps) => {
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
   /**
@@ -30,7 +25,7 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
       position: new naver.maps.LatLng(restaurant.lat, restaurant.lng),
       animation: naver.maps.Animation.DROP,
       icon: {
-        content: createMarkerIcon(mySelect.includes(restaurant.id), myPicky.includes(restaurant.id)),
+        content: createMarkerIcon(count),
       },
     });
 
@@ -72,21 +67,27 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
       return;
     }
 
-    marker.setIcon({ content: createMarkerIcon(mySelect.includes(restaurant.id), myPicky.includes(restaurant.id)) });
-  }, [mySelect, marker, restaurant, myPicky]);
+    marker.setIcon({ content: createMarkerIcon(count) });
+  }, [count, marker, restaurant]);
 
   return null;
-};
+});
 
-function createMarkerIcon(isSelect: boolean, isPicky: boolean) {
+// 동적 tailwind 스타일을 사용하기 위한 기록
+[
+  '[&>g>path:nth-last-child(-n+1)]:fill-transparent',
+  '[&>g>path:nth-last-child(-n+2)]:fill-transparent',
+  '[&>g>path:nth-last-child(-n+3)]:fill-transparent',
+  '[&>g>path:nth-last-child(-n+4)]:fill-transparent',
+  '[&>g>path:nth-last-child(-n+5)]:fill-transparent',
+  '[&>g>path:nth-last-child(-n+6)]:fill-transparent',
+  '[&>g>path:nth-last-child(-n+7)]:fill-transparent',
+];
+
+function createMarkerIcon(count = 0) {
   return renderToString(
-    <div className="relative -translate-x-[50%] -translate-y-[50%]">
-      <div className="absolute left-0 top-0 flex w-14 items-center justify-center">
-        <RamenNoodle className={`w-full ${!isSelect ? 'text-[#E7E9C4]' : 'text-transparent'}`} />
-      </div>
-      <div className="absolute left-0 top-0 flex w-14 items-center justify-center">
-        {isPicky && <DoveShit className="w-10" />}
-      </div>
+    <div className="flex w-14 -translate-x-[50%] -translate-y-[100%] items-center justify-center">
+      <RamenNoodle className={`w-full text-[#E7E9C4] [&>g>path:nth-last-child(-n+${count})]:fill-transparent`} />
     </div>
   );
 }
