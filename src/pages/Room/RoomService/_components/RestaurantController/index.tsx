@@ -14,6 +14,7 @@ export function RestaurantController() {
 
   const [mySelect, setMySelect] = useStore((state) => [state.mySelect, state.setMySelect]);
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
+  const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
 
   const { updateMySelectMutation } = useUpdateSelect({ roomId, userId });
 
@@ -40,6 +41,10 @@ export function RestaurantController() {
     };
   };
 
+  const handleShowDetailButtonClick = () => {
+    setSheetIsOpen(true);
+  };
+
   if (!currentRestaurantId) {
     return null;
   }
@@ -60,7 +65,7 @@ export function RestaurantController() {
         <div>
           <p>더럽힌다</p>
         </div>
-        <div>
+        <div onClick={handleShowDetailButtonClick}>
           <p>자세히 관찰한다</p>
         </div>
       </div>

@@ -19,11 +19,10 @@ export function Map() {
   const { lat: roomLat, lng: roomLng, restaurants } = useContext(ImmutableRoomInfoContext);
   const { roomId, userId } = useContext(IdentifierContext);
 
-  const [sheetRef] = useStore((state) => [state.sheetRef]);
-
   const [setMap] = useStore((state) => [state.setMap]);
   const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
   const [setCurrentRestaurantId] = useStore((state) => [state.setCurrentRestaurantId]);
+  const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
 
   // [ ]: debouncing을 위한 useRef 변수명 수정
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -102,6 +101,8 @@ export function Map() {
       if (!pick) {
         setCurrentRestaurantId(null);
 
+        setSheetIsOpen(false);
+
         return;
       }
 
@@ -129,7 +130,7 @@ export function Map() {
     };
 
     const handleMapClick = () => {
-      sheetRef?.snapTo(2);
+      setSheetIsOpen(false);
     };
 
     const centerChangedEventListener = naver.maps.Event.addListener(map, 'center_changed', handleMapCenterChange);
@@ -139,7 +140,7 @@ export function Map() {
       naver.maps.Event.removeListener(clickEventListener);
       naver.maps.Event.removeListener(centerChangedEventListener);
     };
-  }, [map, setCurrentRestaurantId, setMap, sheetRef, updateNearByRestaurant, updateUserMapLatLng]);
+  }, [map, setCurrentRestaurantId, setMap, setSheetIsOpen, updateNearByRestaurant, updateUserMapLatLng]);
 
   return (
     <>

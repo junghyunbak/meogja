@@ -8,6 +8,7 @@ import useStore from '@/store';
 import { JoinList } from './_components/JoinList';
 import { ExitTimer } from './_components/ExitTimer';
 import { RestaurantController } from './_components/RestaurantController';
+import { BottomSheet } from './_components/BottomSheet';
 
 export function RoomService() {
   const { endTime } = useContext(ImmutableRoomInfoContext);
@@ -36,8 +37,8 @@ export function RoomService() {
         </div>
       </div>
 
+      <BottomSheet />
       <Geolocation />
-
       <RefetchIntervalMutableRoomState />
     </>
   );
