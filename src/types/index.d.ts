@@ -6,11 +6,8 @@ type RestaurantId = string;
 type RIGHT = 0;
 type LEFT = 1;
 
-type RestaurantKind = 'korean' | 'western' | 'japan' | 'snack' | 'pizza' | 'chinese' | 'hamburger' | 'chicken';
-
 type Restaurant = {
   id: RestaurantId;
-  category: RestaurantKind;
   name: string;
   lat: number;
   lng: number;
@@ -28,7 +25,7 @@ type Chat = {
 type UserData = {
   userName: UserName;
   select: RestaurantId[];
-  picky: RestaurantKind | null;
+  picky: RestaurantId[];
   // [ ]: 사용자의 카메라 위치인지, gps위치인지를 구분해야한다.
   lat: number | null;
   lng: number | null;

@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 
 import RamenNoodle from '@/assets/svgs/ramen-noodle.svg?react';
+import DoveShit from '@/assets/svgs/dove-shit.svg?react';
 
 import useStore from '@/store';
 
@@ -29,7 +30,7 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
       position: new naver.maps.LatLng(restaurant.lat, restaurant.lng),
       animation: naver.maps.Animation.DROP,
       icon: {
-        content: createMarkerIcon(mySelect.includes(restaurant.id)),
+        content: createMarkerIcon(mySelect.includes(restaurant.id), myPicky.includes(restaurant.id)),
       },
     });
 
@@ -71,16 +72,21 @@ export const RestaurantMarker = ({ map, restaurant }: RestaurantMarkerProps) => 
       return;
     }
 
-    marker.setIcon({ content: createMarkerIcon(mySelect.includes(restaurant.id)) });
-  }, [mySelect, marker, restaurant]);
+    marker.setIcon({ content: createMarkerIcon(mySelect.includes(restaurant.id), myPicky.includes(restaurant.id)) });
+  }, [mySelect, marker, restaurant, myPicky]);
 
   return null;
 };
 
-function createMarkerIcon(isSelect: boolean) {
+function createMarkerIcon(isSelect: boolean, isPicky: boolean) {
   return renderToString(
-    <div className="-translate-x-[50%] -translate-y-[50%]">
-      <RamenNoodle className={`w-14 ${!isSelect ? 'text-[#E7E9C4]' : 'text-transparent'}`} />
+    <div className="relative -translate-x-[50%] -translate-y-[50%]">
+      <div className="absolute left-0 top-0 flex w-14 items-center justify-center">
+        <RamenNoodle className={`w-full ${!isSelect ? 'text-[#E7E9C4]' : 'text-transparent'}`} />
+      </div>
+      <div className="absolute left-0 top-0 flex w-14 items-center justify-center">
+        {isPicky && <DoveShit className="w-10" />}
+      </div>
     </div>
   );
 }

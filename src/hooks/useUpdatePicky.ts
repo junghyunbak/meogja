@@ -2,16 +2,12 @@ import useStore from '@/store';
 import axios, { AxiosError } from 'axios';
 import { useMutation } from 'react-query';
 
-export function useUpdatePicky(roomId: string, userId: string) {
+export function useUpdatePicky({ roomId, userId }: { roomId: string; userId: string }) {
   const [isUpdatingRef] = useStore((state) => [state.isUpdatingRef]);
 
-  const updateMyPickyMutation = useMutation<
-    undefined,
-    AxiosError,
-    RestaurantKind
-  >({
+  const updateMyPickyMutation = useMutation<undefined, AxiosError, RestaurantId>({
     mutationKey: [],
-    mutationFn: async (restaurantKind: RestaurantKind) => {
+    mutationFn: async (restaurantId: RestaurantId) => {
       if (isUpdatingRef) {
         isUpdatingRef.current = true;
       }
@@ -19,7 +15,7 @@ export function useUpdatePicky(roomId: string, userId: string) {
       await axios.patch('/api/update-user-picky', {
         userId,
         roomId,
-        restaurantKind,
+        restaurantId,
       });
     },
     onSuccess() {

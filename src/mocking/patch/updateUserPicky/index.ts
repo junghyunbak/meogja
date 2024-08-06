@@ -1,23 +1,12 @@
 import { type Server, Response } from 'miragejs';
 
-const RESTAURANT_KIND: RestaurantKind[] = [
-  'chicken',
-  'chinese',
-  'hamburger',
-  'japan',
-  'korean',
-  'pizza',
-  'western',
-  'snack',
-];
-
 export function updateUserPicky(this: Server) {
   this.patch('/api/update-user-picky', (schema, request) => {
     const { requestBody } = request;
 
-    const { userId, roomId, restaurantKind } = JSON.parse(requestBody);
+    const { userId, roomId, restaurantId } = JSON.parse(requestBody);
 
-    if (!userId || !roomId || !RESTAURANT_KIND.includes(restaurantKind)) {
+    if (!userId || !roomId || !restaurantId) {
       return new Response(400);
     }
 
@@ -31,12 +20,11 @@ export function updateUserPicky(this: Server) {
 
     const picky = newState.user[userId].picky;
 
-    newState.user[userId].picky =
-      picky === null
-        ? restaurantKind
-        : picky !== restaurantKind
-          ? restaurantKind
-          : null;
+    if (picky.includes(restaurantId)) {
+      newState.user[userId].picky = picky.filter((v) => v !== restaurantId);
+    } else {
+      newState.user[userId].picky = [...picky, restaurantId];
+    }
 
     schema.db[roomId].update(newState);
 
