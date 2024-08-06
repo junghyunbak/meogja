@@ -1,17 +1,13 @@
 import useStore from '@/store';
 import { useMutation } from 'react-query';
-import axios from 'axios';
+import axios, { type AxiosError } from 'axios';
 
-export function useUpdateSelect(
-  roomId: string,
-  userId: string,
-  restaurantId: string
-) {
+export function useUpdateSelect({ userId, roomId }: { roomId: string; userId: string }) {
   const [isUpdatingRef] = useStore((state) => [state.isUpdatingRef]);
 
-  const updateMySelectMutation = useMutation({
+  const updateMySelectMutation = useMutation<undefined, AxiosError, RestaurantId>({
     mutationKey: [],
-    mutationFn: async () => {
+    mutationFn: async (restaurantId) => {
       if (isUpdatingRef) {
         isUpdatingRef.current = true;
       }
