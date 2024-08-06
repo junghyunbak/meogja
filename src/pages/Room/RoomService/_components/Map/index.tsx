@@ -5,7 +5,7 @@ import useStore from '@/store';
 
 import { ImmutableRoomInfoContext, IdentifierContext } from '@/pages/Room';
 
-import { UserMarker } from '@/components/naverMap/overlay/marker';
+import { RestaurantMarker, UserMarker } from '@/components/naverMap/overlay/marker';
 import { AcitivityRadius } from '@/components/naverMap/overlay/polygon';
 
 import { useNaverMap } from '@/hooks/useNaverMap';
@@ -109,6 +109,7 @@ export function Map() {
       <div className="size-full" id="map" />
 
       <UserMarkers />
+      <RestaurantMarkers />
 
       <AcitivityRadius map={map} />
     </>
@@ -133,6 +134,20 @@ function UserMarkers() {
         .map((otherUserId) => {
           return <UserMarker userData={user[otherUserId]} key={userId} map={map} />;
         })}
+    </>
+  );
+}
+
+function RestaurantMarkers() {
+  const { restaurants } = useContext(ImmutableRoomInfoContext);
+
+  const [map] = useStore((state) => [state.map]);
+
+  return (
+    <>
+      {restaurants.map((restaurant) => {
+        return <RestaurantMarker key={restaurant.id} map={map} restaurant={restaurant} />;
+      })}
     </>
   );
 }
