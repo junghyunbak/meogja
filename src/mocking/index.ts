@@ -21,25 +21,19 @@ export class MockApiService {
 
         this.pretender.handledRequest = (verb) => {
           if (verb !== 'GET') {
-            localStorage.setItem(
-              LOCALSTORAGE_DUMP_KEY,
-              JSON.stringify(server.db.dump())
-            );
+            localStorage.setItem(LOCALSTORAGE_DUMP_KEY, JSON.stringify(server.db.dump()));
           }
         };
       },
     });
 
-    const dumpData = JSON.parse(
-      localStorage.getItem(LOCALSTORAGE_DUMP_KEY) || '{}'
-    );
+    const dumpData = JSON.parse(localStorage.getItem(LOCALSTORAGE_DUMP_KEY) || '{}');
 
     const restaurants: Restaurant[] = [];
 
     mockRestaurants.documents.forEach((document) => {
       restaurants.push({
         id: document.id,
-        category: 'pizza',
         name: document.place_name,
         lat: +document.y,
         lng: +document.x,
@@ -60,9 +54,7 @@ export class MockApiService {
       },
     };
 
-    server.db.loadData(
-      Object.keys(dumpData).length !== 0 ? dumpData : defaultData
-    );
+    server.db.loadData(Object.keys(dumpData).length !== 0 ? dumpData : defaultData);
 
     window.server = server;
   }

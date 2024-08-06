@@ -39,7 +39,7 @@ export function BottomSheet() {
       ref={sheetRef}
       isOpen={sheetIsOpen}
       onClose={handleButtonSheetOnClose}
-      snapPoints={[0.85, 0.5]}
+      snapPoints={[0.9, 0.6]}
       initialSnap={1}
       className="mx-auto max-w-[600px]"
     >
@@ -58,7 +58,7 @@ export function BottomSheet() {
               </div>
 
               <div className="flex w-full border-t border-black">
-                <div className="bg-p-red flex items-center justify-center border-r border-black p-3">
+                <div className="flex items-center justify-center border-r border-black bg-p-red p-3">
                   <p>집까지 거리</p>
                 </div>
                 <div className="flex flex-1 items-center justify-center">
@@ -74,7 +74,7 @@ export function BottomSheet() {
                 </div>
               </div>
 
-              <div className="bg-p-yellow w-full border-t border-black p-3">
+              <div className="w-full border-t border-black bg-p-yellow p-3">
                 <p>먹은 흔적</p>
               </div>
 

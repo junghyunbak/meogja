@@ -28,9 +28,7 @@ const useStoreBase = create<StoreState>()(
     }),
     {
       name: 'zustandStore',
-      partialize: (state) => ({
-        sheetState: state.sheetState,
-      }),
+      partialize: () => ({}),
     }
   )
 );
