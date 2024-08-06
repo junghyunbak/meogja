@@ -13,6 +13,7 @@ export function RestaurantController() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
   const { userId, roomId } = useContext(IdentifierContext);
 
+  const [map] = useStore((state) => [state.map]);
   const [mySelect, setMySelect] = useStore((state) => [state.mySelect, state.setMySelect]);
   const [myPicky, setMyPicky] = useStore((state) => [state.myPicky, state.setMyPicky]);
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
@@ -21,7 +22,7 @@ export function RestaurantController() {
   const { updateMySelectMutation } = useUpdateSelect({ roomId, userId });
   const { updateMyPickyMutation } = useUpdatePicky({ roomId, userId });
 
-  const handleChooseButtonClick = (restaurantId: string) => {
+  const handleChooseButtonClick = (restaurant: Restaurant) => {
     return () => {
       /**
        * 낙관적 처리
@@ -29,10 +30,10 @@ export function RestaurantController() {
       setMySelect((prev) => {
         const next = [...prev];
 
-        const idx = next.indexOf(restaurantId);
+        const idx = next.indexOf(restaurant.id);
 
         if (idx === -1) {
-          next.push(restaurantId);
+          next.push(restaurant.id);
         } else {
           next.splice(idx, 1);
         }
@@ -40,11 +41,13 @@ export function RestaurantController() {
         return next;
       });
 
-      updateMySelectMutation.mutate(restaurantId);
+      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng))
+
+      updateMySelectMutation.mutate(restaurant.id);
     };
   };
 
-  const handleDurtyButtonClick = (restaurantId: RestaurantId) => {
+  const handleDurtyButtonClick = (restaurant: Restaurant) => {
     return () => {
       /**
        * 낙관적 처리
@@ -52,22 +55,30 @@ export function RestaurantController() {
       setMyPicky((prev) => {
         const next = [...prev];
 
-        const idx = next.indexOf(restaurantId);
+        const idx = next.indexOf(restaurant.id);
 
         if (idx === -1) {
-          next.push(restaurantId);
+          next.push(restaurant.id);
         } else {
           next.splice(idx, 1);
         }
 
         return next;
       });
-      updateMyPickyMutation.mutate(restaurantId);
+
+      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng))
+
+      updateMyPickyMutation.mutate(restaurant.id);
     };
   };
 
-  const handleShowDetailButtonClick = () => {
-    setSheetIsOpen(true);
+  const handleShowDetailButtonClick = (restaurant: Restaurant) => {
+
+    return () => {
+      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng))
+
+      setSheetIsOpen(true);
+    }
   };
 
   if (!currentRestaurantId) {
@@ -84,13 +95,13 @@ export function RestaurantController() {
     <div className="restaurant-controller">
       <div className="restaurant-controller-button">
         <p>{restaurant.name}</p>
-        <div onClick={handleChooseButtonClick(restaurant.id)}>
+        <div onClick={handleChooseButtonClick(restaurant)}>
           <p>{mySelect.includes(restaurant.id) ? '뱉는다' : '먹는다'}</p>
         </div>
-        <div onClick={handleDurtyButtonClick(restaurant.id)}>
+        <div onClick={handleDurtyButtonClick(restaurant)}>
           <p>{myPicky.includes(restaurant.id) ? '치운다' : '더럽힌다'}</p>
         </div>
-        <div onClick={handleShowDetailButtonClick}>
+        <div onClick={handleShowDetailButtonClick(restaurant)}>
           <p>자세히 관찰한다</p>
         </div>
       </div>
