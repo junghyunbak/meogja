@@ -23,7 +23,7 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
       position: new naver.maps.LatLng(userData.lat || 0, userData.lng || 0),
       icon: {
         content: renderToString(
-          <div className="user-marker z-10">
+          <div className="user-marker">
             <ColorDove className="w-14" />
           </div>
         ),
