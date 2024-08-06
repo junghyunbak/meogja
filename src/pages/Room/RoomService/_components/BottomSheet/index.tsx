@@ -3,7 +3,7 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 
 import useStore from '@/store';
 
-import { ImmutableRoomInfoContext } from '@/pages/Room';
+import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
 
 import * as geolib from 'geolib';
 
@@ -11,6 +11,7 @@ export function BottomSheet() {
   const sheetRef = useRef<SheetRef | null>(null);
 
   const { restaurants } = useContext(ImmutableRoomInfoContext);
+  const { userId: myId } = useContext(IdentifierContext);
 
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
   const [sheetIsOpen, setSheetIsOpen] = useStore((state) => [state.sheetIsOpen, state.setSheetIsOpen]);
@@ -84,7 +85,14 @@ export function BottomSheet() {
                       return null;
                     }
 
-                    return <li key={userId}>{user[userId].userName}</li>;
+                    return (
+                      <li key={userId}>
+                        <p>
+                          {user[userId].userName}
+                          <span>{userId === myId ? ' (나)' : ''}</span>
+                        </p>
+                      </li>
+                    );
                   })}
                 </ul>
               )}
