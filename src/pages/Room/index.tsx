@@ -1,19 +1,16 @@
 import { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 
 import { Loading } from './_components/Loading';
 import { CheckUserId } from './_components/CheckUserId';
 import { CheckRoomId } from './_components/CheckRoomId';
-import { ErrorBoundary } from 'react-error-boundary';
 import { LoadImmutableRoomData } from './_components/LoadImmutableRoomData';
 import { DelayForAnimation } from './_components/DelayForAnimation';
+import { ErrorPage } from './_components/ErrorPage';
 
 export function Room() {
   return (
-    <ErrorBoundary
-      FallbackComponent={(e) => {
-        return <div>{JSON.stringify(e.error, null, 2)}</div>;
-      }}
-    >
+    <ErrorBoundary FallbackComponent={ErrorPage}>
       <Suspense fallback={<Loading />}>
         <CheckRoomId>
           <CheckUserId>
