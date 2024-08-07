@@ -1,16 +1,9 @@
-import { useNavigate } from 'react-router-dom';
-
 import StrokeDove from '@/assets/svgs/stroke-dove.svg?react';
 import Slider from 'react-slick';
 
 export function Home() {
-  /**
-   * navigate: 실제론 없을 기능
-   */
-  const navigate = useNavigate();
-
   const handleStartButtonClick = () => {
-    navigate('/room/0');
+    location.href = '/room/0';
   };
 
   return (

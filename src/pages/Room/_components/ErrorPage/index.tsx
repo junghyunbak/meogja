@@ -1,6 +1,6 @@
 import { ComponentType, useEffect } from 'react';
 import { type FallbackProps } from 'react-error-boundary';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import SurpriseDove from '@/assets/svgs/surprise-dove.svg?react';
 
@@ -9,8 +9,6 @@ import { AxiosError } from 'axios';
 import { RESPONSE_CODE } from '@/constants/api';
 
 export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
-  const navigate = useNavigate();
-
   const { roomId } = useParams();
 
   const message = (() => {
@@ -41,7 +39,7 @@ export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
   }, [code, roomId]);
 
   const handleGoHomeButtonClick = () => {
-    navigate('/');
+    location.href = '/';
   };
 
   return (
