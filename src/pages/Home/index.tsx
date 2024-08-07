@@ -1,4 +1,3 @@
-import Logo from '@/assets/svgs/logo.svg?react';
 import { useNavigate } from 'react-router-dom';
 
 export function Home() {
@@ -14,7 +13,6 @@ export function Home() {
   return (
     <div className="flex h-full w-full flex-col items-center justify-between bg-bg">
       <div className="flex flex-col items-center gap-8">
-        <Logo className="w-[50%] text-white" />
         <p className="text-white">
           함께하고 싶은 <span className="font-bold text-primary">식당</span>을 다같이 골라보세요.
         </p>
