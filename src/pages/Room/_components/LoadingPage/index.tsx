@@ -4,7 +4,7 @@ import './index.css';
 
 const MAX_GAGE: Gage = 3;
 
-export function Loading() {
+export function LoadingPage() {
   const [gage] = useStore((state) => [state.gage]);
 
   return (
