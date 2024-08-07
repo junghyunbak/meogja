@@ -20,7 +20,7 @@ export function RefetchIntervalMutableRoomState() {
   const [setUser] = useStore((state) => [state.setUser]);
 
   useQuery({
-    queryKey: ['room-service', roomId],
+    queryKey: ['room-service'],
     queryFn: async () => {
       const sendTime = Date.now();
 
