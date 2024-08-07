@@ -61,16 +61,16 @@ export function BottomSheet() {
       onClose={handleButtonSheetOnClose}
       snapPoints={[0.9, 0.6]}
       initialSnap={1}
-      className="mx-auto max-w-[600px]"
+      className="mx-auto max-w-[600px] cursor-grab active:cursor-grabbing"
     >
-      <Sheet.Container className="!left-auto cursor-grab border border-black !shadow-none active:cursor-grabbing">
+      <Sheet.Container className="!left-auto border border-black !shadow-none">
         <Sheet.Header>
           <div className="pt-[7px]">
             <div className="mx-auto h-[4px] w-[33%] bg-black" />
           </div>
         </Sheet.Header>
 
-        <Sheet.Content className="cursor-default">
+        <Sheet.Content>
           {restaurant && (
             <div className="flex size-full flex-col items-center">
               <div className="flex items-center justify-center py-3">
