@@ -1,13 +1,19 @@
 import { useEffect, useState, useContext } from 'react';
-import { ImmutableRoomInfoContext } from '@/pages/Room';
+import { useNavigate } from 'react-router-dom';
+
+import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
 
 export function ExitTimer() {
+  const navigate = useNavigate();
+
+  const { roomId } = useContext(IdentifierContext);
   const { endTime } = useContext(ImmutableRoomInfoContext);
 
-  const [remainSecond, setRemainSecond] = useState(
-    Math.floor((endTime - Date.now()) / 1000)
-  );
+  const [remainSecond, setRemainSecond] = useState(Math.floor((endTime - Date.now()) / 1000));
 
+  /**
+   * 타이머 작동
+   */
   useEffect(() => {
     const timer = setInterval(() => {
       setRemainSecond((prev) => prev - 1);
@@ -17,6 +23,15 @@ export function ExitTimer() {
       clearInterval(timer);
     };
   }, [endTime]);
+
+  /**
+   * 남은 시간이 0초 이하일 경우 결과 페이지로 라우트
+   */
+  useEffect(() => {
+    if (remainSecond <= 0) {
+      navigate(`/result/${roomId}`);
+    }
+  }, [remainSecond, navigate, roomId]);
 
   const s = remainSecond;
 

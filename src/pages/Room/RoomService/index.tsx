@@ -1,7 +1,3 @@
-import { useContext } from 'react';
-
-import { ImmutableRoomInfoContext } from '..';
-
 import { Map } from './_components/Map';
 import { Geolocation } from './_components/Geolocation';
 import { JoinList } from './_components/JoinList';
@@ -11,13 +7,6 @@ import { BottomSheet } from './_components/BottomSheet';
 import { RefetchIntervalMutableRoomState } from './_components/RefetchIntervalMutableRoomState';
 
 export function RoomService() {
-  const { endTime } = useContext(ImmutableRoomInfoContext);
-
-  // [ ]: 실시간으로 종료 여부를 판단할 전역 상태가 필요.
-  if (endTime < Date.now()) {
-    return <div>사용이 종료되었습니다.</div>;
-  }
-
   return (
     <>
       <div className="relative flex size-full flex-col">
