@@ -1,1 +1,1 @@
-export * from './AcitivityRadius';
+export * from './ActivityRadius';

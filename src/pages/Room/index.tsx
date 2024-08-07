@@ -7,6 +7,7 @@ import { CheckRoomId } from './_components/CheckRoomId';
 import { LoadImmutableRoomData } from './_components/LoadImmutableRoomData';
 import { DelayForAnimation } from './_components/DelayForAnimation';
 import { ErrorPage } from './_components/ErrorPage';
+import { RoomService } from './RoomService';
 
 export function Room() {
   return (
@@ -16,7 +17,7 @@ export function Room() {
           <CheckUserId>
             <LoadImmutableRoomData>
               <DelayForAnimation delay={500}>
-                <div>메인서비스!</div>
+                <RoomService />
               </DelayForAnimation>
             </LoadImmutableRoomData>
           </CheckUserId>

@@ -1,19 +1,16 @@
-import { useContext, useEffect } from 'react';
-import { ImmutableRoomInfoContext } from '@/pages/Room';
+import { useEffect } from 'react';
 
-interface AcitivityRadiusProps {
+interface ActivityRadiusProps {
   map: naver.maps.Map | null;
+  centerLatLng: naver.maps.LatLng;
+  radius: number;
 }
 
-export function AcitivityRadius({ map }: AcitivityRadiusProps) {
-  const { lat, lng, radius } = useContext(ImmutableRoomInfoContext);
-
+export function ActivityRadius({ map, centerLatLng, radius }: ActivityRadiusProps) {
   useEffect(() => {
     if (!map) {
       return;
     }
-
-    const standardLatLng = new naver.maps.LatLng(lat, lng);
 
     const latMin = 28.7905313;
     const latMax = 44.4367236;
@@ -26,7 +23,7 @@ export function AcitivityRadius({ map }: AcitivityRadiusProps) {
         Array(361)
           .fill(null)
           .map((_, i) => {
-            return standardLatLng.destinationPoint(i % 360, radius);
+            return centerLatLng.destinationPoint(i % 360, radius);
           }),
         [
           new naver.maps.LatLng(latMin, lngMin),
@@ -45,7 +42,7 @@ export function AcitivityRadius({ map }: AcitivityRadiusProps) {
     return () => {
       ploygon.setMap(null);
     };
-  }, [map, lat, lng, radius]);
+  }, [map, radius, centerLatLng]);
 
   return null;
 }

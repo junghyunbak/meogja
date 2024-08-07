@@ -5,10 +5,12 @@ import useStore from '@/store';
 
 import axios from 'axios';
 
-import { IdentifierContext } from '@/pages/Room';
+import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
 
 export function RefetchIntervalMutableRoomState() {
-  const { userId, roomId } = useContext(IdentifierContext);
+  const userId = useContext(UserIdContext);
+  const roomId = useContext(RoomIdContext);
 
   const isUpdatingRef = useRef<boolean>(false);
 

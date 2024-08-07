@@ -1,14 +1,15 @@
 import { useContext } from 'react';
 
-import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
-
 import { RestaurantMarker } from '@/components/naverMap/overlay/marker';
+
+import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
 
 import useStore from '@/store';
 
 export function MapRestaurants() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
-  const { userId } = useContext(IdentifierContext);
+  const userId = useContext(UserIdContext);
 
   const [map] = useStore((state) => [state.map]);
   const [user] = useStore((state) => [state.user]);

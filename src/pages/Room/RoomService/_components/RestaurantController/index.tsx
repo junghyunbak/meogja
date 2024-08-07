@@ -1,16 +1,18 @@
 import { useContext } from 'react';
 
-import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
-
 import { useUpdateSelect } from '@/hooks/useUpdateSelect';
 
 import useStore from '@/store';
 
 import './index.css';
+import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
+import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
 
 export function RestaurantController() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
-  const { userId, roomId } = useContext(IdentifierContext);
+  const userId = useContext(UserIdContext);
+  const roomId = useContext(RoomIdContext);
 
   const [map] = useStore((state) => [state.map]);
   const [mySelect, setMySelect] = useStore((state) => [state.mySelect, state.setMySelect]);

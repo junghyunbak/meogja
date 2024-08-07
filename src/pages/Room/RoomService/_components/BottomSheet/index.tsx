@@ -3,20 +3,21 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 
 import useStore from '@/store';
 
-import { IdentifierContext, ImmutableRoomInfoContext } from '@/pages/Room';
-
 import * as geolib from 'geolib';
+import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
 
 export function BottomSheet() {
   const sheetRef = useRef<SheetRef | null>(null);
 
+  const myId = useContext(UserIdContext);
   const { restaurants } = useContext(ImmutableRoomInfoContext);
-  const { userId: myId } = useContext(IdentifierContext);
 
+  const [user] = useStore((state) => [state.user]);
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
   const [sheetIsOpen, setSheetIsOpen] = useStore((state) => [state.sheetIsOpen, state.setSheetIsOpen]);
-  const [user] = useStore((state) => [state.user]);
   const [myGpsLatLng] = useStore((state) => [state.myGpsLatLng]);
+  const [mySelect] = useStore((state) => [state.mySelect]);
 
   const handleButtonSheetOnClose = () => {
     setSheetIsOpen(false);
@@ -24,15 +25,38 @@ export function BottomSheet() {
 
   const restaurant = restaurants.find(({ id }) => id === currentRestaurantId);
 
-  const selectUserIds: UserId[] = [];
+  /**
+   * 현재 선택된 식당의 선택정보를 계산
+   */
+  const selectUserIds: UserId[] = (() => {
+    const ret: UserId[] = [];
 
-  Object.entries(user).forEach(([userId, userData]) => {
-    if (restaurant && !userData.select.includes(restaurant.id)) {
-      return;
+    if (!restaurant) {
+      return ret;
     }
 
-    selectUserIds.push(userId);
-  });
+    mySelect.forEach((restaurantId) => {
+      if (restaurantId !== restaurant.id) {
+        return;
+      }
+
+      ret.push(restaurantId);
+    });
+
+    Object.entries(user).forEach(([userId, userData]) => {
+      if (userId === myId) {
+        return;
+      }
+
+      if (!userData.select.includes(restaurant.id)) {
+        return;
+      }
+
+      ret.push(restaurant.id);
+    });
+
+    return ret;
+  })();
 
   return (
     <Sheet

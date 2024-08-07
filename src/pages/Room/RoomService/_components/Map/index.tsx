@@ -3,9 +3,7 @@ import { useMutation } from 'react-query';
 
 import useStore from '@/store';
 
-import { ImmutableRoomInfoContext, IdentifierContext } from '@/pages/Room';
-
-import { AcitivityRadius } from '@/components/naverMap/overlay/polygon';
+import { ActivityRadius } from '@/components/naverMap/overlay/polygon';
 import { MapRestaurants } from './MapRestaurants';
 import { MapUserMarkers } from './MapUserMarkers';
 
@@ -14,12 +12,16 @@ import { useNaverMap } from '@/hooks/useNaverMap';
 import axios, { type AxiosError } from 'axios';
 
 import * as geolib from 'geolib';
+import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
+import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
+import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
 
 const USER_RADIUS = 150; // meter
 
 export function Map() {
-  const { lat: roomLat, lng: roomLng, restaurants } = useContext(ImmutableRoomInfoContext);
-  const { roomId, userId } = useContext(IdentifierContext);
+  const { lat, lng, radius, restaurants } = useContext(ImmutableRoomInfoContext);
+  const roomId = useContext(RoomIdContext);
+  const userId = useContext(UserIdContext);
 
   const [setMap] = useStore((state) => [state.setMap]);
   const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
@@ -32,9 +34,9 @@ export function Map() {
   const timerRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef3 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const prevLngRef = useRef<number>(roomLng);
+  const prevLngRef = useRef<number>(lat);
 
-  const { map } = useNaverMap({ lat: roomLat, lng: roomLng, mapId: 'map' });
+  const { map } = useNaverMap({ lat, lng, mapId: 'map' });
 
   const updateMyLatLngMutation = useMutation<
     undefined,
@@ -164,7 +166,7 @@ export function Map() {
       <MapUserMarkers />
       <MapRestaurants />
 
-      <AcitivityRadius map={map} />
+      <ActivityRadius map={map} centerLatLng={new naver.maps.LatLng(lat, lng)} radius={radius} />
     </>
   );
 }

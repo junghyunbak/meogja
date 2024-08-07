@@ -1,13 +1,13 @@
 import { useContext } from 'react';
 
-import { IdentifierContext } from '@/pages/Room';
-
 import useStore from '@/store';
 
 import { UserMarker } from '@/components/naverMap/overlay/marker';
 
+import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+
 export function MapUserMarkers() {
-  const { userId } = useContext(IdentifierContext);
+  const userId = useContext(UserIdContext);
 
   const [map] = useStore((state) => [state.map]);
   const [user] = useStore((state) => [state.user]);
