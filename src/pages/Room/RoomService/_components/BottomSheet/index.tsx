@@ -35,13 +35,9 @@ export function BottomSheet() {
       return ret;
     }
 
-    mySelect.forEach((restaurantId) => {
-      if (restaurantId !== restaurant.id) {
-        return;
-      }
-
-      ret.push(restaurantId);
-    });
+    if (mySelect.includes(restaurant.id)) {
+      ret.push(myId);
+    }
 
     Object.entries(user).forEach(([userId, userData]) => {
       if (userId === myId) {
@@ -52,7 +48,7 @@ export function BottomSheet() {
         return;
       }
 
-      ret.push(restaurant.id);
+      ret.push(userId);
     });
 
     return ret;
