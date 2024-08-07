@@ -1,6 +1,9 @@
-import { NICKNAME_ADJECTIVE, NICKNAME_NOUN } from '@/constants';
+import { NICKNAME_ADJECTIVE } from '@/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { type Server, Response } from 'miragejs';
+import httpStatus from 'http-status';
+import { createResponseData } from '@/utils';
+import { RESPONSE_CODE } from '@/constants/api';
 
 export const joinRoom = function (this: Server) {
   this.post('/api/join-room', (schema, request) => {
@@ -8,51 +11,46 @@ export const joinRoom = function (this: Server) {
 
     const { roomId } = JSON.parse(requestBody);
 
-    /**
-     * 정보가 올바르지 않을 경우 400(bad request) 반환
-     */
-    if (!roomId) {
-      return new Response(400);
+    if (typeof roomId !== 'string') {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '잘못된 요청입니다.')
+      );
+    }
+
+    if (!schema.db[roomId]) {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_ROOM, '존재하지 않는 방입니다.')
+      );
     }
 
     const state = schema.db[roomId][0] as RoomInfo;
 
-    /**
-     * 방 수용인원 초과 시 403(forbidden) 반환
-     */
     if (Object.keys(state.user).length === state.capacity) {
-      return new Response(403);
+      return new Response(
+        httpStatus.FORBIDDEN,
+        {},
+        createResponseData({}, RESPONSE_CODE.NO_EMTPY_SPACE, '방 접속인원이 가득 찼습니다.')
+      );
     }
 
     const userId = uuidv4();
 
-    const nickName =
-      NICKNAME_ADJECTIVE[Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)] +
-      ' ' +
-      NICKNAME_NOUN[Math.floor(Math.random() * NICKNAME_NOUN.length)];
+    const nickName = `${NICKNAME_ADJECTIVE[Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)]} 비둘기`;
 
-    const newUser: User = {
-      ...state.user,
-    };
+    const newState = JSON.parse(JSON.stringify(state)) as RoomInfo;
 
-    newUser[userId] = {
-      userName: nickName,
-      select: [],
-      lat: null,
-      lng: null,
-      direction: 0,
-    };
-
-    const newState: RoomInfo = {
-      ...state,
-      user: newUser,
-    };
+    newState.user[userId] = { userName: nickName, select: [], lat: null, lng: null, direction: 0 };
 
     schema.db[roomId].update(newState);
 
-    /**
-     * 성공적으로 방 입장 시 201 반환
-     */
-    return new Response(201, {}, { data: { userId } });
+    return new Response(
+      httpStatus.CREATED,
+      {},
+      createResponseData<{ userId: UserId }>({ userId }, RESPONSE_CODE.OK, '방에 성공적으로 입장하였습니다.')
+    );
   });
 };

@@ -1,4 +1,7 @@
 import { type Server, Response } from 'miragejs';
+import { RESPONSE_CODE } from '@/constants/api';
+import { createResponseData } from '@/utils';
+import httpStatus from 'http-status';
 
 export const checkUserId = function (this: Server) {
   this.get('/api/check-user-id', (schema, request) => {
@@ -6,25 +9,36 @@ export const checkUserId = function (this: Server) {
       queryParams: { userId, roomId },
     } = request;
 
-    /**
-     * 정보가 올바르지 않을 경우 400(bad request) 반환
-     */
-    if (!userId || userId instanceof Array || typeof roomId !== 'string') {
-      return new Response(400);
+    if (typeof userId !== 'string' || typeof roomId !== 'string') {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '잘못된 요청입니다.')
+      );
+    }
+
+    if (!schema.db[roomId]) {
+      return new Response(
+        httpStatus.BAD_GATEWAY,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_ROOM, '존재하지 않는 방입니다.')
+      );
     }
 
     const state = schema.db[roomId][0] as RoomInfo;
 
-    /**
-     * 사용자의 식별자가 방에 존재하지 않을 경우 401(unauthorized) 반환
-     */
     if (!Object.keys(state.user).includes(userId)) {
-      return new Response(401);
+      return new Response(
+        httpStatus.UNAUTHORIZED,
+        {},
+        createResponseData({}, RESPONSE_CODE.NOT_AUTHORITY, '방에 속하지 않은 사용자의 접속입니다.')
+      );
     }
 
-    /**
-     * 유효성 검사를 통과할 경우 200(ok) 반환
-     */
-    return new Response(200);
+    return new Response(
+      httpStatus.OK,
+      {},
+      createResponseData({}, RESPONSE_CODE.OK, '사용자 아이디 유효성 검사가 통과하였습니다.')
+    );
   });
 };

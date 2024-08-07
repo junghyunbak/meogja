@@ -1,23 +1,43 @@
 import { type Server, Response } from 'miragejs';
+import httpStatus from 'http-status';
+import { RESPONSE_CODE } from '@/constants/api';
+import { createResponseData } from '@/utils';
 
 export function updateUserSelect(this: Server) {
   this.patch('/api/update-user-select', (schema, request) => {
     const { requestBody } = request;
+
     const { userId, roomId, restaurantId } = JSON.parse(requestBody);
 
-    if (!userId || !roomId || !restaurantId) {
-      return new Response(400);
+    if (typeof userId !== 'string' || typeof roomId !== 'string' || typeof restaurantId !== 'string') {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '잘못된 요청입니다.')
+      );
+    }
+
+    if (!schema.db[roomId]) {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_ROOM, '존재하지 않는 방입니다.')
+      );
     }
 
     const state = schema.db[roomId][0] as RoomInfo;
 
     if (!state.user[userId]) {
-      return new Response(400);
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.NOT_AUTHORITY, '방에 접속중이지 않은 사용자의 요청입니다.')
+      );
     }
 
-    const newUserInfo = { ...state.user[userId] };
+    const newState = JSON.parse(JSON.stringify(state)) as RoomInfo;
 
-    const select = [...newUserInfo.select];
+    const select = [...newState.user[userId].select];
 
     const idx = select.indexOf(restaurantId);
 
@@ -27,16 +47,10 @@ export function updateUserSelect(this: Server) {
       select.splice(idx, 1);
     }
 
-    newUserInfo.select = select;
-
-    const newUser = { ...state.user };
-
-    newUser[userId] = newUserInfo;
-
-    const newState: RoomInfo = { ...state, user: newUser };
+    newState.user[userId].select = select;
 
     schema.db[roomId].update(newState);
 
-    return new Response(204);
+    return new Response(httpStatus.NO_CONTENT);
   });
 }

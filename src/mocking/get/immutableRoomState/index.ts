@@ -1,3 +1,6 @@
+import { RESPONSE_CODE } from '@/constants/api';
+import { createResponseData } from '@/utils';
+import httpStatus from 'http-status';
 import { type Server, Response } from 'miragejs';
 
 export function immutableRoomState(this: Server) {
@@ -7,7 +10,19 @@ export function immutableRoomState(this: Server) {
     } = request;
 
     if (typeof roomId !== 'string') {
-      return new Response(400);
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '잘못된 요청입니다.')
+      );
+    }
+
+    if (!schema.db[roomId]) {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_ROOM, '존재하지 않는 방입니다.')
+      );
     }
 
     const state = schema.db[roomId][0] as RoomInfo;
@@ -23,6 +38,10 @@ export function immutableRoomState(this: Server) {
       endTime,
     };
 
-    return new Response(200, {}, { data: responseData });
+    return new Response(
+      httpStatus.OK,
+      {},
+      createResponseData<ImmutableRoomInfo>(responseData, RESPONSE_CODE.OK, '성공적으로 데이터를 로드했습니다.')
+    );
   });
 }

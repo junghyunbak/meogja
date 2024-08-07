@@ -1,4 +1,7 @@
 import { type Server, Response } from 'miragejs';
+import httpStatus from 'http-status';
+import { createResponseData } from '@/utils';
+import { RESPONSE_CODE } from '@/constants/api';
 
 export function updateUserName(this: Server) {
   this.patch('/api/update-username', (schema, request) => {
@@ -6,34 +9,38 @@ export function updateUserName(this: Server) {
 
     const { roomId, userId, newName } = JSON.parse(requestBody);
 
-    /**
-     * 전달받은 데이터가 올바르지 않을 경우 400(Bad Request) 응답
-     */
-    if (!roomId || !userId || !newName) {
-      return new Response(400);
+    if (typeof roomId !== 'string' || typeof userId !== 'string' || typeof newName !== 'string') {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '잘못된 요청입니다.')
+      );
+    }
+
+    if (!schema.db[roomId]) {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_ROOM, '존재하지 않는 방입니다.')
+      );
     }
 
     const state = schema.db[roomId][0] as RoomInfo;
 
-    /**
-     * 존재하지 않는 아이디일 경우 400(Bad Request) 응답
-     */
     if (!state.user[userId]) {
-      return new Response(400);
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.NOT_AUTHORITY, '방에 접속중이지 않은 사용자의 요청입니다.')
+      );
     }
 
-    const newUserInfo = { ...state.user[userId] };
+    const newState = JSON.parse(JSON.stringify(state)) as RoomInfo;
 
-    newUserInfo.userName = newName;
-
-    const newUser = { ...state.user };
-
-    newUser[userId] = newUserInfo;
-
-    const newState: RoomInfo = { ...state, user: newUser };
+    newState.user[userId].userName = newName;
 
     schema.db[roomId].update(newState);
 
-    return new Response(204);
+    return new Response(httpStatus.NO_CONTENT);
   });
 }
