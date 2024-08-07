@@ -1,4 +1,4 @@
-#map :has(> .user-marker) {
+#map div:has(> .user-marker) {
   transition: all 0.3s ease;
 
   @apply z-10 -translate-x-[50%] -translate-y-[100%];

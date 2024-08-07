@@ -3,6 +3,8 @@ import { renderToString } from 'react-dom/server';
 
 import RamenNoodle from '@/assets/svgs/ramen-noodle.svg?react';
 
+import './index.css';
+
 interface RestaurantMarkerProps {
   map: naver.maps.Map | null;
   restaurant: Restaurant;
@@ -87,7 +89,7 @@ export const RestaurantMarker = memo(({ map, restaurant, count }: RestaurantMark
 
 function createMarkerIcon(count = 0) {
   return renderToString(
-    <div className="flex w-14 -translate-x-[50%] -translate-y-[100%] items-center justify-center">
+    <div className="restaurant-marker">
       <RamenNoodle className={`w-full text-[#E7E9C4] [&>g>path:nth-last-child(-n+${count})]:fill-transparent`} />
     </div>
   );
