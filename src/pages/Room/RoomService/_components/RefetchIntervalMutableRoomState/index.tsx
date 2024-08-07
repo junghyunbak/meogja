@@ -33,6 +33,7 @@ export function RefetchIntervalMutableRoomState() {
       return { sendTime, data };
     },
     onSuccess({ sendTime, data }) {
+      // [ ]: 모든 업데이트를 막으면 부자연스러워질 수 있다. 다른 사용자들의 요청은 계속 반영되도록 하는 편이 좋겠다.
       if (mutationTime.current > sendTime) {
         return;
       }
