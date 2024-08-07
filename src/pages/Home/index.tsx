@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
 import StrokeDove from '@/assets/svgs/stroke-dove.svg?react';
+import Slider from 'react-slick';
 
 export function Home() {
   /**
@@ -17,9 +18,12 @@ export function Home() {
       <div className="flex flex-col items-center gap-8">
         <StrokeDove className="w-2/3" />
 
-        <div className="flex items-center gap-2 [&>p]:text-base">
+        <div className="flex h-4 items-center gap-2 overflow-hidden [&>p]:text-base">
           <p>비둘기야 같이</p>
-          <div className="flex w-6 justify-center text-[#CDB8B8]">밥</div>
+          <Slider autoplay vertical slidesToShow={1} rtl speed={500} className="w-10">
+            <p className="text-center text-[#693939]">커피</p>
+            <p className="text-center text-[#CDB8B8]">밥</p>
+          </Slider>
           <p>먹자</p>
         </div>
         <div
