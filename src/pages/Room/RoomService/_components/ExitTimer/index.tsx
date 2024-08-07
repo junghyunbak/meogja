@@ -1,13 +1,13 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
 import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
+import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
 
 export function ExitTimer() {
   const navigate = useNavigate();
 
-  const roomId = useContext(UserIdContext);
+  const roomId = useContext(RoomIdContext);
   const { endTime } = useContext(ImmutableRoomInfoContext);
 
   const [remainSecond, setRemainSecond] = useState(Math.floor((endTime - Date.now()) / 1000));
