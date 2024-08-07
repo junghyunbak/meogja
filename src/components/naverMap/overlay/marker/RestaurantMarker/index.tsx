@@ -102,7 +102,7 @@ export const RestaurantMarker = memo(({ map, restaurant, count, isVisible }: Res
 function createMarkerIcon(count = 0) {
   return renderToString(
     <div className="restaurant-marker">
-      <RamenNoodle className={`w-full text-[#E7E9C4] [&>g>path:nth-last-child(-n+${count})]:fill-transparent`} />
+      <RamenNoodle className={`text-ramen w-full [&>g>path:nth-last-child(-n+${count})]:fill-transparent`} />
     </div>
   );
 }
