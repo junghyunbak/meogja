@@ -50,6 +50,10 @@ export function updateUserLatLng(this: Server) {
 
     schema.db[roomId].update(newState);
 
-    return new Response(httpStatus.NO_CONTENT);
+    return new Response(
+      httpStatus.OK,
+      {},
+      createResponseData({}, RESPONSE_CODE.OK, '성공적으로 사용자 위치정보를 업데이트 했습니다.')
+    );
   });
 }
