@@ -23,7 +23,7 @@ export function MapUserMarkers() {
       {Object.keys(user)
         .filter((id) => id !== userId)
         .map((otherUserId) => {
-          return <UserMarker userData={user[otherUserId]} key={userId} map={map} />;
+          return <UserMarker userData={user[otherUserId]} key={otherUserId} map={map} />;
         })}
     </>
   );
