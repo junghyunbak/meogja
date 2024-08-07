@@ -9,9 +9,10 @@ interface RestaurantMarkerProps {
   map: naver.maps.Map | null;
   restaurant: Restaurant;
   count: number;
+  isVisible: boolean;
 }
 
-export const RestaurantMarker = memo(({ map, restaurant, count }: RestaurantMarkerProps) => {
+export const RestaurantMarker = memo(({ map, restaurant, count, isVisible }: RestaurantMarkerProps) => {
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
   /**
@@ -63,7 +64,7 @@ export const RestaurantMarker = memo(({ map, restaurant, count }: RestaurantMark
   }, [map, marker, restaurant]);
 
   /**
-   * 마커 상태변경
+   * 선택 횟수에 따른 마커 상태변경
    */
   useEffect(() => {
     if (!marker) {
@@ -72,6 +73,17 @@ export const RestaurantMarker = memo(({ map, restaurant, count }: RestaurantMark
 
     marker.setIcon({ content: createMarkerIcon(count) });
   }, [count, marker, restaurant]);
+
+  /**
+   * 먹은 식당 요소 보기 체크 여부에 따른 상태변경
+   */
+  useEffect(() => {
+    if (!marker) {
+      return;
+    }
+
+    marker.setVisible(isVisible);
+  }, [isVisible, marker]);
 
   return null;
 });

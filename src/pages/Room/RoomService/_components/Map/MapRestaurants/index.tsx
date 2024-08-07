@@ -13,6 +13,7 @@ export function MapRestaurants() {
   const [map] = useStore((state) => [state.map]);
   const [user] = useStore((state) => [state.user]);
   const [mySelect] = useStore((state) => [state.mySelect]);
+  const [showOnlyEaten] = useStore((state) => [state.showOnlyEaten]);
 
   const restaurantIdToUserIdSet = new Map<RestaurantId, Set<UserId>>();
 
@@ -45,6 +46,7 @@ export function MapRestaurants() {
             map={map}
             restaurant={restaurant}
             count={restaurantIdToUserIdSet.get(restaurant.id)?.size || 0}
+            isVisible={showOnlyEaten ? mySelect.includes(restaurant.id) : true}
           />
         );
       })}
