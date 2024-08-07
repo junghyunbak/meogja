@@ -16,8 +16,7 @@ export function BottomSheet() {
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
   const [sheetIsOpen, setSheetIsOpen] = useStore((state) => [state.sheetIsOpen, state.setSheetIsOpen]);
   const [user] = useStore((state) => [state.user]);
-  // [ ]: 권한이 없어 lat, lng이 올바르지 않을 경우에 대한 예외처리 필요
-  const [myGpsLatLng] = useStore((state) => [state.myLatLng]);
+  const [myGpsLatLng] = useStore((state) => [state.myGpsLatLng]);
 
   const handleButtonSheetOnClose = () => {
     setSheetIsOpen(false);
@@ -58,22 +57,24 @@ export function BottomSheet() {
                 <p>{restaurant.name}</p>
               </div>
 
-              <div className="flex w-full border-t border-black">
-                <div className="flex items-center justify-center border-r border-black bg-p-red p-3">
-                  <p>집까지 거리</p>
+              {myGpsLatLng && (
+                <div className="flex w-full border-t border-black">
+                  <div className="flex items-center justify-center border-r border-black bg-p-red p-3">
+                    <p>집까지 거리</p>
+                  </div>
+                  <div className="flex flex-1 items-center justify-center">
+                    <p>
+                      {Math.floor(
+                        geolib.getDistance(
+                          { latitude: myGpsLatLng.lat, longitude: myGpsLatLng.lng },
+                          { latitude: restaurant.lat, longitude: restaurant.lng }
+                        ) / 1000
+                      )}
+                      km
+                    </p>
+                  </div>
                 </div>
-                <div className="flex flex-1 items-center justify-center">
-                  <p>
-                    {Math.floor(
-                      geolib.getDistance(
-                        { latitude: myGpsLatLng.lat, longitude: myGpsLatLng.lng },
-                        { latitude: restaurant.lat, longitude: restaurant.lng }
-                      ) / 1000
-                    )}
-                    km
-                  </p>
-                </div>
-              </div>
+              )}
 
               <div className="w-full border-t border-black bg-p-yellow p-3">
                 <p>먹은 흔적</p>

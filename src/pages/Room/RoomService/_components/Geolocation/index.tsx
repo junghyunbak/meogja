@@ -2,35 +2,33 @@ import useStore from '@/store';
 import { useEffect } from 'react';
 
 export function Geolocation() {
-  const [setMyLatLng] = useStore((state) => [state.setMyLatLng]);
+  const [setMyGpsLatLng] = useStore((state) => [state.setMyGpsLatLng]);
 
   useEffect(() => {
-    const getMyLatLng = (): Promise<{ lat: number; lng: number }> => {
+    const getMyLatLng = (): Promise<{ lat: number; lng: number } | null> => {
       return new Promise((resolve) => {
-        if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition((position) => {
-            const {
-              coords: { latitude, longitude },
-            } = position;
-
-            resolve({ lat: latitude, lng: longitude });
-          });
+        if (!navigator.geolocation) {
+          resolve(null);
         }
+
+        const successCallback: PositionCallback = (position) => {
+          const {
+            coords: { latitude, longitude },
+          } = position;
+
+          resolve({ lat: latitude, lng: longitude });
+        };
+
+        const errorCallback: PositionErrorCallback = () => {
+          resolve(null);
+        };
+
+        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
       });
     };
 
     const updateMyLatLng = async () => {
-      try {
-        const { lat, lng } = await getMyLatLng();
-
-        setMyLatLng(lat, lng);
-      } catch (e) {
-        /**
-         * Promise의 잘못된 사용으로 에러가 발생할 수 있겠다고 판단되어 try-catch문 사용
-         *
-         * [ ]: Promise 코드 개선
-         */
-      }
+      setMyGpsLatLng(await getMyLatLng());
     };
 
     updateMyLatLng();
@@ -40,7 +38,7 @@ export function Geolocation() {
     return () => {
       clearInterval(timer);
     };
-  }, []);
+  }, [setMyGpsLatLng]);
 
-  return <div />;
+  return null;
 }

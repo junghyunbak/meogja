@@ -2,9 +2,8 @@ import { RIGHT } from '@/constants';
 import { type StateCreator } from 'zustand';
 
 type MyRoomInfoSlice = {
-  // [ ]: myHomeLatLng 으로 네이밍 변경
-  myLatLng: { lat: number; lng: number };
-  setMyLatLng: (lat: number, lng: number) => void;
+  myGpsLatLng: { lat: number; lng: number } | null;
+  setMyGpsLatLng: (myGpsLatLng: { lat: number; lng: number } | null) => void;
 
   myName: string;
   setMyName: (myName: string) => void;
@@ -20,18 +19,18 @@ type MyRoomInfoSlice = {
 };
 
 export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (set): MyRoomInfoSlice => ({
-  myLatLng: { lat: 0, lng: 0 },
-  setMyLatLng: function (lat: number, lng: number) {
-    set(() => ({ myLatLng: { lat, lng } }));
+  myGpsLatLng: null,
+  setMyGpsLatLng(myGpsLatLng) {
+    set(() => ({ myGpsLatLng }));
   },
 
   myName: '',
-  setMyName: function (myName: string) {
+  setMyName(myName: string) {
     set(() => ({ myName }));
   },
 
   mySelect: [],
-  setMySelect: function (param) {
+  setMySelect(param) {
     if (param instanceof Function) {
       const fn = param;
 
