@@ -7,14 +7,12 @@ import { createMapSlice } from './slices/map';
 import { createBottomSheetSlice } from './slices/bottomSheet';
 import { createMutableRoomInfoSlice } from './slices/mutableRoomInfo';
 import { createMyRoomInfoSlice } from './slices/myRoomInfo';
-import { createBlockingSlice } from './slices/blocking';
 
 export type StoreState = ReturnType<typeof createRestaurantSlice> &
   ReturnType<typeof createMapSlice> &
   ReturnType<typeof createBottomSheetSlice> &
   ReturnType<typeof createMutableRoomInfoSlice> &
-  ReturnType<typeof createMyRoomInfoSlice> &
-  ReturnType<typeof createBlockingSlice>;
+  ReturnType<typeof createMyRoomInfoSlice>;
 
 const useStoreBase = create<StoreState>()(
   persist(
@@ -24,7 +22,6 @@ const useStoreBase = create<StoreState>()(
       ...createBottomSheetSlice(...a),
       ...createMutableRoomInfoSlice(...a),
       ...createMyRoomInfoSlice(...a),
-      ...createBlockingSlice(...a),
     }),
     {
       name: 'zustandStore',

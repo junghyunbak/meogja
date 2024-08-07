@@ -2,6 +2,7 @@ import { useMutation } from 'react-query';
 import useStore from '@/store';
 import axios from 'axios';
 import React from 'react';
+import { useMutationTimeContext } from '@/pages/Room/RoomService/_components/MutationTimeProvider/index.context';
 
 export function useUpdateUserName(
   roomId: string,
@@ -10,13 +11,11 @@ export function useUpdateUserName(
 ) {
   const [myName] = useStore((state) => [state.myName]);
 
-  const [isUpdatingRef] = useStore((state) => [state.isUpdatingRef]);
+  const mutationTime = useMutationTimeContext();
 
   const updateUserNameMutation = useMutation({
     mutationFn: async (newName) => {
-      if (isUpdatingRef) {
-        isUpdatingRef.current = true;
-      }
+      mutationTime.current = Date.now();
 
       await axios.patch('/api/update-username', {
         newName,
@@ -24,16 +23,7 @@ export function useUpdateUserName(
         roomId,
       });
     },
-    onSuccess() {
-      if (isUpdatingRef) {
-        isUpdatingRef.current = false;
-      }
-    },
     onError() {
-      if (isUpdatingRef) {
-        isUpdatingRef.current = false;
-      }
-
       setName(myName);
     },
   });
