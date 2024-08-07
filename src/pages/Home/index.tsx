@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 
+import StrokeDove from '@/assets/svgs/stroke-dove.svg?react';
+
 export function Home() {
   /**
    * navigate: 실제론 없을 기능
@@ -11,19 +13,25 @@ export function Home() {
   };
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-between bg-bg">
+    <div className="relative flex size-full items-center justify-center">
       <div className="flex flex-col items-center gap-8">
-        <p className="text-white">
-          함께하고 싶은 <span className="font-bold text-primary">식당</span>을 다같이 골라보세요.
-        </p>
+        <StrokeDove className="w-2/3" />
+
+        <div className="flex items-center gap-2 [&>p]:text-base">
+          <p>비둘기야 같이</p>
+          <div className="flex w-6 justify-center text-[#CDB8B8]">밥</div>
+          <p>먹자</p>
+        </div>
         <div
           onClick={handleStartButtonClick}
-          className="flex w-full cursor-pointer items-center justify-center rounded bg-primary py-2 text-white"
+          className="flex w-fit cursor-pointer items-center justify-center border border-black p-3"
         >
-          시작하기
+          <p className="text-sm">활동 영역 정하기</p>
         </div>
+      </div>
 
-        <p className="text-xs text-gray-400">또는 아래로 스크롤하여 사용법 읽기</p>
+      <div className="absolute bottom-9">
+        <p className="text-xs">죽어서도 행복할 비둘기처럼</p>
       </div>
     </div>
   );
