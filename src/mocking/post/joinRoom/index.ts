@@ -24,7 +24,7 @@ export const joinRoom = function (this: Server) {
       return new Response(403);
     }
 
-    const id = uuidv4();
+    const userId = uuidv4();
 
     const nickName =
       NICKNAME_ADJECTIVE[Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)] +
@@ -35,7 +35,7 @@ export const joinRoom = function (this: Server) {
       ...state.user,
     };
 
-    newUser[id] = {
+    newUser[userId] = {
       userName: nickName,
       select: [],
       lat: null,
@@ -53,6 +53,6 @@ export const joinRoom = function (this: Server) {
     /**
      * 성공적으로 방 입장 시 201 반환
      */
-    return new Response(201, {}, { data: { id } });
+    return new Response(201, {}, { data: { userId } });
   });
 };

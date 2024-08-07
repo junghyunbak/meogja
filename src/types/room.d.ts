@@ -1,6 +1,8 @@
 type UserId = string;
 type UserName = string;
 
+type RoomId = string;
+
 type RestaurantId = string;
 
 type RIGHT = 0;
@@ -67,6 +69,11 @@ type RoomInfo = {
   radius: number;
 
   /**
+   * 고를 수 있는 최대 식당 개수
+   */
+  maxPickCount: number;
+
+  /**
    * 방에 접속할 수 있는 최대인원
    */
   capacity: number;
@@ -90,3 +97,5 @@ type RoomInfo = {
 type MutableRoomInfo = Pick<RoomInfo, 'user'>;
 
 type ImmutableRoomInfo = Pick<RoomInfo, 'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants'>;
+
+type Gage = 0 | 1 | 2 | 3;

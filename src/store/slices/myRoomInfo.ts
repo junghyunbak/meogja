@@ -2,6 +2,9 @@ import { RIGHT } from '@/constants';
 import { type StateCreator } from 'zustand';
 
 type MyRoomInfoSlice = {
+  gage: Gage;
+  setGage: (gage: Gage) => void;
+
   myGpsLatLng: { lat: number; lng: number } | null;
   setMyGpsLatLng: (myGpsLatLng: { lat: number; lng: number } | null) => void;
 
@@ -19,13 +22,18 @@ type MyRoomInfoSlice = {
 };
 
 export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (set): MyRoomInfoSlice => ({
+  gage: 0,
+  setGage(gage) {
+    set(() => ({ gage }));
+  },
+
   myGpsLatLng: null,
   setMyGpsLatLng(myGpsLatLng) {
     set(() => ({ myGpsLatLng }));
   },
 
   myName: '',
-  setMyName(myName: string) {
+  setMyName(myName) {
     set(() => ({ myName }));
   },
 
@@ -45,7 +53,7 @@ export const createMyRoomInfoSlice: StateCreator<MyRoomInfoSlice> = (set): MyRoo
   },
 
   myMapLatLng: { lat: 0, lng: 0 },
-  setMyMapLatLng(lat: number, lng: number) {
+  setMyMapLatLng(lat, lng) {
     set(() => ({ myMapLatLng: { lat, lng } }));
   },
 

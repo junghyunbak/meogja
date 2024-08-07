@@ -50,6 +50,7 @@ export class MockApiService {
         restaurants,
         user: {},
         capacity: 3,
+        maxPickCount: 3,
       },
     };
 
