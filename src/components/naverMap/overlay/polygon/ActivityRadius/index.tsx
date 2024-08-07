@@ -17,7 +17,7 @@ export function ActivityRadius({ map, centerLatLng, radius }: ActivityRadiusProp
     const lngMin = 120.6472122;
     const lngMax = 133.830806;
 
-    const ploygon = new naver.maps.Polygon({
+    const polygon = new naver.maps.Polygon({
       map,
       paths: [
         Array(361)
@@ -40,7 +40,7 @@ export function ActivityRadius({ map, centerLatLng, radius }: ActivityRadiusProp
     });
 
     return () => {
-      ploygon.setMap(null);
+      polygon.setMap(null);
     };
   }, [map, radius, centerLatLng]);
 
