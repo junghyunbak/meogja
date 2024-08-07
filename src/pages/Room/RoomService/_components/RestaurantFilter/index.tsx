@@ -10,11 +10,11 @@ export function RestaurantFilter() {
   };
 
   return (
-    <div className="pointer-events-auto flex cursor-pointer items-center gap-3 p-3" onClick={handleChkBoxClick}>
+    <div className="pointer-events-auto flex w-fit cursor-pointer items-center gap-3 p-3" onClick={handleChkBoxClick}>
       <div className="flex aspect-square h-4 items-center justify-center border border-black bg-white p-[1px]">
         {showOnlyEaten && <Check className="w-full" />}
       </div>
-      <p className="text-base text-black">내가 먹은것만 보기</p>
+      <p className="select-none text-base text-black">내가 먹은것만 보기</p>
     </div>
   );
 }
