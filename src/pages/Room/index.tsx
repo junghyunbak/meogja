@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { LoadingPage } from './_components/LoadingPage';
@@ -7,9 +7,10 @@ import { CheckRoomId } from './_components/CheckRoomId';
 import { LoadImmutableRoomData } from './_components/LoadImmutableRoomData';
 import { DelayForAnimation } from './_components/DelayForAnimation';
 import { ErrorPage } from './_components/ErrorPage';
-import { RoomService } from './RoomService';
 import { MutationTimeProvider } from './RoomService/_components/MutationTimeProvider';
 import { LoadNaverMapScript } from './_components/LoadNaverMapScript';
+
+const RoomService = React.lazy(() => import('./RoomService'));
 
 export function Room() {
   return (
