@@ -34,5 +34,3 @@ export function RoomService() {
     </>
   );
 }
-
-export default RoomService;

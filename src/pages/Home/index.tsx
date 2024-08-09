@@ -1,7 +1,7 @@
 import StrokeDove from '@/assets/svgs/stroke-dove.svg?react';
 import Slider from 'react-slick';
 
-export function Home() {
+function Home() {
   const handleStartButtonClick = () => {
     location.href = '/room/0';
   };
@@ -33,3 +33,5 @@ export function Home() {
     </div>
   );
 }
+
+export default Home;

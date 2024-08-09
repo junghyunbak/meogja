@@ -1,18 +1,18 @@
-import { Home } from '@/pages/Home';
-import { Room } from '@/pages/Room';
-import {
-  Outlet,
-  createBrowserRouter,
-  type RouteObject,
-} from 'react-router-dom';
+import { Outlet, createBrowserRouter, type RouteObject } from 'react-router-dom';
 import { RootLayout } from './_components/RootLayout';
 import { QueryProvider } from './_components/QueryProvider';
+import React, { Suspense } from 'react';
+
+const Home = React.lazy(() => import('@/pages/Home'));
+const Room = React.lazy(() => import('@/pages/Room'));
 
 function Root() {
   return (
     <QueryProvider>
       <RootLayout>
-        <Outlet />
+        <Suspense>
+          <Outlet />
+        </Suspense>
       </RootLayout>
     </QueryProvider>
   );

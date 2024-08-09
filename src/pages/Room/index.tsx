@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import { Suspense } from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 
 import { LoadingPage } from './_components/LoadingPage';
@@ -10,7 +10,7 @@ import { ErrorPage } from './_components/ErrorPage';
 import { MutationTimeProvider } from './RoomService/_components/MutationTimeProvider';
 import { LoadNaverMapScript } from './_components/LoadNaverMapScript';
 
-const RoomService = React.lazy(() => import('./RoomService'));
+import { RoomService } from './RoomService';
 
 export function Room() {
   return (
@@ -33,3 +33,5 @@ export function Room() {
     </ErrorBoundary>
   );
 }
+
+export default Room;
