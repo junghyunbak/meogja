@@ -27,7 +27,7 @@ export function LoadImmutableRoomData({ children }: LoadImmutableRoomDataProps) 
       return response.data;
     },
     onSuccess() {
-      setGage(3);
+      setGage(4);
     },
     suspense: true,
     useErrorBoundary: true,

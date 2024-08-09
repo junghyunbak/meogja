@@ -2,7 +2,7 @@ import useStore from '@/store';
 
 import './index.css';
 
-const MAX_GAGE: Gage = 3;
+const MAX_GAGE: Gage = 4;
 
 export function LoadingPage() {
   const [gage] = useStore((state) => [state.gage]);

@@ -47,7 +47,7 @@ export function CheckUserId({ children }: CheckUserIdProps) {
       return userId;
     },
     onSuccess() {
-      setGage(2);
+      setGage(3);
     },
     suspense: true,
     useErrorBoundary: true,

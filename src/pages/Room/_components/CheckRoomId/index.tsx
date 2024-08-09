@@ -23,7 +23,7 @@ export function CheckRoomId({ children }: CheckRoomProps) {
       await axios.get('/api/check-room', { params: { roomId } });
     },
     onSuccess() {
-      setGage(1);
+      setGage(2);
     },
     suspense: true,
     useErrorBoundary: true,

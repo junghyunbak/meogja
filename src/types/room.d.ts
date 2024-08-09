@@ -98,4 +98,4 @@ type MutableRoomInfo = Pick<RoomInfo, 'user'>;
 
 type ImmutableRoomInfo = Pick<RoomInfo, 'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants'>;
 
-type Gage = 0 | 1 | 2 | 3;
+type Gage = 0 | 1 | 2 | 3 | 4;
