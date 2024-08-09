@@ -1,9 +1,12 @@
 import StrokeDove from '@/assets/svgs/stroke-dove.svg?react';
 import Slider from 'react-slick';
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
+  const navigate = useNavigate();
+
   const handleStartButtonClick = () => {
-    location.href = '/room/0';
+    navigate('/create-room');
   };
 
   return (

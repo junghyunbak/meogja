@@ -5,6 +5,7 @@ import React, { Suspense } from 'react';
 
 const Home = React.lazy(() => import('@/pages/Home'));
 const Room = React.lazy(() => import('@/pages/Room'));
+const CreateRoom = React.lazy(() => import('@/pages/CreateRoom'));
 
 function Root() {
   return (
@@ -28,6 +29,7 @@ const routes: RouteObject[] = [
         path: '/',
         element: <Home />,
       },
+      { path: '/create-room', element: <CreateRoom /> },
       { path: '/room/:roomId', element: <Room /> },
     ],
   },
