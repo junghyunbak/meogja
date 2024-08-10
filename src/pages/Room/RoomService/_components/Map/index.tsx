@@ -12,9 +12,9 @@ import { useNaverMap } from '@/hooks/useNaverMap';
 import axios, { type AxiosError } from 'axios';
 
 import * as geolib from 'geolib';
-import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
-import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
-import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
 const USER_RADIUS = 150; // meter
 

@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import { LoadNaverMap } from './plugins';
+import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadNaverMap } from './plugins';
 import { useQuery } from 'react-query';
 import { sleep } from '@/utils';
 import { create } from 'zustand';
@@ -106,5 +106,9 @@ const Finish: Plugin = ({ children, setStep, time }) => {
 };
 
 export const plugins = {
-  LoadNaverMap: LoadNaverMap,
+  LoadNaverMap,
+  CheckRoomId: Object.assign(CheckRoomId, {
+    CheckUserId,
+    LoadImmutableRoomData,
+  }),
 };

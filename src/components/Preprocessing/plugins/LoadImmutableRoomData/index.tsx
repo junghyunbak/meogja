@@ -1,24 +1,18 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { useQuery } from 'react-query';
 
 import axios from 'axios';
 
-import useStore from '@/store';
-
 import { RoomIdContext } from '../CheckRoomId/index.context';
 import { ImmutableRoomInfoContextProvider } from './index.context';
 
-interface LoadImmutableRoomDataProps {
-  children: React.ReactNode;
-}
+import { type Plugin } from '../..';
 
-export function LoadImmutableRoomData({ children }: LoadImmutableRoomDataProps) {
+export const LoadImmutableRoomData: Plugin = ({ children, time, step, setStep }) => {
   const roomId = useContext(RoomIdContext);
 
-  const [setGage] = useStore((state) => [state.setGage]);
-
   const { data, isLoading } = useQuery({
-    queryKey: ['load-immutable-room-data'],
+    queryKey: ['load-immutable-room-data', time],
     queryFn: async () => {
       const response = await axios
         .get<ResponseTemplate<ImmutableRoomInfo>>('/api/immutable-room-state', { params: { roomId } })
@@ -27,7 +21,7 @@ export function LoadImmutableRoomData({ children }: LoadImmutableRoomDataProps) 
       return response.data;
     },
     onSuccess() {
-      setGage(4);
+      setStep(step);
     },
     suspense: true,
     useErrorBoundary: true,
@@ -38,4 +32,4 @@ export function LoadImmutableRoomData({ children }: LoadImmutableRoomDataProps) 
   }
 
   return <ImmutableRoomInfoContextProvider value={data}>{children}</ImmutableRoomInfoContextProvider>;
-}
+};

@@ -4,7 +4,7 @@ import useStore from '@/store';
 
 import { UserMarker } from '@/components/naverMap/overlay/marker';
 
-import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 
 export function MapUserMarkers() {
   const userId = useContext(UserIdContext);

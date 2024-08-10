@@ -2,8 +2,8 @@ import { useContext } from 'react';
 
 import { RestaurantMarker } from '@/components/naverMap/overlay/marker';
 
-import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
-import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
 import useStore from '@/store';
 

@@ -1,8 +1,8 @@
 import { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
-import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
+import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
+import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
 export function ExitTimer() {
   const navigate = useNavigate();

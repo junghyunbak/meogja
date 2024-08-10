@@ -4,8 +4,8 @@ import { Sheet, SheetRef } from 'react-modal-sheet';
 import useStore from '@/store';
 
 import * as geolib from 'geolib';
-import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
-import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
 export function BottomSheet() {
   const sheetRef = useRef<SheetRef | null>(null);

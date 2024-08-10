@@ -8,8 +8,6 @@ export const LoadNaverMap: Plugin = ({ children, step, setStep, time }) => {
   const { isLoading } = useQuery({
     queryKey: ['load-naver-map-script', time],
     queryFn: async () => {
-      console.log('한번만 실행');
-
       const src = `https://oapi.map.naver.com/openapi/v3/maps.js?ncpClientId=${NCP_CLIENT_ID}`;
 
       if (document.querySelector(`[src="${src}"]`)) {

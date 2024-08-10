@@ -1,29 +1,22 @@
-import React from 'react';
 import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
+
+import { type Plugin } from '../..';
 
 import axios from 'axios';
 
 import { RoomIdContextProvider } from './index.context';
 
-import useStore from '@/store';
-
-interface CheckRoomProps {
-  children: React.ReactNode;
-}
-
-export function CheckRoomId({ children }: CheckRoomProps) {
+export const CheckRoomId: Plugin = ({ children, setStep, step, time }) => {
   const { roomId } = useParams();
 
-  const [setGage] = useStore((state) => [state.setGage]);
-
   const { isLoading } = useQuery({
-    queryKey: ['check-room-id'],
+    queryKey: ['check-room-id', time],
     queryFn: async () => {
       await axios.get('/api/check-room', { params: { roomId } });
     },
     onSuccess() {
-      setGage(2);
+      setStep(step);
     },
     suspense: true,
     useErrorBoundary: true,
@@ -34,4 +27,4 @@ export function CheckRoomId({ children }: CheckRoomProps) {
   }
 
   return <RoomIdContextProvider value={roomId}>{children}</RoomIdContextProvider>;
-}
+};

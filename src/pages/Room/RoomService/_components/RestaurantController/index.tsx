@@ -5,9 +5,9 @@ import { useUpdateSelect } from '@/hooks/useUpdateSelect';
 import useStore from '@/store';
 
 import './index.css';
-import { ImmutableRoomInfoContext } from '@/pages/Room/_components/LoadImmutableRoomData/index.context';
-import { UserIdContext } from '@/pages/Room/_components/CheckUserId/index.context';
-import { RoomIdContext } from '@/pages/Room/_components/CheckRoomId/index.context';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
+import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
 export function RestaurantController() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);

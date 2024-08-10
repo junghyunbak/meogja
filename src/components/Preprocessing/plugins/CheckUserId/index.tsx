@@ -1,24 +1,19 @@
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 import { useQuery } from 'react-query';
-
-import useStore from '@/store';
 
 import { UserIdContextProvider } from './index.context';
 
 import axios from 'axios';
+
 import { RoomIdContext } from '../CheckRoomId/index.context';
 
-interface CheckUserIdProps {
-  children: React.ReactNode;
-}
+import { type Plugin } from '../..';
 
-export function CheckUserId({ children }: CheckUserIdProps) {
-  const [setGage] = useStore((state) => [state.setGage]);
-
+export const CheckUserId: Plugin = ({ children, step, setStep, time }) => {
   const roomId = useContext(RoomIdContext);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['check-user-id'],
+    queryKey: ['check-user-id', time],
     queryFn: async () => {
       const userId = localStorage.getItem(roomId);
 
@@ -47,7 +42,7 @@ export function CheckUserId({ children }: CheckUserIdProps) {
       return userId;
     },
     onSuccess() {
-      setGage(3);
+      setStep(step);
     },
     suspense: true,
     useErrorBoundary: true,
@@ -58,4 +53,4 @@ export function CheckUserId({ children }: CheckUserIdProps) {
   }
 
   return <UserIdContextProvider value={data}>{children}</UserIdContextProvider>;
-}
+};
