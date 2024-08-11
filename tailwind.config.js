@@ -7,6 +7,9 @@ export default {
       pretendard: 'pretendard',
       dove: 'dove',
     },
+    backgroundImage: {
+      floor: 'url("/src/assets/imgs/floor.jpg")',
+    },
     extend: {
       colors: {
         'p-red': '#F3B6B6',
@@ -14,6 +17,8 @@ export default {
         'p-yellow': '#FFEA31',
         'p-yg': '#D6FF52',
         'p-pink': '#FF54F8',
+        coffee: '#693939',
+        rice: '#CDB8B8',
         ramen: '#E0E19A',
         bg: '#333333',
       },

@@ -105,5 +105,5 @@ type MutableRoomInfo = Pick<RoomInfo, 'user'>;
 
 type ImmutableRoomInfo = Pick<
   RoomInfo,
-  'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants' | 'maxPickCount'
+  'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants' | 'maxPickCount' | 'category'
 >;
