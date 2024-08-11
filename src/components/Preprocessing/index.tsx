@@ -48,7 +48,7 @@ export function Preprocessing({ plugins = [], children }: PreprocessingProps) {
   return (
     <StepStoreContext.Provider value={store}>
       <Suspense fallback={<Loading maxStep={plugins.length} />}>
-        {[...plugins, Finish]
+        {[...plugins, DelayForAnimation]
           .map((value, i) => ({ Component: value, step: i + 1 }))
           .reverse()
           .reduce((result, { Component, step }) => {
@@ -87,7 +87,7 @@ function Loading({ maxStep }: LoadingProps) {
   );
 }
 
-const Finish: Plugin = ({ children, setStep, time }) => {
+const DelayForAnimation: Plugin = ({ children, time }) => {
   const { isLoading } = useQuery({
     queryKey: ['delay-for-animation', time],
     queryFn: async () => {
@@ -97,12 +97,6 @@ const Finish: Plugin = ({ children, setStep, time }) => {
       await sleep(500);
     },
     suspense: true,
-    onSuccess() {
-      /**
-       * step 0단계로 상태 리셋
-       */
-      setStep(0);
-    },
   });
 
   if (isLoading) {
