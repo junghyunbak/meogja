@@ -114,7 +114,7 @@ function CreateRoom() {
             title="방 최대인원"
             unit="명"
             min={2}
-            max={10}
+            max={7}
             counterKey="maxRoomJoinCount"
             updateFormCounter={updateFormCounter}
             initialCounterNumber={defaultValue.maxRoomJoinCount}
