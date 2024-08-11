@@ -12,6 +12,8 @@ export default {
         'p-red': '#F3B6B6',
         'p-green': '#6FF61C',
         'p-yellow': '#FFEA31',
+        'p-yg': '#D6FF52',
+        'p-pink': '#FF54F8',
         ramen: '#E0E19A',
         bg: '#333333',
       },
