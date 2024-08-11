@@ -194,7 +194,7 @@ function CreateRoom() {
           <div className="cursor-pointer bg-black p-3" onClick={handleCreateRoomButtonClick}>
             <p className="text-white">방 생성하기</p>
           </div>
-        ) : (
+        ) : !isCopy ? (
           <div
             className="cursor-pointer bg-black p-3"
             onClick={() => {
@@ -223,14 +223,12 @@ function CreateRoom() {
               }
             }}
           >
-            {isCopy ? (
-              <div className="flex items-center justify-center gap-2">
-                <Check className="h-3 text-white" />
-                <p className="text-white">클립보드에 복사되었습니다.</p>
-              </div>
-            ) : (
-              <p className="text-white">생성된 링크 공유하고 접속하기</p>
-            )}
+            <p className="text-white">생성된 링크 공유하고 접속하기</p>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center gap-2 bg-black p-3">
+            <Check className="h-3 text-white" />
+            <p className="text-white">클립보드에 복사되었습니다.</p>
           </div>
         )}
       </div>
