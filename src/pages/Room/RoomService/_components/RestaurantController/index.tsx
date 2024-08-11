@@ -10,7 +10,7 @@ import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/in
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
 export function RestaurantController() {
-  const { restaurants } = useContext(ImmutableRoomInfoContext);
+  const { restaurants, maxPickCount } = useContext(ImmutableRoomInfoContext);
   const userId = useContext(UserIdContext);
   const roomId = useContext(RoomIdContext);
 
@@ -21,21 +21,44 @@ export function RestaurantController() {
 
   const { updateMySelectMutation } = useUpdateSelect({ roomId, userId });
 
-  const handleChooseButtonClick = (restaurant: Restaurant) => {
+  const handleSelectButtonClick = (restaurant: Restaurant) => {
     return () => {
-      /**
-       * 낙관적 처리
-       */
+      if (maxPickCount - mySelect.length <= 0) {
+        return;
+      }
+
+      setMySelect((prev) => {
+        const next = [...prev];
+
+        const idx = next.indexOf(restaurant.id);
+
+        if (idx !== -1) {
+          return prev;
+        }
+
+        next.push(restaurant.id);
+
+        return next;
+      });
+
+      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
+
+      updateMySelectMutation.mutate(restaurant.id);
+    };
+  };
+
+  const handleUnselectButtonClick = (restaurant: Restaurant) => {
+    return () => {
       setMySelect((prev) => {
         const next = [...prev];
 
         const idx = next.indexOf(restaurant.id);
 
         if (idx === -1) {
-          next.push(restaurant.id);
-        } else {
-          next.splice(idx, 1);
+          return prev;
         }
+
+        next.splice(idx, 1);
 
         return next;
       });
@@ -64,13 +87,26 @@ export function RestaurantController() {
     return null;
   }
 
+  const remain = maxPickCount - mySelect.length;
+
   return (
     <div className="restaurant-controller">
       <div className="restaurant-controller-button">
         <p>{restaurant.name}</p>
-        <div onClick={handleChooseButtonClick(restaurant)}>
-          <p>{mySelect.includes(restaurant.id) ? '뱉는다' : '먹는다'}</p>
-        </div>
+
+        {!mySelect.includes(restaurant.id) ? (
+          <div
+            onClick={handleSelectButtonClick(restaurant)}
+            className={`${remain === 0 ? '!cursor-auto !bg-[#DDDDDD]' : ''}`}
+          >
+            <p>{`먹는다 (${remain})`}</p>
+          </div>
+        ) : (
+          <div onClick={handleUnselectButtonClick(restaurant)}>
+            <p>뱉는다</p>
+          </div>
+        )}
+
         <div onClick={handleShowDetailButtonClick(restaurant)}>
           <p>자세히 관찰한다</p>
         </div>

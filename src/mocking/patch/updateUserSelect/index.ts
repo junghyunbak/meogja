@@ -47,6 +47,14 @@ export function updateUserSelect(this: Server) {
       select.splice(idx, 1);
     }
 
+    if (select.length > state.maxPickCount) {
+      return new Response(
+        httpStatus.BAD_REQUEST,
+        {},
+        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '최대 선택 수를 초과할 수 없습니다.')
+      );
+    }
+
     newState.user[userId].select = select;
 
     schema.db[roomId].update(newState);
