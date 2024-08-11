@@ -11,7 +11,7 @@ export function Category({ updateCategory }: CategoryProps) {
   return (
     <div className="flex w-full cursor-pointer">
       <div
-        className={`center flex w-1/2 items-center justify-center border-r border-black py-3 ${category === 'FD' ? 'bg-black text-white' : ''}`}
+        className={`center flex w-1/2 items-center justify-center border-r border-black py-3 ${category === 'FD' ? 'cursor-default bg-black text-white' : ''}`}
         onClick={() => {
           updateCategory('FD');
 
@@ -21,7 +21,7 @@ export function Category({ updateCategory }: CategoryProps) {
         <p>식당</p>
       </div>
       <div
-        className={`flex w-1/2 items-center justify-center py-3 ${category === 'CE' ? 'bg-black text-white' : ''}`}
+        className={`flex w-1/2 items-center justify-center py-3 ${category === 'CE' ? 'cursor-default bg-black text-white' : ''}`}
         onClick={() => {
           updateCategory('CE');
 
