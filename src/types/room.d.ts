@@ -56,6 +56,8 @@ type UserData = {
 
 type User = Record<UserId, UserData>;
 
+type Category = 'FD' | 'CE';
+
 type RoomInfo = {
   /**
    * 모일 장소의 위치
@@ -77,6 +79,11 @@ type RoomInfo = {
    * 방에 접속할 수 있는 최대인원
    */
   capacity: number;
+
+  /**
+   * 방 개설 목적
+   */
+  category: Category;
 
   /**
    * 방이 종료되는 시각
