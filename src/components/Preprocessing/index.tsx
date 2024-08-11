@@ -1,5 +1,5 @@
 import React, { Suspense, useMemo } from 'react';
-import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadNaverMap } from './plugins';
+import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadMutableRoomData, LoadNaverMap } from './plugins';
 import { useQuery } from 'react-query';
 import { sleep } from '@/utils';
 import { create } from 'zustand';
@@ -110,5 +110,6 @@ export const plugins = {
   CheckRoomId: Object.assign(CheckRoomId, {
     CheckUserId,
     LoadImmutableRoomData,
+    LoadMutableRoomData,
   }),
 };
