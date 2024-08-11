@@ -1,10 +1,14 @@
 import useStore from '@/store';
 import ColorDove from '@/assets/svgs/color-dove.svg?react';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
 import { type MouseEventHandler } from 'react';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 
 export function JoinList() {
   const [user] = useStore((state) => [state.user]);
+  const [map] = useStore((state) => [state.map]);
+
+  const myId = useContext(UserIdContext);
 
   const scrollRef = useRef<HTMLDivElement | null>(null);
 
@@ -40,7 +44,7 @@ export function JoinList() {
   return (
     <div className="pointer-events-auto w-fit max-w-full cursor-grab active:cursor-grabbing">
       <div
-        className="scrollbar-hide flex overflow-x-scroll"
+        className="flex overflow-x-scroll scrollbar-hide"
         ref={scrollRef}
         onMouseDown={handleDragStart}
         onMouseMove={handleDragMove}
@@ -48,13 +52,22 @@ export function JoinList() {
         onMouseUp={handleDragEnd}
       >
         {Object.keys(user).map((userId) => {
+          const { userName, lat, lng } = user[userId];
+
           return (
             <div
-              className="ml-3 flex flex-col items-center border border-black bg-white p-2 py-1 last-of-type:mr-3"
+              className={`ml-3 flex flex-col items-center border border-black bg-white p-2 py-1 last-of-type:mr-3 ${userId === myId ? 'cursor-default' : ''}`}
+              onClick={() => {
+                if (!map || !lat || !lng || myId === userId) {
+                  return;
+                }
+
+                map.setCenter(new naver.maps.LatLng(lat, lng));
+              }}
               key={userId}
             >
               <ColorDove className="w-10" />
-              <p className="select-none text-nowrap text-xs">{user[userId].userName}</p>
+              <p className="select-none text-nowrap text-xs">{`${userName} ${myId === userId ? '(나)' : ''}`}</p>
             </div>
           );
         })}
