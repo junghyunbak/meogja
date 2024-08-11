@@ -39,6 +39,7 @@ export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
   }, [code, roomId]);
 
   const handleGoHomeButtonClick = () => {
+    // [ ]: step 전역상태 초기화 문제 해결되면 navigator로 변경
     location.href = '/';
   };
 

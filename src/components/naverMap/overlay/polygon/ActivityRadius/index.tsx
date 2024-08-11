@@ -3,6 +3,10 @@ import { useEffect } from 'react';
 interface ActivityRadiusProps {
   map: naver.maps.Map | null;
   centerLatLng: naver.maps.LatLng;
+
+  /**
+   * 단위: meter
+   */
   radius: number;
 }
 
