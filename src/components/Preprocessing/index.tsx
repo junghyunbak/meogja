@@ -1,27 +1,10 @@
-import React, { Suspense, useMemo } from 'react';
+import React, { createContext, Suspense, useContext, useMemo, useRef } from 'react';
 import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadMutableRoomData, LoadNaverMap } from './plugins';
 import { useQuery } from 'react-query';
 import { sleep } from '@/utils';
-import { create } from 'zustand';
+import { create, StoreApi, UseBoundStore, useStore } from 'zustand';
 
 import './index.css';
-
-/**
- * 지역 상태를 사용할 경우,
- *
- * "Warning: Can't perform a React state update on a component that hasn't mounted yet."
- *
- * 에러가 발생하기 때문에 전역 상태를 사용
- */
-interface StepState {
-  step: number;
-  setStep: (step: number) => void;
-}
-
-const useStepStore = create<StepState>()((set) => ({
-  step: 0,
-  setStep: (step: number) => set(() => ({ step })),
-}));
 
 export type Plugin = (props: {
   children: React.ReactNode;
@@ -30,31 +13,53 @@ export type Plugin = (props: {
   time: number;
 }) => React.ReactNode;
 
+/**
+ * 지역 상태를 사용할 경우,
+ *
+ * "Warning: Can't perform a React state update on a component that hasn't mounted yet."
+ *
+ * 에러가 발생하기 때문에 전역 상태를 지역 상태처럼 사용
+ */
+interface StepState {
+  step: number;
+  setStep: (step: number) => void;
+}
+
+type StepStore = UseBoundStore<StoreApi<StepState>>;
+
+const StepStoreContext = createContext<StepStore>({} as StepStore);
+
 interface PreprocessingProps {
   plugins?: Plugin[];
   children?: React.ReactNode;
 }
 
 export function Preprocessing({ plugins = [], children }: PreprocessingProps) {
-  const [setStep] = useStepStore((s) => [s.setStep]);
+  const store = useRef(
+    create<StepState>()((set) => ({ step: 0, setStep: (step: number) => set(() => ({ step })) }))
+  ).current;
+
+  const [setStep] = useStore(store, (s) => [s.setStep]);
 
   const time = useMemo(() => {
     return Date.now();
   }, []);
 
   return (
-    <Suspense fallback={<Loading maxStep={plugins.length} />}>
-      {[...plugins, Finish]
-        .map((value, i) => ({ Component: value, step: i + 1 }))
-        .reverse()
-        .reduce((result, { Component, step }) => {
-          return (
-            <Component step={step} setStep={setStep} time={time}>
-              {result}
-            </Component>
-          );
-        }, children)}
-    </Suspense>
+    <StepStoreContext.Provider value={store}>
+      <Suspense fallback={<Loading maxStep={plugins.length} />}>
+        {[...plugins, Finish]
+          .map((value, i) => ({ Component: value, step: i + 1 }))
+          .reverse()
+          .reduce((result, { Component, step }) => {
+            return (
+              <Component step={step} setStep={setStep} time={time}>
+                {result}
+              </Component>
+            );
+          }, children)}
+      </Suspense>
+    </StepStoreContext.Provider>
   );
 }
 
@@ -63,7 +68,9 @@ interface LoadingProps {
 }
 
 function Loading({ maxStep }: LoadingProps) {
-  const [step] = useStepStore((s) => [s.step]);
+  const store = useContext(StepStoreContext);
+
+  const [step] = useStore(store, (s) => [s.step]);
 
   return (
     <div className="flex size-full flex-col items-center justify-center gap-4">
