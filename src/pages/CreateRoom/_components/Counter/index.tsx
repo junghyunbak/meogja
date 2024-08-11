@@ -42,7 +42,7 @@ function CounterContent({
       <div className="flex items-center gap-9">
         <div className="flex items-center gap-9">
           <div
-            className={`cursor-pointer p-3 ${number === min ? 'text-gray-300' : ''}`}
+            className={`cursor-pointer p-3 ${number === min ? 'cursor-not-allowed text-gray-300' : ''}`}
             onClick={() => {
               setNumber((prev) => {
                 const next = prev - 1;
@@ -62,7 +62,7 @@ function CounterContent({
           {number}
 
           <div
-            className={`cursor-pointer p-3 ${number === max ? 'text-gray-300' : ''}`}
+            className={`cursor-pointer p-3 ${number === max ? 'cursor-not-allowed text-gray-300' : ''}`}
             onClick={() => {
               setNumber((prev) => {
                 const next = prev + 1;
