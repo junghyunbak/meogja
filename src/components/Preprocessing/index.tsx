@@ -32,9 +32,10 @@ const StepStoreContext = createContext<StepStore>({} as StepStore);
 interface PreprocessingProps {
   plugins?: Plugin[];
   children?: React.ReactNode;
+  loadingMessage?: string;
 }
 
-export function Preprocessing({ plugins = [], children }: PreprocessingProps) {
+export function Preprocessing({ plugins = [], children, loadingMessage = '로딩중' }: PreprocessingProps) {
   const store = useRef(
     create<StepState>()((set) => ({ step: 0, setStep: (step: number) => set(() => ({ step })) }))
   ).current;
@@ -47,7 +48,7 @@ export function Preprocessing({ plugins = [], children }: PreprocessingProps) {
 
   return (
     <StepStoreContext.Provider value={store}>
-      <Suspense fallback={<Loading maxStep={plugins.length} />}>
+      <Suspense fallback={<Loading maxStep={plugins.length} message={loadingMessage} />}>
         {[...plugins, DelayForAnimation]
           .map((value, i) => ({ Component: value, step: i + 1 }))
           .reverse()
@@ -65,9 +66,10 @@ export function Preprocessing({ plugins = [], children }: PreprocessingProps) {
 
 interface LoadingProps {
   maxStep: number;
+  message: string;
 }
 
-function Loading({ maxStep }: LoadingProps) {
+function Loading({ maxStep, message }: LoadingProps) {
   const store = useContext(StepStoreContext);
 
   const [step] = useStore(store, (s) => [s.step]);
@@ -75,7 +77,7 @@ function Loading({ maxStep }: LoadingProps) {
   return (
     <div className="flex size-full flex-col items-center justify-center gap-4">
       <p className="text-2xl">
-        로딩중
+        {message}
         {Array(step)
           .fill(null)
           .map(() => '.')}

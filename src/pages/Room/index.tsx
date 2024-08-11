@@ -16,6 +16,7 @@ export function Room() {
             plugins.CheckRoomId.CheckUserId,
             plugins.CheckRoomId.LoadImmutableRoomData,
           ]}
+          loadingMessage="방에 입장 중"
         >
           <RoomService />
         </Preprocessing>

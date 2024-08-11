@@ -14,6 +14,7 @@ function Result() {
         plugins.CheckRoomId.LoadImmutableRoomData,
         plugins.CheckRoomId.LoadMutableRoomData,
       ]}
+      loadingMessage="결과 페이지로 이동 중"
     >
       <ResultService />
     </Preprocessing>

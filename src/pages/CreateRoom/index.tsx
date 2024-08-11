@@ -166,7 +166,7 @@ function CreateRoom() {
         <hr className="w-full border-black" />
 
         <div className="aspect-[3/2] w-full">
-          <Preprocessing plugins={[plugins.LoadNaverMap]}>
+          <Preprocessing plugins={[plugins.LoadNaverMap]} loadingMessage="지도 가져오는 중">
             <Map updateLatLng={updateLatLng} radius={activityRadius} />
           </Preprocessing>
         </div>
