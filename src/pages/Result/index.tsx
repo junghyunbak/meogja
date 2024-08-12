@@ -23,7 +23,7 @@ function Result() {
 }
 
 function ResultService() {
-  const { restaurants, endTime, category } = useContext(ImmutableRoomInfoContext);
+  const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
   const { user } = useContext(MutableRoomInfoContext);
 
   const [isCopy, setIsCopy] = useState(false);
@@ -86,15 +86,15 @@ function ResultService() {
 
   return (
     <div className="flex size-full flex-col items-center justify-center gap-8 p-6">
-      <div className="relative left-0 top-0 flex w-full flex-col border border-black">
-        <div className="absolute left-[4px] top-[4px] -z-10 box-content h-full w-full border border-black bg-white" />
-        <div className="absolute left-[8px] top-[8px] -z-20 box-content h-full w-full border border-black bg-white" />
+      <div className="relative left-0 top-0 box-content flex w-full flex-col border-2 border-black">
+        <div className="absolute left-[4px] top-[4px] -z-10 box-content h-full w-full border-2 border-black bg-white" />
+        <div className="absolute left-[8px] top-[8px] -z-20 box-content h-full w-full border-2 border-black bg-white" />
 
         <div className="flex items-center justify-start bg-white p-3">
           <p className="text-lg">비둘기들의 선택은?</p>
         </div>
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <ul className="flex flex-col gap-3 bg-white p-3">
           {candidate.map(({ restaurantId, rank, count }) => {
@@ -106,10 +106,12 @@ function ResultService() {
 
             return (
               <li className="flex justify-between" key={restaurantId}>
-                <div className="flex w-full items-center gap-2">
+                <div className="flex flex-1 items-center gap-2 overflow-hidden">
                   <p className="text-lg">{rank}</p>
-                  <RamenNoddleNonShadow className="h-7" />
-                  <a className="text-lg" href={restaurant.placeUrl} target="_blank">
+
+                  <RamenNoddleNonShadow className="w-7 shrink-0" />
+
+                  <a className="truncate text-lg" href={restaurant.placeUrl} target="_blank">
                     {restaurant.name}
                   </a>
                 </div>
