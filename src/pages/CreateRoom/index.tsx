@@ -178,7 +178,7 @@ function CreateRoom() {
             title="활동 반경"
             unit="km"
             min={1}
-            max={3}
+            max={2}
             counterKey="activityRadius"
             updateFormCounter={updateFormCounter}
             number={activityRadius}
