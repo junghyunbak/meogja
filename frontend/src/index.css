@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  @apply font-dove text-[16px] max-md:text-[14px];
+}
+
+body {
+  @apply p-0;
+}

@@ -1,0 +1,21 @@
+#map div:has(> .user-marker) {
+  transition: all 0.3s ease;
+
+  @apply z-10 -translate-x-[50%] -translate-y-[100%];
+}
+
+.user-marker {
+  animation: tilt 1.2s ease 0s infinite;
+}
+
+@keyframes tilt {
+  0% {
+    transform: rotate(-20deg);
+  }
+  50% {
+    transform: rotate(20deg);
+  }
+  100% {
+    transform: rotate(-20deg);
+  }
+}

@@ -1,0 +1,7 @@
+#map div:has(> .restaurant-marker) {
+  @apply pointer-events-none flex w-14 -translate-x-[50%] -translate-y-[100%] items-center justify-center;
+}
+
+.restaurant-marker {
+  @apply pointer-events-auto;
+}

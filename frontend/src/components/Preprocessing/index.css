@@ -1,0 +1,9 @@
+.loading-bar {
+  @apply h-4 w-2/3 border-2 border-black;
+
+  & > div {
+    transition: width 0.5s ease;
+
+    @apply h-full bg-black;
+  }
+}
