@@ -7,9 +7,6 @@ export default {
       pretendard: 'pretendard',
       dove: 'dove',
     },
-    backgroundImage: {
-      floor: 'url("/src/assets/imgs/floor.jpg")',
-    },
     extend: {
       colors: {
         'p-red': '#F3B6B6',

@@ -2,11 +2,10 @@ import { useContext, useState } from 'react';
 
 import { plugins, Preprocessing } from '@/components/Preprocessing';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
-
 import { MutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
 
-import ColorDove from '@/assets/svgs/color-dove.svg?react';
 import Check from '@/assets/svgs/check.svg?react';
+import RamenNoddleNonShadow from '@/assets/svgs/ramen-noodle-non-shadow.svg?react';
 
 function Result() {
   return (
@@ -16,7 +15,7 @@ function Result() {
         plugins.CheckRoomId.LoadImmutableRoomData,
         plugins.CheckRoomId.LoadMutableRoomData,
       ]}
-      loadingMessage="결과 페이지로 이동 중"
+      loadingMessage="결과 가져오는 중"
     >
       <ResultService />
     </Preprocessing>
@@ -29,6 +28,9 @@ function ResultService() {
 
   const [isCopy, setIsCopy] = useState(false);
 
+  /**
+   * 등수 계산
+   */
   const restaurantIdToCount = new Map<RestaurantId, number>();
 
   Object.keys(user).forEach((userId) => {
@@ -37,86 +39,98 @@ function ResultService() {
     });
   });
 
-  const candidate = Array.from(restaurantIdToCount.entries())
-    .sort((a, b) => (a[1] > b[1] ? -1 : 1))
-    .map(([restaurantId]) => restaurantId)
-    .slice(0, 3);
+  const candidate: { restaurantId: RestaurantId; rank: number; count: number }[] = [];
 
-  // [ ]: 종료되지 않은 방일 경우 보여줄 화면 구현
+  [...restaurantIdToCount.entries()]
+    .map((v) => ({ restaurantId: v[0], count: v[1] }))
+    .sort((a, b) => (a.count > b.count ? -1 : 1))
+    .forEach((a, i, arr) => {
+      const j = arr.findIndex((b) => a.count === b.count);
+
+      candidate.push({ restaurantId: a.restaurantId, rank: i === j ? i + 1 : j + 1, count: a.count });
+    });
+
+  const handleShareButtonClick = () => {
+    if (isCopy) {
+      return;
+    }
+
+    const text = [
+      ...candidate.map(({ restaurantId, rank }) => {
+        const restaurant = restaurants.find(({ id }) => id === restaurantId);
+
+        if (!restaurant) {
+          return '';
+        }
+
+        return `${rank}위 ${restaurant.name} ${restaurant.placeUrl}`;
+      }),
+    ].join('\n');
+
+    if (window.navigator.share) {
+      window.navigator.share({ text });
+    } else {
+      window.navigator.clipboard.writeText(text);
+
+      setIsCopy(true);
+
+      setTimeout(() => {
+        setIsCopy(false);
+      }, 2000);
+    }
+  };
+
   if (endTime > Date.now()) {
     return <div>아직 종료되지 않았습니다.</div>;
   }
 
   return (
-    <div className="bg-floor flex min-h-full w-full flex-col items-center gap-8 bg-center p-6">
-      <p className="text-2xl">비둘기들의 선택은?</p>
+    <div className="flex size-full flex-col items-center justify-center gap-8 p-6">
+      <div className="relative left-0 top-0 flex w-full flex-col border border-black">
+        <div className="absolute left-[4px] top-[4px] -z-10 box-content h-full w-full border border-black bg-white" />
+        <div className="absolute left-[8px] top-[8px] -z-20 box-content h-full w-full border border-black bg-white" />
 
-      <div className="flex w-full flex-col gap-3">
-        <div className="flex items-center">
-          <ColorDove className="w-10 -rotate-90" />
-          <p>마시쩡</p>
+        <div className="flex items-center justify-start bg-white p-3">
+          <p className="text-lg">비둘기들의 선택은?</p>
         </div>
 
-        <div className="w-full border border-black bg-white p-3">
-          {candidate.map((restaurantId, i) => {
+        <hr className="w-full border-black" />
+
+        <ul className="flex flex-col gap-3 bg-white p-3">
+          {candidate.map(({ restaurantId, rank, count }) => {
             const restaurant = restaurants.find(({ id }) => id === restaurantId);
 
             if (!restaurant) {
-              return null;
+              return;
             }
 
             return (
-              <div>
-                <p>{`${i + 1}위 ${restaurant.name}`}</p>
-              </div>
+              <li className="flex justify-between" key={restaurantId}>
+                <div className="flex w-full items-center gap-2">
+                  <p className="text-lg">{rank}</p>
+                  <RamenNoddleNonShadow className="h-7" />
+                  <a className="text-lg" href={restaurant.placeUrl} target="_blank">
+                    {restaurant.name}
+                  </a>
+                </div>
+
+                <p className="text-nowrap text-lg">{count}표</p>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
 
-      {!isCopy ? (
-        <div
-          className="cursor-pointer bg-black p-3"
-          onClick={() => {
-            const text = [
-              ...candidate.map((restaurantId, i) => {
-                const restaurant = restaurants.find(({ id }) => id === restaurantId);
-
-                if (!restaurant) {
-                  return '';
-                }
-
-                return `${i + 1}위 ${restaurant.name} ${restaurant.placeUrl}`;
-              }),
-            ].join('\n');
-
-            if (window.navigator.share) {
-              window.navigator.share({ text });
-            } else {
-              window.navigator.clipboard.writeText(text);
-
-              setIsCopy(true);
-
-              setTimeout(() => {
-                setIsCopy(false);
-              }, 2000);
-            }
-          }}
-        >
-          <p className="text-white">
-            결과 공유하고{' '}
-            <span className={`${category === 'CE' ? 'text-coffee' : 'text-rice'}`}>
-              {category === 'FD' ? '식당' : '카페'}
-            </span>{' '}
-            링크 확인하기
-          </p>
-        </div>
-      ) : (
-        <div className="flex items-center justify-center gap-2 bg-black p-3">
-          <Check className="h-3 text-white" />
-          <p className="text-white">클립보드에 복사되었습니다.</p>
-        </div>
-      )}
+      <div className="cursor-pointer border border-black p-3" onClick={handleShareButtonClick}>
+        {!isCopy ? (
+          <p>결과 공유하기</p>
+        ) : (
+          <div className="flex cursor-default items-center gap-2">
+            <Check className="h-3" />
+            <p>클립보드에 복사되었습니다.</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
