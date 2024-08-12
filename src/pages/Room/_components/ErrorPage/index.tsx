@@ -49,7 +49,7 @@ export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
 
       <p>{message}</p>
 
-      <div className="cursor-pointer border bg-black p-3" onClick={handleGoHomeButtonClick}>
+      <div className="cursor-pointer border-2 bg-black p-3" onClick={handleGoHomeButtonClick}>
         <p className="text-sm text-white">홈으로 이동</p>
       </div>
     </div>

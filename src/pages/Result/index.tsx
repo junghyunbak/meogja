@@ -123,7 +123,7 @@ function ResultService() {
         </ul>
       </div>
 
-      <div className="cursor-pointer border border-black p-3" onClick={handleShareButtonClick}>
+      <div className="cursor-pointer border-2 border-black p-3" onClick={handleShareButtonClick}>
         {!isCopy ? (
           <p>결과 공유하기</p>
         ) : (

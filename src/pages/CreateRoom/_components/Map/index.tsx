@@ -54,6 +54,7 @@ export function Map({ radius, updateLatLng }: MapProps) {
       fillColor: '#000000',
       fillOpacity: 0.05,
       strokeColor: '#000000',
+      strokeWeight: 2,
     });
 
     setCircle(circle);
@@ -62,6 +63,7 @@ export function Map({ radius, updateLatLng }: MapProps) {
       map,
       path: [centerLatLng, centerLatLng.destinationPoint(90, 1000)],
       strokeColor: '#000000',
+      strokeWeight: 2,
     });
 
     setPolyline(polyline);

@@ -24,7 +24,7 @@ function Home() {
         </div>
         <div
           onClick={handleStartButtonClick}
-          className="flex w-fit cursor-pointer items-center justify-center border border-black p-3"
+          className="flex w-fit cursor-pointer items-center justify-center border-2 border-black p-3"
         >
           <p className="text-sm">활동 영역 정하기</p>
         </div>

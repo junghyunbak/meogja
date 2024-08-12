@@ -108,7 +108,7 @@ function CreateRoom() {
     <div className="flex min-h-full w-full flex-col bg-p-yg p-6">
       <p className="mb-6 text-center text-2xl">어디로 이동할까?</p>
 
-      <div className="flex w-full flex-col items-center border border-black bg-white py-4">
+      <div className="flex w-full flex-col items-center border-2 border-black bg-white py-4">
         <div className="mb-3 w-full">
           <Counter
             title="방 최대인원"
@@ -133,17 +133,17 @@ function CreateRoom() {
           />
         </div>
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <div className="w-full bg-p-pink p-3">
           <p className="text-center text-base">목적</p>
         </div>
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <Category updateCategory={updateCategory} />
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <div className="mb-3 w-full">
           <Counter
@@ -157,13 +157,13 @@ function CreateRoom() {
           />
         </div>
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <div className="w-full bg-p-pink p-3">
           <p className="text-center text-base">모일 장소</p>
         </div>
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <div className="aspect-[3/2] w-full">
           <Preprocessing plugins={[plugins.LoadNaverMap]} loadingMessage="지도 가져오는 중">
@@ -171,7 +171,7 @@ function CreateRoom() {
           </Preprocessing>
         </div>
 
-        <hr className="w-full border-black" />
+        <div className="w-full border-b-2 border-black" />
 
         <div className="mb-3 w-full">
           <Counter

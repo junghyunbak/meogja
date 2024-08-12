@@ -56,7 +56,7 @@ export function JoinList() {
 
           return (
             <div
-              className={`ml-3 flex flex-col items-center border border-black bg-white p-2 py-1 last-of-type:mr-3 ${userId === myId ? 'cursor-default' : ''}`}
+              className={`ml-3 flex flex-col items-center border-2 border-black bg-white p-2 py-1 last-of-type:mr-3 ${userId === myId ? 'cursor-default' : ''}`}
               onClick={() => {
                 if (!map || !lat || !lng || myId === userId) {
                   return;

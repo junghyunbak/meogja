@@ -63,7 +63,7 @@ export function BottomSheet() {
       initialSnap={1}
       className="mx-auto max-w-[600px] cursor-grab active:cursor-grabbing"
     >
-      <Sheet.Container className="!left-auto border border-black !shadow-none">
+      <Sheet.Container className="!left-auto border-2 border-black !shadow-none">
         <Sheet.Header>
           <div className="pt-[7px]">
             <div className="mx-auto h-[4px] w-[33%] bg-black" />
@@ -78,8 +78,8 @@ export function BottomSheet() {
               </div>
 
               {myGpsLatLng && (
-                <div className="flex w-full border-t border-black">
-                  <div className="flex items-center justify-center border-r border-black bg-p-red p-3">
+                <div className="flex w-full border-t-2 border-black">
+                  <div className="flex items-center justify-center border-r-2 border-black bg-p-red p-3">
                     <p>집까지 거리</p>
                   </div>
                   <div className="flex flex-1 items-center justify-center">
@@ -96,12 +96,12 @@ export function BottomSheet() {
                 </div>
               )}
 
-              <div className="w-full border-t border-black bg-p-yellow p-3">
+              <div className="w-full border-t-2 border-black bg-p-yellow p-3">
                 <p>먹은 흔적</p>
               </div>
 
               {selectUserIds.length > 0 && (
-                <ul className="w-full border-t border-black p-3">
+                <ul className="w-full border-t-2 border-black p-3">
                   {selectUserIds.map((userId) => {
                     if (!user[userId]) {
                       return null;
@@ -119,7 +119,7 @@ export function BottomSheet() {
                 </ul>
               )}
 
-              <iframe src={restaurant.placeUrl} className="size-full border-t border-black" />
+              <iframe src={restaurant.placeUrl} className="size-full border-t-2 border-black" />
             </div>
           )}
         </Sheet.Content>
