@@ -86,8 +86,8 @@ function ResultService() {
 
   return (
     <div className="flex size-full flex-col items-center justify-center gap-8 p-6">
-      <div className="relative left-0 top-0 box-content flex w-full flex-col border-2 border-black">
-        <div className="absolute left-[4px] top-[4px] -z-10 box-content h-full w-full border-2 border-black bg-white" />
+      <div className="relative left-0 top-0 flex w-full flex-col border-2 border-black">
+        <div className="absolute left-[3px] top-[3px] -z-10 box-content h-full w-full border-2 border-black bg-white" />
         <div className="absolute left-[8px] top-[8px] -z-20 box-content h-full w-full border-2 border-black bg-white" />
 
         <div className="flex items-center justify-start bg-white p-3">

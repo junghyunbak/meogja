@@ -63,7 +63,7 @@ export function BottomSheet() {
       initialSnap={1}
       className="mx-auto max-w-[600px] cursor-grab active:cursor-grabbing"
     >
-      <Sheet.Container className="!left-auto border-2 border-black !shadow-none">
+      <Sheet.Container className="!left-auto border-2 border-b-0 border-black !shadow-none">
         <Sheet.Header>
           <div className="pt-[7px]">
             <div className="mx-auto h-[4px] w-[33%] bg-black" />
