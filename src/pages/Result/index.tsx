@@ -6,6 +6,7 @@ import { MutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadM
 
 import Check from '@/assets/svgs/check.svg?react';
 import RamenNoddleNonShadow from '@/assets/svgs/ramen-noodle-non-shadow.svg?react';
+import { useNavigate } from 'react-router-dom';
 
 function Result() {
   return (
@@ -25,6 +26,7 @@ function Result() {
 function ResultService() {
   const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
   const { user } = useContext(MutableRoomInfoContext);
+  const navigate = useNavigate();
 
   const [isCopy, setIsCopy] = useState(false);
 
@@ -123,15 +125,26 @@ function ResultService() {
         </ul>
       </div>
 
-      <div className="cursor-pointer border-2 border-black p-3" onClick={handleShareButtonClick}>
-        {!isCopy ? (
-          <p>결과 공유하기</p>
-        ) : (
-          <div className="flex cursor-default items-center gap-2">
-            <Check className="h-3" />
-            <p>클립보드에 복사되었습니다.</p>
-          </div>
-        )}
+      <div className="flex gap-3">
+        <div className="cursor-pointer bg-black p-3" onClick={handleShareButtonClick}>
+          {!isCopy ? (
+            <p className="text-white">결과 공유하기</p>
+          ) : (
+            <div className="flex cursor-default items-center gap-2">
+              <Check className="h-3 text-white" />
+              <p className="text-white">복사완료</p>
+            </div>
+          )}
+        </div>
+
+        <div
+          className="cursor-pointer border-2 border-black p-3"
+          onClick={() => {
+            navigate('/');
+          }}
+        >
+          <p>홈으로</p>
+        </div>
       </div>
     </div>
   );

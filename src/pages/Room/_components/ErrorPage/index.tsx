@@ -1,6 +1,6 @@
 import { ComponentType, useEffect } from 'react';
 import { type FallbackProps } from 'react-error-boundary';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 import SurpriseDove from '@/assets/svgs/surprise-dove.svg?react';
 
@@ -10,6 +10,8 @@ import { RESPONSE_CODE } from '@/constants/api';
 
 export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
   const { roomId } = useParams();
+
+  const navigate = useNavigate();
 
   const message = (() => {
     if (!(error instanceof AxiosError)) {
@@ -39,8 +41,7 @@ export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
   }, [code, roomId]);
 
   const handleGoHomeButtonClick = () => {
-    // [ ]: step 전역상태 초기화 문제 해결되면 navigator로 변경
-    location.href = '/';
+    navigate('/');
   };
 
   return (
