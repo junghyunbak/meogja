@@ -23,6 +23,8 @@ export function Map({ radius, updateLatLng }: MapProps) {
   const [polyline, setPolyline] = useState<naver.maps.Polyline | null>(null);
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
+  const [isGpsLoading, setIsGpsLoading] = useState(false);
+
   /**
    * circle, polyline, marker 오버레이 생성
    */
@@ -111,26 +113,29 @@ export function Map({ radius, updateLatLng }: MapProps) {
     }
   }, [map, circle, polyline, centerLatLng, marker, radius]);
 
+  const handleGpsButtonClick = async () => {
+    if (!map) {
+      return;
+    }
+
+    setIsGpsLoading(true);
+
+    const latLng = await getMyLatLng();
+
+    if (!latLng) {
+      return;
+    }
+
+    map.setCenter(new naver.maps.LatLng(latLng.lat, latLng.lng));
+
+    setIsGpsLoading(false);
+  };
+
   return (
     <div className="relative size-full">
       <div id="create-room-map" className="size-full" />
-      <div
-        className="absolute bottom-0 left-0 m-3 cursor-pointer bg-black p-2"
-        onClick={async () => {
-          if (!map) {
-            return;
-          }
-
-          const latLng = await getMyLatLng();
-
-          if (!latLng) {
-            return;
-          }
-
-          map.setCenter(new naver.maps.LatLng(latLng.lat, latLng.lng));
-        }}
-      >
-        <p className="text-sm text-white">내 위치로 이동</p>
+      <div className="absolute bottom-0 left-0 m-3 cursor-pointer bg-black p-2" onClick={handleGpsButtonClick}>
+        <p className="text-sm text-white">{isGpsLoading ? '로딩 중...' : '내 위치로 이동'}</p>
       </div>
     </div>
   );
