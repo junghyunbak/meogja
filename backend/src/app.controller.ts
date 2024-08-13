@@ -4,6 +4,7 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { HttpStatus } from '@nestjs/common';
 import { RESPONSE_CODE } from './constants/api';
 import { JoinRoomDto } from './dto/join-room.dto';
+import { CheckRoomDto } from './dto/check-room.dto';
 
 @Controller()
 export class AppController {
@@ -43,8 +44,10 @@ export class AppController {
 
   @Get('check-room')
   async checkRoomId(
-    @Query('roomId') roomId: string,
+    @Query() query: CheckRoomDto,
   ): Promise<ResponseTemplate<object>> {
+    const { roomId } = query;
+
     await this.appService.checkRoomIsExist(roomId);
 
     return {
