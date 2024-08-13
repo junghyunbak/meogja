@@ -23,6 +23,11 @@ type Code = {
    * 방 접속 최대인원을 초과했을 경우
    */
   NO_EMTPY_SPACE: "R501";
+
+  /**
+   * 알 수 없는 서버 에러 발생했을 경우
+   */
+  INTERNAL_SERVER_ERROR: "S500";
 };
 
 type CodeValues = Code[keyof Code];

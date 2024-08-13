@@ -8,6 +8,8 @@ import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
 import { NICKNAME_ADJECTIVE } from './constants/nickname';
 import { RIGHT } from './constants/room';
+import { ForbiddenException } from './exceptions/forbidden.exception';
+import { BadRequestException } from './exceptions/badRequest.exception';
 
 @Injectable()
 export class AppService {
@@ -57,7 +59,7 @@ export class AppService {
      * 방이 존재하는지
      */
     if (!mutableRoomInfo || !immutableRoomInfo) {
-      throw new Error();
+      throw new BadRequestException();
     }
 
     /**
@@ -66,13 +68,13 @@ export class AppService {
     if (
       Object.keys(mutableRoomInfo.user).length === immutableRoomInfo.capacity
     ) {
-      throw new Error();
+      throw new ForbiddenException();
     }
 
     return true;
   }
 
-  async addUser(roomId: RoomId): Promise<void> {
+  async addUser(roomId: RoomId): Promise<UserId> {
     const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
       createCacheStoreKey(roomId, 'mutable'),
     );
@@ -91,6 +93,8 @@ export class AppService {
       createCacheStoreKey(roomId, 'mutable'),
       mutableRoomInfo,
     );
+
+    return userId;
   }
 
   async getRestaurants(

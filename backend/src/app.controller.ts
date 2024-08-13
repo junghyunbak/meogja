@@ -30,8 +30,12 @@ export class AppController {
   ): Promise<ResponseTemplate<{ userId: UserId }>> {
     await this.appService.checkRoomIsValid(body.roomId);
 
-    await this.appService.addUser(body.roomId);
+    const userId = await this.appService.addUser(body.roomId);
 
-    return { data: { userId: '' }, code: RESPONSE_CODE.OK, message: '' };
+    return {
+      data: { userId },
+      code: RESPONSE_CODE.OK,
+      message: '방에 성공적으로 입장하였습니다.',
+    };
   }
 }
