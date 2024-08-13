@@ -14,7 +14,6 @@ export function RoomService() {
       <div className="relative flex size-full flex-col">
         <div className="pointer-events-none absolute top-0 z-20 mt-3 flex w-full flex-col gap-3">
           <RestaurantCategoryFilter />
-          <JoinList />
           <RestaurantFilter />
         </div>
 
