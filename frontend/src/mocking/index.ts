@@ -45,8 +45,8 @@ export class MockApiService {
       '0': {
         lat: 33.450701,
         lng: 126.570667,
-        endTime: new Date(Date.now() + 1000 * 60).getTime(),
-        radius: 1000,
+        endTime: new Date(Date.now() + 1000 * 60 * 60).getTime(),
+        radius: 1,
         restaurants,
         user: {},
         capacity: 3,
