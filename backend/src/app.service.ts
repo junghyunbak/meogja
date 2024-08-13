@@ -152,31 +152,41 @@ export class AppService {
   ): Promise<Restaurant[]> {
     const restaurants: Restaurant[] = [];
 
-    // [ ]: 모든 페이지의 데이터까지 다 가져오도록 구현
-    const { data } = await axios.get<KakaoPlaceSearchWithCategoryResponse>(
-      'https://dapi.kakao.com/v2/local/search/category.json',
-      {
-        params: {
-          category_group_code: category,
-          y: lat,
-          x: lng,
-          radius: radius * 1000,
-        },
-        headers: {
-          Authorization: `KakaoAK ${this.configService.get<string>('KAKAO_REST_API_KEY')}`,
-        },
-      },
-    );
+    let data: KakaoPlaceSearchWithCategoryResponse;
 
-    data.documents.forEach((document) => {
-      restaurants.push({
-        id: document.id,
-        name: document.place_name,
-        lat: +document.y,
-        lng: +document.x,
-        placeUrl: document.place_url,
+    let page = 1;
+
+    do {
+      data = await axios
+        .get<KakaoPlaceSearchWithCategoryResponse>(
+          'https://dapi.kakao.com/v2/local/search/category.json',
+          {
+            params: {
+              category_group_code: category,
+              y: lat,
+              x: lng,
+              radius: radius * 1000,
+              page,
+            },
+            headers: {
+              Authorization: `KakaoAK ${this.configService.get<string>('KAKAO_REST_API_KEY')}`,
+            },
+          },
+        )
+        .then((value) => value.data);
+
+      data.documents.forEach((document) => {
+        restaurants.push({
+          id: document.id,
+          name: document.place_name,
+          lat: +document.y,
+          lng: +document.x,
+          placeUrl: document.place_url,
+        });
       });
-    });
+
+      page++;
+    } while (!data.meta.is_end);
 
     return restaurants;
   }
