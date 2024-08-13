@@ -46,7 +46,7 @@ export function RefetchIntervalMutableRoomState() {
       setMyName(userName);
       setMySelect(select);
     },
-    refetchInterval: 1000,
+    refetchInterval: 500,
   });
 
   return null;

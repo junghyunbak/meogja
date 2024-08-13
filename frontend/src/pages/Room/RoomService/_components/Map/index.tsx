@@ -36,7 +36,7 @@ export function Map() {
 
   const prevLngRef = useRef<number>(lat);
 
-  const { map } = useNaverMap({ lat, lng, mapId: 'map' });
+  const { map } = useNaverMap({ lat, lng, mapId: 'map', zoom: 17 });
 
   const updateMyLatLngMutation = useMutation<
     undefined,
@@ -81,7 +81,7 @@ export function Map() {
 
         timerRef.current = setTimeout(() => {
           updateMyLatLngMutation.mutate({ lat: centerLat, lng: centerLng, direction });
-        }, 1000);
+        }, 100);
       })();
     },
     // useMutation의 변화에 따라 callback 함수가 다시 생성될 필요가 없다.
