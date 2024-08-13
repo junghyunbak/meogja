@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { memo, useEffect } from 'react';
 
 interface ActivityRadiusProps {
   map: naver.maps.Map | null;
@@ -10,7 +10,7 @@ interface ActivityRadiusProps {
   radius: number;
 }
 
-export function ActivityRadius({ map, centerLatLng, radius }: ActivityRadiusProps) {
+export const ActivityRadius = memo(({ map, centerLatLng, radius }: ActivityRadiusProps) => {
   useEffect(() => {
     if (!map) {
       return;
@@ -49,4 +49,4 @@ export function ActivityRadius({ map, centerLatLng, radius }: ActivityRadiusProp
   }, [map, radius, centerLatLng]);
 
   return null;
-}
+});

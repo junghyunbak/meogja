@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import useStore from '@/store';
 
@@ -6,7 +6,7 @@ import { UserMarker } from '@/components/naverMap/overlay/marker';
 
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 
-export function MapUserMarkers() {
+export const MapUserMarkers = memo(() => {
   const userId = useContext(UserIdContext);
 
   const [map] = useStore((state) => [state.map]);
@@ -27,4 +27,4 @@ export function MapUserMarkers() {
         })}
     </>
   );
-}
+});

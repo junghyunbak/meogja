@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { memo, useContext } from 'react';
 
 import { RestaurantMarker } from '@/components/naverMap/overlay/marker';
 
@@ -7,7 +7,7 @@ import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/Loa
 
 import useStore from '@/store';
 
-export function MapRestaurants() {
+export const MapRestaurants = memo(() => {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
   const userId = useContext(UserIdContext);
 
@@ -57,4 +57,4 @@ export function MapRestaurants() {
       })}
     </>
   );
-}
+});
