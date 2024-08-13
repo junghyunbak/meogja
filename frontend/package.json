@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
+    "start": "npm run dev:mocking",
     "dev": "vite",
+    "dev:mocking": "cross-env NODE_ENV=mocking vite",
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
@@ -13,6 +14,7 @@
   },
   "dependencies": {
     "axios": "^1.7.2",
+    "cross-env": "^7.0.3",
     "geolib": "^3.3.4",
     "http-status": "^1.7.4",
     "react": "^18.3.1",

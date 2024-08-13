@@ -199,7 +199,7 @@ function CreateRoom() {
                 '',
                 `제한 시간 ${formData.current.limitMinute}분! (${date.toLocaleString()}에 종료)`,
                 '',
-                `https://먹자.site/room/${createRoomMutation.data}`,
+                `${window.location.protocol}//${window.location.host}/room/${createRoomMutation.data}`,
               ].join('\n');
 
               if (window.navigator.share) {

@@ -166,7 +166,7 @@ export function Map() {
       <MapUserMarkers />
       <MapRestaurants />
 
-      <ActivityRadius map={map} centerLatLng={new naver.maps.LatLng(lat, lng)} radius={radius} />
+      <ActivityRadius map={map} centerLatLng={new naver.maps.LatLng(lat, lng)} radius={radius * 1000} />
     </>
   );
 }
