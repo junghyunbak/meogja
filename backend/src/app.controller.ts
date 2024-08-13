@@ -1,15 +1,20 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateRoomDto } from './dto/create-room.dto';
+import { HttpStatus } from '@nestjs/common';
+import { RESPONSE_CODE } from './constants/api';
 
 @Controller()
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
   @Post('create-room')
-  createRoom(@Body() body: CreateRoomDto): string {
-    console.log(body);
+  @HttpCode(HttpStatus.CREATED)
+  async createRoom(
+    @Body() body: CreateRoomDto,
+  ): Promise<ResponseTemplate<{ roomId: RoomId }>> {
+    const roomId = await this.appService.createRoom(body);
 
-    return this.appService.getHello();
+    return { data: { roomId }, code: RESPONSE_CODE.OK, message: '' };
   }
 }
