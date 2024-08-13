@@ -15,6 +15,7 @@ export function MapRestaurants() {
   const [user] = useStore((state) => [state.user]);
   const [mySelect] = useStore((state) => [state.mySelect]);
   const [showOnlyEaten] = useStore((state) => [state.showOnlyEaten]);
+  const [currentCategory] = useStore((state) => [state.currentCategory]);
 
   const restaurantIdToUserIdSet = new Map<RestaurantId, Set<UserId>>();
 
@@ -41,13 +42,16 @@ export function MapRestaurants() {
   return (
     <>
       {restaurants.map((restaurant) => {
+        const isInCategory =
+          currentCategory === null ? true : restaurant.categoryName.includes(currentCategory) ? true : false;
+
         return (
           <RestaurantMarker
             key={restaurant.id}
             map={map}
             restaurant={restaurant}
             count={restaurantIdToUserIdSet.get(restaurant.id)?.size || 0}
-            isVisible={showOnlyEaten ? mySelect.includes(restaurant.id) : true}
+            isVisible={!isInCategory ? false : showOnlyEaten ? mySelect.includes(restaurant.id) : true}
           />
         );
       })}

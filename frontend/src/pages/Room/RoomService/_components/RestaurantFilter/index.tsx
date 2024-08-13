@@ -10,7 +10,7 @@ export function RestaurantFilter() {
   };
 
   return (
-    <div className="pointer-events-auto flex w-fit cursor-pointer items-center gap-3 p-3" onClick={handleChkBoxClick}>
+    <div className="pointer-events-auto mx-3 flex w-fit cursor-pointer items-center gap-3" onClick={handleChkBoxClick}>
       <div className="flex aspect-square h-4 items-center justify-center border-2 border-black bg-white p-[1px]">
         {showOnlyEaten && <Check className="w-full text-black" />}
       </div>
