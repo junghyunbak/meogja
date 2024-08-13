@@ -38,7 +38,7 @@ export function ActivityRadius({ map, centerLatLng, radius }: ActivityRadiusProp
         ],
       ],
       fillColor: '#000000',
-      fillOpacity: 0.05,
+      fillOpacity: 0.1,
       strokeOpacity: 0,
       strokeWeight: 1,
     });
