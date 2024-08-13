@@ -45,7 +45,7 @@ export class AppService {
     return roomId;
   }
 
-  async checkRoomIsValid(roomId: string) {
+  async checkRoomIsExist(roomId: string): Promise<void> {
     const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
       createCacheStoreKey(roomId, 'mutable'),
     );
@@ -55,23 +55,26 @@ export class AppService {
         createCacheStoreKey(roomId, 'immutable'),
       );
 
-    /**
-     * 방이 존재하는지
-     */
     if (!mutableRoomInfo || !immutableRoomInfo) {
       throw new BadRequestException();
     }
+  }
 
-    /**
-     * 방이 가득찼는지
-     */
+  async checkRoomIsFull(roomId: string): Promise<void> {
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    const immutableRoomInfo =
+      await this.cacheManager.store.get<ImmutableRoomInfo>(
+        createCacheStoreKey(roomId, 'immutable'),
+      );
+
     if (
       Object.keys(mutableRoomInfo.user).length === immutableRoomInfo.capacity
     ) {
       throw new ForbiddenException();
     }
-
-    return true;
   }
 
   async addUser(roomId: RoomId): Promise<UserId> {

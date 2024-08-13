@@ -1,4 +1,4 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { HttpStatus } from '@nestjs/common';
@@ -28,7 +28,9 @@ export class AppController {
   async joinRoom(
     @Body() body: JoinRoomDto,
   ): Promise<ResponseTemplate<{ userId: UserId }>> {
-    await this.appService.checkRoomIsValid(body.roomId);
+    await this.appService.checkRoomIsExist(body.roomId);
+
+    await this.appService.checkRoomIsFull(body.roomId);
 
     const userId = await this.appService.addUser(body.roomId);
 
@@ -36,6 +38,19 @@ export class AppController {
       data: { userId },
       code: RESPONSE_CODE.OK,
       message: '방에 성공적으로 입장하였습니다.',
+    };
+  }
+
+  @Get('check-room')
+  async checkRoomId(
+    @Query('roomId') roomId: string,
+  ): Promise<ResponseTemplate<object>> {
+    await this.appService.checkRoomIsExist(roomId);
+
+    return {
+      data: {},
+      code: RESPONSE_CODE.OK,
+      message: '방 아이디 유효성 검사가 통과하였습니다.',
     };
   }
 }
