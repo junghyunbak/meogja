@@ -6,6 +6,8 @@ import { CreateRoomDto } from './dto/create-room.dto';
 import { createCacheStoreKey } from './utils/response';
 import axios from 'axios';
 import { ConfigService } from '@nestjs/config';
+import { NICKNAME_ADJECTIVE } from './constants/nickname';
+import { RIGHT } from './constants/room';
 
 @Injectable()
 export class AppService {
@@ -33,7 +35,62 @@ export class AppService {
       { ...immutableRoomInfo, restaurants },
     );
 
+    await this.cacheManager.store.set<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+      { user: {} },
+    );
+
     return roomId;
+  }
+
+  async checkRoomIsValid(roomId: string) {
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    const immutableRoomInfo =
+      await this.cacheManager.store.get<ImmutableRoomInfo>(
+        createCacheStoreKey(roomId, 'immutable'),
+      );
+
+    /**
+     * 방이 존재하는지
+     */
+    if (!mutableRoomInfo || !immutableRoomInfo) {
+      throw new Error();
+    }
+
+    /**
+     * 방이 가득찼는지
+     */
+    if (
+      Object.keys(mutableRoomInfo.user).length === immutableRoomInfo.capacity
+    ) {
+      throw new Error();
+    }
+
+    return true;
+  }
+
+  async addUser(roomId: RoomId): Promise<void> {
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    const userId = uuidv4();
+
+    mutableRoomInfo.user[userId] = {
+      userName: `${NICKNAME_ADJECTIVE[Math.floor(Math.random() * NICKNAME_ADJECTIVE.length)]} 비둘기`,
+      lat: null,
+      lng: null,
+      direction: RIGHT,
+      select: [],
+    };
+
+    await this.cacheManager.store.set<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+      mutableRoomInfo,
+    );
   }
 
   async getRestaurants(
@@ -44,6 +101,7 @@ export class AppService {
   ): Promise<Restaurant[]> {
     const restaurants: Restaurant[] = [];
 
+    // [ ]: 모든 페이지의 데이터까지 다 가져오도록 구현
     const { data } = await axios.get<KakaoPlaceSearchWithCategoryResponse>(
       'https://dapi.kakao.com/v2/local/search/category.json',
       {
