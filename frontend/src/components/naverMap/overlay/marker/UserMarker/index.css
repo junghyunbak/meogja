@@ -4,7 +4,7 @@
   @apply z-10 -translate-x-[50%] -translate-y-[100%];
 }
 
-.user-marker {
+.user-marker > .user-marker-icon {
   animation: tilt 1.2s ease 0s infinite;
 }
 

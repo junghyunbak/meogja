@@ -26,7 +26,7 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
       map,
       position: new naver.maps.LatLng(userData.lat || 0, userData.lng || 0),
       icon: {
-        content: createUserMarkerContent(userData.direction),
+        content: createUserMarkerContent(userData),
       },
     });
 
@@ -49,17 +49,21 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
 
     marker.setPosition(new naver.maps.LatLng(userData.lat, userData.lng));
     marker.setIcon({
-      content: createUserMarkerContent(userData.direction),
+      content: createUserMarkerContent(userData),
     });
   }, [marker, userData]);
 
   return null;
 }
 
-function createUserMarkerContent(direction: LEFT | RIGHT) {
+function createUserMarkerContent(userData: UserData) {
   return renderToString(
-    <div className="user-marker">
-      <ColorDove className={`z-10 w-16 ${direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
+    <div className="user-marker flex flex-col items-center justify-center">
+      <div className="user-marker-icon z-10 w-16">
+        <ColorDove className={`w-full ${userData.direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
+      </div>
+
+      <div className="text-nowrap text-xs">{userData.userName}</div>
     </div>
   );
 }
