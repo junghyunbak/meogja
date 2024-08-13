@@ -1,8 +1,11 @@
+import { useContext } from 'react';
+
 import useStore from '@/store';
+
 import ColorDove from '@/assets/svgs/color-dove.svg?react';
-import { useContext, useRef } from 'react';
-import { type MouseEventHandler } from 'react';
+
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { HorizontalMouseDragScroll } from '@/components/HorizontalMouseDragScroll';
 
 export function JoinList() {
   const [user] = useStore((state) => [state.user]);
@@ -10,47 +13,9 @@ export function JoinList() {
 
   const myId = useContext(UserIdContext);
 
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-
-  const isDragging = useRef<boolean>(false);
-  const startX = useRef<number>(0);
-  const scrollLeft = useRef<number>(0);
-
-  const handleDragStart: MouseEventHandler<HTMLDivElement> = (e) => {
-    if (!scrollRef.current) {
-      return;
-    }
-
-    isDragging.current = true;
-
-    startX.current = e.pageX - scrollRef.current.offsetLeft;
-    scrollLeft.current = scrollRef.current.scrollLeft;
-  };
-
-  const handleDragMove: MouseEventHandler<HTMLDivElement> = (e) => {
-    if (!isDragging.current || !scrollRef.current) {
-      return;
-    }
-
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = x - startX.current;
-    scrollRef.current.scrollLeft = scrollLeft.current - walk;
-  };
-
-  const handleDragEnd: MouseEventHandler<HTMLDivElement> = () => {
-    isDragging.current = false;
-  };
-
   return (
-    <div className="pointer-events-auto w-fit max-w-full cursor-grab active:cursor-grabbing">
-      <div
-        className="flex overflow-x-scroll scrollbar-hide"
-        ref={scrollRef}
-        onMouseDown={handleDragStart}
-        onMouseMove={handleDragMove}
-        onMouseLeave={handleDragEnd}
-        onMouseUp={handleDragEnd}
-      >
+    <div className="pointer-events-auto w-fit max-w-full">
+      <HorizontalMouseDragScroll>
         {Object.keys(user).map((userId) => {
           const { userName, lat, lng } = user[userId];
 
@@ -71,7 +36,7 @@ export function JoinList() {
             </div>
           );
         })}
-      </div>
+      </HorizontalMouseDragScroll>
     </div>
   );
 }
