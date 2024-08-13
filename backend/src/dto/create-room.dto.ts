@@ -1,6 +1,6 @@
 import { IsIn, IsNumber } from 'class-validator';
 
-const categories: Category[] = ['FD', 'CE'];
+const categories: Category[] = ['FD6', 'CE7'];
 
 export class CreateRoomDto implements Omit<ImmutableRoomInfo, 'restaurants'> {
   @IsNumber()
