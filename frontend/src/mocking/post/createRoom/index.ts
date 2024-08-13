@@ -8,13 +8,13 @@ export function createRoom(this: Server) {
   this.post('/api/create-room', async (_, request) => {
     const { requestBody } = request;
 
-    const { lat, lng, capacity, minute, radius, category, maxPickCount } = JSON.parse(requestBody);
+    const { lat, lng, capacity, endTime, radius, category, maxPickCount } = JSON.parse(requestBody);
 
     if (
       typeof lat !== 'number' ||
       typeof lng !== 'number' ||
       typeof capacity !== 'number' ||
-      typeof minute !== 'number' ||
+      typeof endTime !== 'number' ||
       typeof radius !== 'number' ||
       typeof category !== 'string' ||
       typeof maxPickCount !== 'number'

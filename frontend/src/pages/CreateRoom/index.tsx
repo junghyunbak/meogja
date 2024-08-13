@@ -64,20 +64,12 @@ function CreateRoom() {
       } = await axios.post<
         ResponseTemplate<{ roomId: string }>,
         AxiosResponse<ResponseTemplate<{ roomId: string }>>,
-        {
-          lat: number;
-          lng: number;
-          capacity: number;
-          minute: number;
-          radius: number;
-          category: Category;
-          maxPickCount: number;
-        }
+        Omit<ImmutableRoomInfo, 'restaurants'>
       >('/api/create-room', {
         lat: formData.current.lat,
         lng: formData.current.lng,
         capacity: formData.current.maxRoomJoinCount,
-        minute: formData.current.limitMinute,
+        endTime: Date.now() + formData.current.limitMinute * 60 * 1000,
         radius: formData.current.activityRadius,
         category: formData.current.category,
         maxPickCount: formData.current.maxChooseCount,
