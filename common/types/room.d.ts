@@ -56,7 +56,7 @@ type UserData = {
 
 type User = Record<UserId, UserData>;
 
-type Category = 'FD' | 'CE';
+type Category = "FD6" | "CE7";
 
 type RoomInfo = {
   /**
@@ -101,9 +101,16 @@ type RoomInfo = {
   user: User;
 };
 
-type MutableRoomInfo = Pick<RoomInfo, 'user'>;
+type MutableRoomInfo = Pick<RoomInfo, "user">;
 
 type ImmutableRoomInfo = Pick<
   RoomInfo,
-  'lat' | 'lng' | 'capacity' | 'endTime' | 'radius' | 'restaurants' | 'maxPickCount' | 'category'
+  | "lat"
+  | "lng"
+  | "capacity"
+  | "endTime"
+  | "radius"
+  | "restaurants"
+  | "maxPickCount"
+  | "category"
 >;

@@ -51,7 +51,7 @@ export class MockApiService {
         user: {},
         capacity: 3,
         maxPickCount: 3,
-        category: 'FD',
+        category: 'FD6',
       },
     };
 

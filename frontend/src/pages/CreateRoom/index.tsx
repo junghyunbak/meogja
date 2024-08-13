@@ -52,7 +52,7 @@ function CreateRoom() {
     activityRadius: defaultValue.activityRadius,
     lat: defaultValue.lat,
     lng: defaultValue.lng,
-    category: 'FD',
+    category: 'FD6',
   });
 
   const createRoomMutation = useMutation({
@@ -195,7 +195,7 @@ function CreateRoom() {
               const date = new Date(Date.now() + formData.current.limitMinute * 60 * 1000);
 
               const text = [
-                `함께 갈 ${formData.current.category === 'FD' ? '식당을' : '카페를'} 골라보세요.`,
+                `함께 갈 ${formData.current.category === 'FD6' ? '식당을' : '카페를'} 골라보세요.`,
                 '',
                 `제한 시간 ${formData.current.limitMinute}분! (${date.toLocaleString()}에 종료)`,
                 '',
