@@ -1,6 +1,6 @@
 import { useMutation } from 'react-query';
 import axios, { type AxiosError } from 'axios';
-import { useMutationTimeContext } from '@/pages/Room/RoomService/_components/MutationTimeProvider/index.context';
+import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
 
 export function useUpdateSelect({ userId, roomId }: { roomId: string; userId: string }) {
   const mutationTime = useMutationTimeContext();

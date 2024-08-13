@@ -1,6 +1,6 @@
 import { ErrorBoundary } from 'react-error-boundary';
 import { ErrorPage } from './_components/ErrorPage';
-import { MutationTimeProvider } from './RoomService/_components/MutationTimeProvider';
+import { MutationTimeProvider } from './_components/MutationTimeProvider';
 
 import { RoomService } from './RoomService';
 import { plugins, Preprocessing } from '@/components/Preprocessing';

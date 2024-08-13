@@ -2,7 +2,7 @@ import { useMutation } from 'react-query';
 import useStore from '@/store';
 import axios from 'axios';
 import React from 'react';
-import { useMutationTimeContext } from '@/pages/Room/RoomService/_components/MutationTimeProvider/index.context';
+import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
 
 export function useUpdateUserName(
   roomId: string,

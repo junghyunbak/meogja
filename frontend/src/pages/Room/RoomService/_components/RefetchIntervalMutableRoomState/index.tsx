@@ -7,7 +7,7 @@ import axios from 'axios';
 
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
-import { useMutationTimeContext } from '../MutationTimeProvider/index.context';
+import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
 
 export function RefetchIntervalMutableRoomState() {
   const userId = useContext(UserIdContext);
