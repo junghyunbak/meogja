@@ -96,6 +96,11 @@ type RoomInfo = {
   endTime: number;
 
   /**
+   * 방 유지시간
+   */
+  minute: number;
+
+  /**
    * 방의 식당 데이터
    */
   restaurants: Restaurant[];
@@ -118,4 +123,5 @@ type ImmutableRoomInfo = Pick<
   | "restaurants"
   | "maxPickCount"
   | "category"
+  | "minute"
 >;

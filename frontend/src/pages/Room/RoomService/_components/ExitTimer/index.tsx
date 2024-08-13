@@ -4,11 +4,13 @@ import { useNavigate } from 'react-router-dom';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
+import Clock from '@/assets/svgs/clock.svg?react';
+
 export function ExitTimer() {
   const navigate = useNavigate();
 
   const roomId = useContext(RoomIdContext);
-  const { endTime } = useContext(ImmutableRoomInfoContext);
+  const { endTime, minute } = useContext(ImmutableRoomInfoContext);
 
   const [remainSecond, setRemainSecond] = useState(Math.floor((endTime - Date.now()) / 1000));
 
@@ -17,7 +19,7 @@ export function ExitTimer() {
    */
   useEffect(() => {
     const timer = setInterval(() => {
-      setRemainSecond((prev) => prev - 1);
+      setRemainSecond(Math.floor((endTime - Date.now()) / 1000));
     }, 1000);
 
     return () => {
@@ -38,14 +40,20 @@ export function ExitTimer() {
 
   const m = Math.floor(remainSecond / 60);
 
-  const h = Math.floor(m / 60);
+  const percent = (remainSecond / (minute * 60)) * 100;
 
   return (
-    <div className="w-fit bg-black px-4 py-3">
-      <p className="text-white">
-        집에 돌아갈 시간{' '}
-        {`${(h % 24).toString().padStart(2, '0')}:${(m % 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`}
-      </p>
+    <div className="relative flex h-[33dvh] w-3 flex-col items-center rounded-lg border-2 border-black">
+      <div className="w-full flex-1 rounded-lg" />
+      <div className="w-full rounded-lg bg-p-red" style={{ height: `${percent}%` }} />
+
+      <div className="absolute flex w-6 translate-y-1/2" style={{ bottom: `${percent}%` }}>
+        <Clock className="w-full" />
+
+        <div className="absolute right-7">
+          <p>{`${(m % 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`}</p>
+        </div>
+      </div>
     </div>
   );
 }

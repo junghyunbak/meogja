@@ -42,11 +42,14 @@ export class MockApiService {
       });
     });
 
+    const minute = 10;
+
     const defaultData: { '0': RoomInfo } = {
       '0': {
         lat: 33.450701,
         lng: 126.570667,
-        endTime: new Date(Date.now() + 1000 * 60 * 60).getTime(),
+        endTime: new Date(Date.now() + 1000 * 60 * minute).getTime(),
+        minute,
         radius: 1,
         restaurants,
         user: {},

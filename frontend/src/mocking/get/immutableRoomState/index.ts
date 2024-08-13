@@ -27,7 +27,7 @@ export function immutableRoomState(this: Server) {
 
     const state = schema.db[roomId][0] as RoomInfo;
 
-    const { lat, lng, restaurants, capacity, radius, endTime, maxPickCount, category } = state;
+    const { lat, lng, restaurants, capacity, radius, endTime, maxPickCount, category, minute } = state;
 
     const responseData: ImmutableRoomInfo = {
       lat,
@@ -38,6 +38,7 @@ export function immutableRoomState(this: Server) {
       endTime,
       maxPickCount,
       category,
+      minute,
     };
 
     return new Response(

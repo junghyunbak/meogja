@@ -13,9 +13,6 @@ export function RoomService() {
       <div className="relative flex size-full flex-col">
         <div className="pointer-events-none absolute top-0 z-20 mt-3 flex w-full flex-col">
           <JoinList />
-          <div className="ml-3 mt-3 w-fit">
-            <ExitTimer />
-          </div>
           <RestaurantFilter />
         </div>
 
@@ -25,6 +22,10 @@ export function RoomService() {
 
         <div className="pointer-events-none absolute bottom-0 z-20 w-full">
           <RestaurantController />
+        </div>
+
+        <div className="absolute bottom-0 right-0 z-20 p-3">
+          <ExitTimer />
         </div>
       </div>
 

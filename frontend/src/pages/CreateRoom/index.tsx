@@ -70,6 +70,7 @@ function CreateRoom() {
         lng: formData.current.lng,
         capacity: formData.current.maxRoomJoinCount,
         endTime: Date.now() + formData.current.limitMinute * 60 * 1000,
+        minute: formData.current.limitMinute,
         radius: formData.current.activityRadius,
         category: formData.current.category,
         maxPickCount: formData.current.maxChooseCount,

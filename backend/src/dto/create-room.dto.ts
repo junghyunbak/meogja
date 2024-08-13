@@ -23,4 +23,7 @@ export class CreateRoomDto implements Omit<ImmutableRoomInfo, 'restaurants'> {
 
   @IsNumber()
   endTime: number;
+
+  @IsNumber()
+  minute: number;
 }
