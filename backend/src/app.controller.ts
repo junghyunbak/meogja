@@ -6,6 +6,8 @@ import { RESPONSE_CODE } from './constants/api';
 import { JoinRoomDto } from './dto/join-room.dto';
 import { CheckRoomDto } from './dto/check-room.dto';
 import { CheckUserDto } from './dto/check-user.dto';
+import { GetImmutableRoomStateDto } from './dto/get-immutable-room-state.dto';
+import { GetMutableRoomStateDto } from './dto/get-mutable-room-state.dto';
 
 @Controller()
 export class AppController {
@@ -73,6 +75,42 @@ export class AppController {
     return {
       data: {},
       message: '사용자 아이디 유효성 검사가 통과하였습니다.',
+      code: RESPONSE_CODE.OK,
+    };
+  }
+
+  @Get('immutable-room-state')
+  @HttpCode(HttpStatus.OK)
+  async getImmutableRoomState(
+    @Query() query: GetImmutableRoomStateDto,
+  ): Promise<ResponseTemplate<ImmutableRoomInfo>> {
+    const { roomId } = query;
+
+    await this.appService.checkRoomIsExist(roomId);
+
+    const data = await this.appService.getImmutableRoomState(roomId);
+
+    return {
+      data,
+      message: '성공적으로 데이터를 로드했습니다.',
+      code: RESPONSE_CODE.OK,
+    };
+  }
+
+  @Get('mutable-room-state')
+  @HttpCode(HttpStatus.OK)
+  async getMutableRoomState(
+    @Query() query: GetMutableRoomStateDto,
+  ): Promise<ResponseTemplate<MutableRoomInfo>> {
+    const { roomId } = query;
+
+    await this.appService.checkRoomIsExist(roomId);
+
+    const data = await this.appService.getMutableRoomState(roomId);
+
+    return {
+      data,
+      message: '성공적으로 데이터를 로드했습니다.',
       code: RESPONSE_CODE.OK,
     };
   }

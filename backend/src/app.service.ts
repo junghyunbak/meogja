@@ -111,6 +111,18 @@ export class AppService {
     return userId;
   }
 
+  async getImmutableRoomState(roomId: RoomId): Promise<ImmutableRoomInfo> {
+    return await this.cacheManager.store.get<ImmutableRoomInfo>(
+      createCacheStoreKey(roomId, 'immutable'),
+    );
+  }
+
+  async getMutableRoomState(roomId: RoomId): Promise<MutableRoomInfo> {
+    return await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+  }
+
   async getRestaurants(
     lat: number,
     lng: number,
