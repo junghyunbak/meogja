@@ -29,6 +29,8 @@ export function Map() {
   const [setCurrentRestaurantId] = useStore((state) => [state.setCurrentRestaurantId]);
   const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
 
+  const [currentCategory] = useStore((state) => [state.currentCategory]);
+
   // [ ]: debouncing을 위한 useRef 변수명 수정
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -102,6 +104,13 @@ export function Map() {
       const { x: mapCenterLng, y: mapCenterLat } = map.getCenter();
 
       const pick = restaurants
+        .filter((restaurant) => {
+          if (currentCategory === null) {
+            return true;
+          }
+
+          return restaurant.categoryName.includes(currentCategory);
+        })
         .map((restaurant) => {
           const { lat, lng } = restaurant;
 
@@ -125,7 +134,7 @@ export function Map() {
 
       setCurrentRestaurantId(pick.restaurant.id);
     }, 100);
-  }, [map, restaurants, setCurrentRestaurantId, setSheetIsOpen]);
+  }, [map, restaurants, setCurrentRestaurantId, setSheetIsOpen, currentCategory]);
 
   /**
    * map 전역상태 초기화 및 이벤트 등록
