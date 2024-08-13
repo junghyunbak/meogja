@@ -1,5 +1,5 @@
 {
-  "name": "gola",
+  "name": "meogja",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,7 +10,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "serve": "vite build && ./node_modules/.bin/serve ./dist --single -p 4173"
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -24,6 +25,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.26.0",
     "react-slick": "^0.30.2",
+    "serve": "^14.2.3",
     "slick-carousel": "^1.8.1",
     "tailwind-scrollbar-hide": "^1.1.7",
     "uuid": "^10.0.0",
