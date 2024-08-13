@@ -10,6 +10,7 @@ import { NICKNAME_ADJECTIVE } from './constants/nickname';
 import { RIGHT } from './constants/room';
 import { ForbiddenException } from './exceptions/forbidden.exception';
 import { BadRequestException } from './exceptions/badRequest.exception';
+import { UnauthorizedException } from './exceptions/unauthorized.exception';
 
 @Injectable()
 export class AppService {
@@ -45,7 +46,7 @@ export class AppService {
     return roomId;
   }
 
-  async checkRoomIsExist(roomId: string): Promise<void> {
+  async checkRoomIsExist(roomId: RoomId): Promise<void> {
     const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
       createCacheStoreKey(roomId, 'mutable'),
     );
@@ -60,7 +61,7 @@ export class AppService {
     }
   }
 
-  async checkRoomIsFull(roomId: string): Promise<void> {
+  async checkRoomIsFull(roomId: RoomId): Promise<void> {
     const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
       createCacheStoreKey(roomId, 'mutable'),
     );
@@ -74,6 +75,16 @@ export class AppService {
       Object.keys(mutableRoomInfo.user).length === immutableRoomInfo.capacity
     ) {
       throw new ForbiddenException();
+    }
+  }
+
+  async checkUserInRoom(roomId: RoomId, userId: UserId) {
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    if (!Object.keys(mutableRoomInfo.user).includes(userId)) {
+      throw new UnauthorizedException();
     }
   }
 

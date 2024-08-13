@@ -5,6 +5,7 @@ import { HttpStatus } from '@nestjs/common';
 import { RESPONSE_CODE } from './constants/api';
 import { JoinRoomDto } from './dto/join-room.dto';
 import { CheckRoomDto } from './dto/check-room.dto';
+import { CheckUserDto } from './dto/check-user.dto';
 
 @Controller()
 export class AppController {
@@ -43,6 +44,7 @@ export class AppController {
   }
 
   @Get('check-room')
+  @HttpCode(HttpStatus.OK)
   async checkRoomId(
     @Query() query: CheckRoomDto,
   ): Promise<ResponseTemplate<object>> {
@@ -54,6 +56,24 @@ export class AppController {
       data: {},
       code: RESPONSE_CODE.OK,
       message: '방 아이디 유효성 검사가 통과하였습니다.',
+    };
+  }
+
+  @Get('check-user-id')
+  @HttpCode(HttpStatus.OK)
+  async checkUserId(
+    @Query() query: CheckUserDto,
+  ): Promise<ResponseTemplate<object>> {
+    const { roomId, userId } = query;
+
+    await this.appService.checkRoomIsExist(roomId);
+
+    await this.appService.checkUserInRoom(roomId, userId);
+
+    return {
+      data: {},
+      message: '사용자 아이디 유효성 검사가 통과하였습니다.',
+      code: RESPONSE_CODE.OK,
     };
   }
 }
