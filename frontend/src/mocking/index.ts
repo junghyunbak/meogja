@@ -38,6 +38,7 @@ export class MockApiService {
         lat: +document.y,
         lng: +document.x,
         placeUrl: document.place_url,
+        categoryName: document.category_group_name,
       });
     });
 

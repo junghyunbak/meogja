@@ -29,6 +29,11 @@ type Restaurant = {
    * 카카오 맵의 식당 상세정보 링크
    */
   placeUrl: string;
+
+  /**
+   * 장소 카테고리
+   */
+  categoryName: string;
 };
 
 type UserData = {
