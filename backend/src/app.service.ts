@@ -88,6 +88,27 @@ export class AppService {
     }
   }
 
+  async updateUserLatLng(
+    roomId: RoomId,
+    userId: UserId,
+    lat: number,
+    lng: number,
+    direction: LEFT | RIGHT,
+  ): Promise<void> {
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    const userData = mutableRoomInfo.user[userId];
+
+    mutableRoomInfo.user[userId] = { ...userData, lat, lng, direction };
+
+    this.cacheManager.store.set<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+      mutableRoomInfo,
+    );
+  }
+
   async addUser(roomId: RoomId): Promise<UserId> {
     const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
       createCacheStoreKey(roomId, 'mutable'),

@@ -1,4 +1,12 @@
-import { Body, Controller, Get, HttpCode, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Post,
+  Query,
+  Patch,
+} from '@nestjs/common';
 import { AppService } from './app.service';
 import { CreateRoomDto } from './dto/create-room.dto';
 import { HttpStatus } from '@nestjs/common';
@@ -8,6 +16,7 @@ import { CheckRoomDto } from './dto/check-room.dto';
 import { CheckUserDto } from './dto/check-user.dto';
 import { GetImmutableRoomStateDto } from './dto/get-immutable-room-state.dto';
 import { GetMutableRoomStateDto } from './dto/get-mutable-room-state.dto';
+import { UpdateUserLatLngDto } from './dto/update-user-lat-lng.dto';
 
 @Controller()
 export class AppController {
@@ -111,6 +120,30 @@ export class AppController {
     return {
       data,
       message: '성공적으로 데이터를 로드했습니다.',
+      code: RESPONSE_CODE.OK,
+    };
+  }
+
+  @Patch('update-user-lat-lng')
+  @HttpCode(HttpStatus.OK)
+  async updateUserLatLng(
+    @Body() body: UpdateUserLatLngDto,
+  ): Promise<ResponseTemplate<object>> {
+    await this.appService.checkRoomIsExist(body.roomId);
+
+    await this.appService.checkUserInRoom(body.roomId, body.userId);
+
+    await this.appService.updateUserLatLng(
+      body.roomId,
+      body.userId,
+      body.lat,
+      body.lng,
+      body.direction,
+    );
+
+    return {
+      data: {},
+      message: '성공적으로 사용자 위치정보를 업데이트 했습니다.',
       code: RESPONSE_CODE.OK,
     };
   }
