@@ -103,7 +103,41 @@ export class AppService {
 
     mutableRoomInfo.user[userId] = { ...userData, lat, lng, direction };
 
-    this.cacheManager.store.set<MutableRoomInfo>(
+    await this.cacheManager.store.set<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+      mutableRoomInfo,
+    );
+  }
+
+  async updateUserSelect(
+    roomId: RoomId,
+    userId: UserId,
+    restaurantId: RestaurantId,
+  ) {
+    const immutableRoomInfo =
+      await this.cacheManager.store.get<ImmutableRoomInfo>(
+        createCacheStoreKey(roomId, 'immutable'),
+      );
+
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    const select = mutableRoomInfo.user[userId].select;
+
+    const idx = select.indexOf(restaurantId);
+
+    if (idx === -1) {
+      select.push(restaurantId);
+    } else {
+      select.splice(idx, 1);
+    }
+
+    if (select.length > immutableRoomInfo.maxPickCount) {
+      throw new BadRequestException();
+    }
+
+    await this.cacheManager.store.set<MutableRoomInfo>(
       createCacheStoreKey(roomId, 'mutable'),
       mutableRoomInfo,
     );

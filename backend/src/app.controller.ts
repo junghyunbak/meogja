@@ -17,6 +17,7 @@ import { CheckUserDto } from './dto/check-user.dto';
 import { GetImmutableRoomStateDto } from './dto/get-immutable-room-state.dto';
 import { GetMutableRoomStateDto } from './dto/get-mutable-room-state.dto';
 import { UpdateUserLatLngDto } from './dto/update-user-lat-lng.dto';
+import { UpdateUserSelectDto } from './dto/update-user-select.dto';
 
 @Controller()
 export class AppController {
@@ -144,6 +145,28 @@ export class AppController {
     return {
       data: {},
       message: '성공적으로 사용자 위치정보를 업데이트 했습니다.',
+      code: RESPONSE_CODE.OK,
+    };
+  }
+
+  @Patch('update-user-select')
+  @HttpCode(HttpStatus.OK)
+  async updateUserSelect(
+    @Body() body: UpdateUserSelectDto,
+  ): Promise<ResponseTemplate<object>> {
+    await this.appService.checkRoomIsExist(body.roomId);
+
+    await this.appService.checkUserInRoom(body.roomId, body.userId);
+
+    await this.appService.updateUserSelect(
+      body.roomId,
+      body.userId,
+      body.restaurantId,
+    );
+
+    return {
+      data: {},
+      message: '성공적으로 사용자 선택정보를 업데이트 했습니다.',
       code: RESPONSE_CODE.OK,
     };
   }
