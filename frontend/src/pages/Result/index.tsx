@@ -82,9 +82,12 @@ function ResultService() {
     }
   };
 
+  // [ ]: ms단위의 계산으로, 종료된 방임에도 "종료되지 않았다"는 문제가 발생하여 비활성화
+  /*
   if (endTime > Date.now()) {
     return <div>아직 종료되지 않았습니다.</div>;
   }
+  */
 
   return (
     <div className="flex size-full flex-col items-center justify-center gap-8 p-6">
