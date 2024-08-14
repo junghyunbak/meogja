@@ -1,6 +1,5 @@
 import { Map } from './_components/Map';
 import { Geolocation } from './_components/Geolocation';
-import { JoinList } from './_components/JoinList';
 import { ExitTimer } from './_components/ExitTimer';
 import { RestaurantController } from './_components/RestaurantController';
 import { BottomSheet } from './_components/BottomSheet';

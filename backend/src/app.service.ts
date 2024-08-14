@@ -156,6 +156,8 @@ export class AppService {
       lng: null,
       direction: RIGHT,
       select: [],
+      gpsLat: null,
+      gpsLng: null,
     };
 
     await this.cacheManager.store.set<MutableRoomInfo>(

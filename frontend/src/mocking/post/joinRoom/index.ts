@@ -1,4 +1,4 @@
-import { NICKNAME_ADJECTIVE } from '@/constants';
+import { NICKNAME_ADJECTIVE, RIGHT } from '@/constants';
 import { v4 as uuidv4 } from 'uuid';
 import { type Server, Response } from 'miragejs';
 import httpStatus from 'http-status';
@@ -43,7 +43,15 @@ export const joinRoom = function (this: Server) {
 
     const newState = JSON.parse(JSON.stringify(state)) as RoomInfo;
 
-    newState.user[userId] = { userName: nickName, select: [], lat: null, lng: null, direction: 0 };
+    newState.user[userId] = {
+      userName: nickName,
+      select: [],
+      lat: null,
+      lng: null,
+      direction: RIGHT,
+      gpsLat: null,
+      gpsLng: null,
+    };
 
     schema.db[roomId].update(newState);
 

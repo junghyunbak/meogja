@@ -24,7 +24,7 @@ function Result() {
 }
 
 function ResultService() {
-  const { restaurants, endTime } = useContext(ImmutableRoomInfoContext);
+  const { restaurants } = useContext(ImmutableRoomInfoContext);
   const { user } = useContext(MutableRoomInfoContext);
   const navigate = useNavigate();
 
