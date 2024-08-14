@@ -4,7 +4,7 @@ import { LEFT, RIGHT } from 'src/constants/room';
 const directions: (LEFT | RIGHT)[] = [LEFT, RIGHT];
 
 export class UpdateUserLatLngDto
-  implements Omit<UserData, 'select' | 'userName'>
+  implements Pick<UserData, 'lat' | 'lng' | 'direction'>
 {
   @IsString()
   roomId: RoomId;

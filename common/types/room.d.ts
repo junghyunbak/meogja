@@ -57,6 +57,12 @@ type UserData = {
    * 사용자가 최근 바라본 방향
    */
   direction: LEFT | RIGHT;
+
+  /**
+   * 사용자의 gps 정보
+   */
+  gpsLat: number | null;
+  gpsLng: number | null;
 };
 
 type User = Record<UserId, UserData>;
