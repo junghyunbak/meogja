@@ -6,28 +6,36 @@ import { useContext } from 'react';
 export function RestaurantCategoryFilter() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
-  const categories = Array.from(
-    new Set(
-      restaurants.reduce<string[]>(
-        (arr, { categoryName }) => [
-          ...arr,
-          ...categoryName
-            .split(/>|,/)
-            .map((v) => v.trim())
-            .filter((v) => v !== ''),
-        ],
-        []
-      )
-    )
-  );
+  const categoryNameToCount = new Map<string, number>();
+
+  restaurants.forEach(({ categoryName }) => {
+    categoryName
+      .split(/>|,/)
+      .map((v) => v.trim())
+      .filter((v) => v !== '')
+      .forEach((v) => {
+        categoryNameToCount.set(v, (categoryNameToCount.get(v) || 0) + 1);
+      });
+  });
+
+  const categories: { name: string; count: number }[] = [...categoryNameToCount.entries()]
+    .map(([name, count]) => ({
+      name,
+      count,
+    }))
+    .sort((a, b) => (a.count > b.count ? -1 : 1));
+
+  restaurants.reduce<string[]>((arr, { categoryName }) => [...arr, ...categoryName], []);
 
   return (
     <div className="pointer-events-auto max-w-full">
       <HorizontalMouseDragScroll>
-        <CategoryItem categoryName="전체" categoryIdentify={null} />
+        <CategoryItem categoryName="전체" categoryIdentify={null} count={restaurants.length} />
 
         {categories.map((category) => {
-          return <CategoryItem key={category} categoryName={category} categoryIdentify={category} />;
+          const { name, count } = category;
+
+          return <CategoryItem key={name} categoryName={name} categoryIdentify={name} count={count} />;
         })}
       </HorizontalMouseDragScroll>
     </div>
@@ -37,9 +45,10 @@ export function RestaurantCategoryFilter() {
 interface CategoryItemProps {
   categoryName: string;
   categoryIdentify: string | null;
+  count: number;
 }
 
-function CategoryItem({ categoryName, categoryIdentify }: CategoryItemProps) {
+function CategoryItem({ categoryName, categoryIdentify, count }: CategoryItemProps) {
   const [currentCategory, setCurrentCategory] = useStore((state) => [state.currentCategory, state.setCurrentCategory]);
 
   const handleCategoryClick = (category: string | null) => {
@@ -53,7 +62,9 @@ function CategoryItem({ categoryName, categoryIdentify }: CategoryItemProps) {
       className={`ml-3 w-fit select-none border-2 border-black p-2 last-of-type:mr-3 ${currentCategory === categoryIdentify ? 'bg-p-yg' : 'bg-white'}`}
       onClick={handleCategoryClick(categoryIdentify)}
     >
-      <p className="text-nowrap text-sm">{categoryName}</p>
+      <p className="text-nowrap text-sm">
+        {categoryName} {count && <span>({count})</span>}
+      </p>
     </div>
   );
 }
