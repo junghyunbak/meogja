@@ -11,10 +11,13 @@ import { useNaverMap } from '@/hooks/useNaverMap';
 
 import axios, { type AxiosError } from 'axios';
 
-import * as geolib from 'geolib';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
+
+import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
+
+import * as geolib from 'geolib';
 
 const USER_RADIUS = 150; // meter
 
@@ -22,13 +25,13 @@ export function Map() {
   const { lat, lng, radius, restaurants } = useContext(ImmutableRoomInfoContext);
   const roomId = useContext(RoomIdContext);
   const userId = useContext(UserIdContext);
+  const mutationTime = useMutationTimeContext();
 
   const [setMap] = useStore((state) => [state.setMap]);
   const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
   const [setMyDirection] = useStore((state) => [state.setMyDirection]);
   const [setCurrentRestaurantId] = useStore((state) => [state.setCurrentRestaurantId]);
   const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
-
   const [currentCategory] = useStore((state) => [state.currentCategory]);
 
   // [ ]: debouncing을 위한 useRef 변수명 수정
@@ -47,6 +50,8 @@ export function Map() {
   >({
     mutationKey: [],
     mutationFn: async ({ lat, lng, direction }) => {
+      mutationTime.current = Date.now();
+
       await axios.patch('/api/update-user-lat-lng', {
         roomId,
         userId,
