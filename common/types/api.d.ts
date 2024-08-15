@@ -56,7 +56,7 @@ type KakaoPlaceSearchWithCategoryResponse = {
   meta: {
     total_count: number;
     is_end: boolean;
-    pageable_count: 45;
+    pageable_count: number;
     same_name: {
       region: string[];
       keyword: string;
