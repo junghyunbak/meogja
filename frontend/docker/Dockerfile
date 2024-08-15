@@ -1,8 +1,10 @@
-FROM node:18.17.1
+FROM node:18.17.0
 
 WORKDIR /usr/src/app
 
-COPY ../ ./
+COPY ../.. ./
+
+WORKDIR /usr/src/app/frontend
 
 RUN npm i
 
