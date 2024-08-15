@@ -11,6 +11,11 @@ jobs:
   deploy_master:
     runs-on: ubuntu-latest
     steps:
+      - name: 🏷노드 버전 설정
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.17.0
+
       - name: 🌳환경변수 설정
         run: echo "${{ secrets.PROD_ENV_PROPERTIES }}" > ./.env
 
@@ -36,4 +41,10 @@ jobs:
             git checkout master
             git pull origin master
 
-            ./scripts/backend-build-and-run.sh
+            cd ./backend
+
+            npm install
+
+            npx pm2 kill
+
+            npm run start:prod
