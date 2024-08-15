@@ -11,6 +11,3 @@ https://먹자.site/
 ## 배포 환경
 
 ![meogja-structure](https://github.com/user-attachments/assets/51b4a438-e885-4004-8e49-8b74b17c1d53)
-
-## 문제 해결 경험
-
