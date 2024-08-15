@@ -6,8 +6,9 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { BasicException } from 'src/exceptions/basic.exception';
-import { type Response } from 'express';
 import { RESPONSE_CODE } from 'src/constants/api';
+
+import { type Response } from 'express';
 
 @Catch()
 export class BasicExceptionFilter implements ExceptionFilter {
