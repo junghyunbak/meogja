@@ -18,7 +18,6 @@ export function RefetchIntervalMutableRoomState() {
   const [setMySelect] = useStore((state) => [state.setMySelect]);
   const [setMyName] = useStore((state) => [state.setMyName]);
   const [setUser] = useStore((state) => [state.setUser]);
-  const [setMyMapLatLng] = useStore((state) => [state.setMyMapLatLng]);
 
   useQuery({
     queryKey: ['room-service'],
@@ -42,14 +41,10 @@ export function RefetchIntervalMutableRoomState() {
         return;
       }
 
-      const { select, userName, lat, lng } = user[userId];
+      const { select, userName } = user[userId];
 
       setMyName(userName);
       setMySelect(select);
-
-      if (lat && lng) {
-        setMyMapLatLng(lat, lng);
-      }
     },
     refetchInterval: 500,
   });
