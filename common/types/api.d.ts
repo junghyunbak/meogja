@@ -41,7 +41,7 @@ type ResponseTemplate<T> = {
 type KakaoPlaceSearchWithCategoryResponse = {
   documents: {
     address_name: string;
-    category_group_code: Category;
+    category_group_code: string;
     category_group_name: string;
     category_name: string;
     distance: string;
