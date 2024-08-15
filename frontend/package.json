@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run dev:mocking",
     "dev": "cross-env VITE_ENV=dev vite",
-    "dev:mocking": "cross-env VITE_ENV=mocking vite",
+    "dev:mocking": "cross-env VITE_ENV=mock vite",
     "build": "tsc -b && vite build",
     "serve": "cross-env VITE_ENV=prod vite build && ./node_modules/.bin/serve ./dist --single -p 4173",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
