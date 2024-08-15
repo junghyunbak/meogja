@@ -36,10 +36,4 @@ jobs:
             git checkout master
             git pull origin master
 
-            cd ./backend
-
-            npm install
-
-            npx pm2 kill
-
-            npm run start:prod
+            ./scripts/backend-build-and-run.sh
