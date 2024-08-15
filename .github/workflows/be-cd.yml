@@ -11,7 +11,19 @@ jobs:
   deploy_master:
     runs-on: ubuntu-latest
     steps:
-      - name: ssh action
+      - name: 🌳환경변수 설정
+        run: echo "${{ secrets.PROD_ENV_PROPERTIES }}" > ./.env
+
+      - name: 📩환경변수 복사
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{secrets.RELEASE_HOST}}
+          username: ${{ secrets.RELEASE_USERNAME}}
+          password: ${{ secrets.RELEASE_PASSWORD}}
+          source: "./.env"
+          target: "~/git-repo/meogja/backend"
+
+      - name: 🖥서버 접속 및 스크립트 실행
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.RELEASE_HOST }}
@@ -25,6 +37,8 @@ jobs:
             git pull origin master
 
             cd ./backend
+
+            npm ci
 
             npx pm2 kill
 
