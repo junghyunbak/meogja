@@ -18,6 +18,7 @@ import { GetImmutableRoomStateDto } from './dto/get-immutable-room-state.dto';
 import { GetMutableRoomStateDto } from './dto/get-mutable-room-state.dto';
 import { UpdateUserLatLngDto } from './dto/update-user-lat-lng.dto';
 import { UpdateUserSelectDto } from './dto/update-user-select.dto';
+import { UpdateUserGpsLatLngDto } from './dto/update-user-gps-lat-lng.dto';
 
 @Controller()
 export class AppController {
@@ -140,6 +141,29 @@ export class AppController {
       body.lat,
       body.lng,
       body.direction,
+    );
+
+    return {
+      data: {},
+      message: '성공적으로 사용자 위치정보를 업데이트 했습니다.',
+      code: RESPONSE_CODE.OK,
+    };
+  }
+
+  @Patch('update-user-gps-lat-lng')
+  @HttpCode(HttpStatus.OK)
+  async updateUserGpsLatLng(
+    @Body() body: UpdateUserGpsLatLngDto,
+  ): Promise<ResponseTemplate<object>> {
+    await this.appService.checkRoomIsExist(body.roomId);
+
+    await this.appService.checkUserInRoom(body.roomId, body.userId);
+
+    await this.appService.updateUserGpsLatLng(
+      body.roomId,
+      body.userId,
+      body.lat,
+      body.lng,
     );
 
     return {

@@ -109,6 +109,26 @@ export class AppService {
     );
   }
 
+  async updateUserGpsLatLng(
+    roomId: RoomId,
+    userId: UserId,
+    lat: number,
+    lng: number,
+  ): Promise<void> {
+    const mutableRoomInfo = await this.cacheManager.store.get<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+    );
+
+    const userData = mutableRoomInfo.user[userId];
+
+    mutableRoomInfo.user[userId] = { ...userData, gpsLat: lat, gpsLng: lng };
+
+    await this.cacheManager.store.set<MutableRoomInfo>(
+      createCacheStoreKey(roomId, 'mutable'),
+      mutableRoomInfo,
+    );
+  }
+
   async updateUserSelect(
     roomId: RoomId,
     userId: UserId,
