@@ -1,4 +1,5 @@
 import { useContext, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { plugins, Preprocessing } from '@/components/Preprocessing';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
@@ -6,7 +7,8 @@ import { MutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadM
 
 import Check from '@/assets/svgs/check.svg?react';
 import RamenNoddleNonShadow from '@/assets/svgs/ramen-noodle-non-shadow.svg?react';
-import { useNavigate } from 'react-router-dom';
+
+import * as geolib from 'geolib';
 
 function Result() {
   return (
@@ -33,24 +35,34 @@ function ResultService() {
   /**
    * 등수 계산
    */
-  const restaurantIdToCount = new Map<RestaurantId, number>();
+  const restaurantIdToPoint = new Map<RestaurantId, { count: number; distance: number }>();
 
   Object.keys(user).forEach((userId) => {
     user[userId].select.forEach((restaurantId) => {
-      restaurantIdToCount.set(restaurantId, (restaurantIdToCount.get(restaurantId) || 0) + 1);
+      const restaurant = restaurants.find(({ id }) => restaurantId === id);
+
+      if (!restaurant) {
+        return;
+      }
+
+      if (!restaurantIdToPoint.has(restaurantId)) {
+        restaurantIdToPoint.set(restaurantId, { count: 0, distance: 0 });
+      }
+
+      const point = restaurantIdToPoint.get(restaurantId);
+
+      if (!point) {
+        return;
+      }
+
+      point.count += 1;
+
+      point.distance += geolib.getDistance(
+        { lat: restaurant.lat, lng: restaurant.lng },
+        { lat: user[userId].gpsLat || restaurant.lat, lng: user[userId].gpsLng || restaurant.lng }
+      );
     });
   });
-
-  const candidate: { restaurantId: RestaurantId; rank: number; count: number }[] = [];
-
-  [...restaurantIdToCount.entries()]
-    .map((v) => ({ restaurantId: v[0], count: v[1] }))
-    .sort((a, b) => (a.count > b.count ? -1 : 1))
-    .forEach((a, i, arr) => {
-      const j = arr.findIndex((b) => a.count === b.count);
-
-      candidate.push({ restaurantId: a.restaurantId, rank: i === j ? i + 1 : j + 1, count: a.count });
-    });
 
   const handleShareButtonClick = () => {
     if (isCopy) {
@@ -58,16 +70,26 @@ function ResultService() {
     }
 
     const text = [
-      ...candidate.map(({ restaurantId, rank }) => {
-        const restaurant = restaurants.find(({ id }) => id === restaurantId);
+      ...[...restaurantIdToPoint.entries()]
+        .sort((a, b) => {
+          if (a[1].count > b[1].count) {
+            return -1;
+          } else if (a[1].count < b[1].count) {
+            return 1;
+          } else {
+            return a[1].distance < b[1].distance ? -1 : 1;
+          }
+        })
+        .map(([restaurantId], i) => {
+          const restaurant = restaurants.find(({ id }) => id === restaurantId);
 
-        if (!restaurant) {
-          return '';
-        }
+          if (!restaurant) {
+            return '';
+          }
 
-        return `${rank}위 ${restaurant.name} ${restaurant.placeUrl}`;
-      }),
-    ].join('\n');
+          return `${i + 1}위 ${restaurant.name} ${restaurant.placeUrl}`;
+        }),
+    ].join('\n\n');
 
     if (window.navigator.share) {
       window.navigator.share({ text });
@@ -82,13 +104,6 @@ function ResultService() {
     }
   };
 
-  // [ ]: ms단위의 계산으로, 종료된 방임에도 "종료되지 않았다"는 문제가 발생하여 비활성화
-  /*
-  if (endTime > Date.now()) {
-    return <div>아직 종료되지 않았습니다.</div>;
-  }
-  */
-
   return (
     <div className="flex size-full flex-col items-center justify-center gap-8 p-6">
       <div className="relative left-0 top-0 flex w-full flex-col border-2 border-black">
@@ -102,31 +117,43 @@ function ResultService() {
         <div className="w-full border-b-2 border-black" />
 
         <ul className="flex flex-col gap-3 bg-white p-3">
-          {candidate.map(({ restaurantId, rank, count }) => {
-            const restaurant = restaurants.find(({ id }) => id === restaurantId);
+          {[...restaurantIdToPoint.entries()]
+            .sort((a, b) => {
+              if (a[1].count > b[1].count) {
+                return -1;
+              } else if (a[1].count < b[1].count) {
+                return 1;
+              } else {
+                return a[1].distance < b[1].distance ? -1 : 1;
+              }
+            })
+            .map(([restaurantId, { count }], i) => {
+              const restaurant = restaurants.find(({ id }) => id === restaurantId);
 
-            if (!restaurant) {
-              return;
-            }
+              if (!restaurant) {
+                return null;
+              }
 
-            return (
-              <li className="flex justify-between" key={restaurantId}>
-                <div className="flex flex-1 items-center gap-2 overflow-hidden">
-                  <p className="text-lg">{rank}</p>
+              return (
+                <li className="flex justify-between" key={restaurantId}>
+                  <div className="flex flex-1 items-center gap-2 overflow-hidden">
+                    <p className="text-lg">{i + 1}</p>
 
-                  <RamenNoddleNonShadow className="w-7 shrink-0" />
+                    <RamenNoddleNonShadow className="w-7 shrink-0" />
 
-                  <a className="truncate text-lg" href={restaurant.placeUrl} target="_blank">
-                    {restaurant.name}
-                  </a>
-                </div>
+                    <a className="truncate text-lg" href={restaurant.placeUrl} target="_blank">
+                      {restaurant.name}
+                    </a>
+                  </div>
 
-                <p className="text-nowrap text-lg">{count}표</p>
-              </li>
-            );
-          })}
+                  <p className="text-nowrap text-lg">{count}표</p>
+                </li>
+              );
+            })}
         </ul>
       </div>
+
+      <p className="text-xs">* 동수 득표의 경우, 모두에게서 가까운 순으로 순위를 매김</p>
 
       <div className="flex gap-3">
         <div className="cursor-pointer bg-black p-3" onClick={handleShareButtonClick}>
