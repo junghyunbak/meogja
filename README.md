@@ -4,6 +4,10 @@
 
 ## Meogja
 
+### 서비스 흐름도
+
+![Group 21](https://github.com/user-attachments/assets/5cb8c2d5-ce33-45ad-b194-04f26e5b0fbf)
+
 ### 프로젝트 설계
 
 ![meogja-structure](https://github.com/user-attachments/assets/51b4a438-e885-4004-8e49-8b74b17c1d53)
