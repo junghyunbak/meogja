@@ -5,7 +5,7 @@ import { MockApiService } from './mocking/index.ts';
 import './index.css';
 import '@/assets/fonts/stylesheet.css';
 
-if (process.env.NODE_ENV === 'mocking') {
+if (import.meta.env.VITE_ENV === 'mock') {
   new MockApiService().register();
 }
 

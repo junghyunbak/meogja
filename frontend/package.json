@@ -5,13 +5,12 @@
   "type": "module",
   "scripts": {
     "start": "npm run dev:mocking",
-    "dev": "vite",
-    "dev:mocking": "cross-env NODE_ENV=mocking vite",
+    "dev": "cross-env VITE_ENV=dev vite",
+    "dev:mocking": "cross-env VITE_ENV=mocking vite",
     "build": "tsc -b && vite build",
+    "serve": "cross-env VITE_ENV=prod vite build && ./node_modules/.bin/serve ./dist --single -p 4173",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "format": "prettier --write .",
-    "serve": "vite build && ./node_modules/.bin/serve ./dist --single -p 4173"
+    "format": "prettier --write ."
   },
   "dependencies": {
     "axios": "^1.7.2",
@@ -53,6 +52,7 @@
     "tailwindcss": "^3.4.7",
     "typescript": "^5.2.2",
     "vite": "^5.3.4",
+    "vite-plugin-html-env": "^1.2.8",
     "vite-plugin-svgr": "^4.2.0",
     "vite-tsconfig-paths": "^4.3.2"
   }

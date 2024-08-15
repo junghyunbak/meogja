@@ -20,10 +20,7 @@ export function QueryProvider({ children }: QueryProviderProps) {
     <QueryClientProvider client={queryClient}>
       {children}
 
-      {/**
-       * // [ ]: NODE_ENV 값을 cross-env로 변경할 경우 ReactQueryDevtools가 동작하지 않는 이슈가 존재.
-       */}
-      {process.env.NODE_ENV !== 'production' && <ReactQueryDevtools />}
+      {import.meta.env.VITE_ENV !== 'prod' && <ReactQueryDevtools />}
     </QueryClientProvider>
   );
 }
