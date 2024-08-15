@@ -38,7 +38,7 @@ jobs:
 
             cd ./backend
 
-            npm ci
+            npm install
 
             npx pm2 kill
 
