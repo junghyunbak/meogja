@@ -6,7 +6,7 @@ https://먹자.site/
 
 ## 서비스 흐름도
 
-![Group 21](https://github.com/user-attachments/assets/5cb8c2d5-ce33-45ad-b194-04f26e5b0fbf)
+![Frame 98](https://github.com/user-attachments/assets/f15f7e34-003b-4e1b-aebf-dfe85acc207d)
 
 ## 배포 환경
 
