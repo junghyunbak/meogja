@@ -1,7 +1,10 @@
+import React, { Suspense } from 'react';
+import { ErrorBoundary } from 'react-error-boundary';
 import { Outlet, createBrowserRouter, type RouteObject } from 'react-router-dom';
+
 import { RootLayout } from './_components/RootLayout';
 import { QueryProvider } from './_components/QueryProvider';
-import React, { Suspense } from 'react';
+import { ErrorPage } from './_components/ErrorPage';
 
 const Home = React.lazy(() => import('@/pages/Home'));
 const Room = React.lazy(() => import('@/pages/Room'));
@@ -10,13 +13,15 @@ const Result = React.lazy(() => import('@/pages/Result'));
 
 function Root() {
   return (
-    <QueryProvider>
-      <RootLayout>
-        <Suspense>
-          <Outlet />
-        </Suspense>
-      </RootLayout>
-    </QueryProvider>
+    <RootLayout>
+      <QueryProvider>
+        <ErrorBoundary FallbackComponent={ErrorPage}>
+          <Suspense>
+            <Outlet />
+          </Suspense>
+        </ErrorBoundary>
+      </QueryProvider>
+    </RootLayout>
   );
 }
 

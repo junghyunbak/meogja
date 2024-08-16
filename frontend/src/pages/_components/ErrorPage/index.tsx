@@ -8,7 +8,7 @@ import { AxiosError } from 'axios';
 
 import { RESPONSE_CODE } from '@/constants/api';
 
-export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
+export const ErrorPage: ComponentType<FallbackProps> = ({ error, resetErrorBoundary }) => {
   const { roomId } = useParams();
 
   const navigate = useNavigate();
@@ -42,6 +42,8 @@ export const ErrorPage: ComponentType<FallbackProps> = ({ error }) => {
 
   const handleGoHomeButtonClick = () => {
     navigate('/');
+
+    resetErrorBoundary();
   };
 
   return (

@@ -21,7 +21,7 @@ export function checkRoomId(this: Server) {
       return new Response(
         httpStatus.BAD_REQUEST,
         {},
-        createResponseData({}, RESPONSE_CODE.BAD_REQUEST, '존재하지 않는 방입니다.')
+        createResponseData({}, RESPONSE_CODE.BAD_ROOM, '존재하지 않는 방입니다.')
       );
     }
 
