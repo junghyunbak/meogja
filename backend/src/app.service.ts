@@ -9,7 +9,10 @@ import { ConfigService } from '@nestjs/config';
 import { NICKNAME_ADJECTIVE } from './constants/nickname';
 import { RIGHT } from './constants/room';
 import { ForbiddenException } from './exceptions/forbidden.exception';
-import { BadRequestException } from './exceptions/badRequest.exception';
+import {
+  BadRequestException,
+  BadRoomException,
+} from './exceptions/badRequest.exception';
 import { UnauthorizedException } from './exceptions/unauthorized.exception';
 
 @Injectable()
@@ -57,7 +60,7 @@ export class AppService {
       );
 
     if (!mutableRoomInfo || !immutableRoomInfo) {
-      throw new BadRequestException();
+      throw new BadRoomException();
     }
   }
 
