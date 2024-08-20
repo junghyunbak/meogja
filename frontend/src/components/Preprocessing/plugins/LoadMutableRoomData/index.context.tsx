@@ -1,14 +1,24 @@
-import React, { createContext } from 'react';
+import React, { createContext, useRef } from 'react';
+import { create, type UseBoundStore, type StoreApi } from 'zustand';
 
-type MutableRoomInfoContextValue = MutableRoomInfo;
+interface MutableRoomInfoState {
+  user: User;
+  setUser: (user: User) => void;
+}
 
-export const MutableRoomInfoContext = createContext<MutableRoomInfoContextValue>({} as MutableRoomInfoContextValue);
+type MutableRoomInfoStore = UseBoundStore<StoreApi<MutableRoomInfoState>>;
+
+export const MutableRoomInfoStoreContext = createContext<MutableRoomInfoStore>({} as MutableRoomInfoStore);
 
 interface MutableRoomInfoContextProviderProps {
   children: React.ReactNode;
-  value: MutableRoomInfoContextValue;
+  initialState: User;
 }
 
-export function MutableRoomInfoContextProvider({ children, value }: MutableRoomInfoContextProviderProps) {
-  return <MutableRoomInfoContext.Provider value={value}>{children}</MutableRoomInfoContext.Provider>;
+export function MutableRoomInfoStoreContextProvider({ children, initialState }: MutableRoomInfoContextProviderProps) {
+  const store = useRef(
+    create<MutableRoomInfoState>()((set) => ({ user: initialState, setUser: (user: User) => set(() => ({ user })) }))
+  ).current;
+
+  return <MutableRoomInfoStoreContext.Provider value={store}>{children}</MutableRoomInfoStoreContext.Provider>;
 }

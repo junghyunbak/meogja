@@ -1,7 +1,8 @@
-import { memo, useEffect } from 'react';
+import { useEffect } from 'react';
 
 interface ActivityRadiusProps {
-  map: naver.maps.Map | null;
+  map: naver.maps.Map;
+
   centerLatLng: naver.maps.LatLng;
 
   /**
@@ -10,12 +11,8 @@ interface ActivityRadiusProps {
   radius: number;
 }
 
-export const ActivityRadius = memo(({ map, centerLatLng, radius }: ActivityRadiusProps) => {
+export const ActivityRadius = ({ map, centerLatLng, radius }: ActivityRadiusProps) => {
   useEffect(() => {
-    if (!map) {
-      return;
-    }
-
     const latMin = 28.7905313;
     const latMax = 44.4367236;
     const lngMin = 120.6472122;
@@ -46,7 +43,7 @@ export const ActivityRadius = memo(({ map, centerLatLng, radius }: ActivityRadiu
     return () => {
       polygon.setMap(null);
     };
-  }, [map, radius, centerLatLng]);
+  }, []);
 
   return null;
-});
+};

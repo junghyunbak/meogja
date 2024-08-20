@@ -7,7 +7,7 @@ import { RoomIdContext } from '../CheckRoomId/index.context';
 
 import { type Plugin } from '../..';
 
-import { MutableRoomInfoContextProvider } from './index.context';
+import { MutableRoomInfoStoreContextProvider } from './index.context';
 
 export const LoadMutableRoomData: Plugin = ({ children, time, step, setStep }) => {
   const roomId = useContext(RoomIdContext);
@@ -15,11 +15,13 @@ export const LoadMutableRoomData: Plugin = ({ children, time, step, setStep }) =
   const { data, isLoading } = useQuery({
     queryKey: ['load-mutable-room-data', time],
     queryFn: async () => {
-      const response = await axios
+      const {
+        data: { user },
+      } = await axios
         .get<ResponseTemplate<MutableRoomInfo>>('/api/mutable-room-state', { params: { roomId } })
         .then((value) => value.data);
 
-      return response.data;
+      return user;
     },
     onSuccess() {
       setStep(step);
@@ -32,5 +34,5 @@ export const LoadMutableRoomData: Plugin = ({ children, time, step, setStep }) =
     return null;
   }
 
-  return <MutableRoomInfoContextProvider value={data}>{children}</MutableRoomInfoContextProvider>;
+  return <MutableRoomInfoStoreContextProvider initialState={data}>{children}</MutableRoomInfoStoreContextProvider>;
 };

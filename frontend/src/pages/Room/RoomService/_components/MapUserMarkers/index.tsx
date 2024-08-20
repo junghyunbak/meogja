@@ -1,18 +1,25 @@
 import { memo, useContext } from 'react';
 
-import useStore from '@/store';
+import useGlobalStore from '@/store';
 
 import { UserMarker } from '@/components/naverMap/overlay/marker';
 
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { MapContext } from '../..';
+import { useStore } from 'zustand';
+import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
 
 export const MapUserMarkers = memo(() => {
   const userId = useContext(UserIdContext);
 
-  const [map] = useStore((state) => [state.map]);
-  const [user] = useStore((state) => [state.user]);
-  const [myMapLatLng] = useStore((state) => [state.myMapLatLng]);
-  const [myDirection] = useStore((state) => [state.myDirection]);
+  const { map } = useContext(MapContext);
+
+  const mutableRoomInfoStore = useContext(MutableRoomInfoStoreContext);
+
+  const [user] = useStore(mutableRoomInfoStore, (s) => [s.user]);
+
+  const [myMapLatLng] = useGlobalStore((state) => [state.myMapLatLng]);
+  const [myDirection] = useGlobalStore((state) => [state.myDirection]);
 
   const me = user[userId];
 

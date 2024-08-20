@@ -3,28 +3,25 @@ import { useMutation } from 'react-query';
 
 import useStore from '@/store';
 
-import { ActivityRadius } from '@/components/naverMap/overlay/polygon';
-import { MapRestaurants } from './MapRestaurants';
-import { MapUserMarkers } from './MapUserMarkers';
-
-import { useNaverMap } from '@/hooks/useNaverMap';
-
 import axios, { type AxiosError } from 'axios';
 
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
-
 import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
+import { MapContext } from '../..';
+
+import { LEFT, RIGHT } from '@/constants';
 
 import * as geolib from 'geolib';
 
-const USER_RADIUS = 150; // meter
+const USER_RADIUS_M = 150;
 
 export function Map() {
-  const { lat, lng, radius, restaurants } = useContext(ImmutableRoomInfoContext);
+  const { lng, restaurants } = useContext(ImmutableRoomInfoContext);
   const roomId = useContext(RoomIdContext);
   const userId = useContext(UserIdContext);
+  const { map } = useContext(MapContext);
   const mutationTime = useMutationTimeContext();
 
   const [setMap] = useStore((state) => [state.setMap]);
@@ -39,9 +36,7 @@ export function Map() {
   const timerRef2 = useRef<ReturnType<typeof setTimeout> | null>(null);
   const timerRef3 = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const prevLngRef = useRef<number>(lat);
-
-  const { map } = useNaverMap({ lat, lng, mapId: 'map', zoom: 17 });
+  const prevLngRef = useRef<number>(lng);
 
   const updateMyLatLngMutation = useMutation<
     undefined,
@@ -62,39 +57,34 @@ export function Map() {
     },
   });
 
-  const updateUserMapLatLng = useCallback(
-    (center: naver.maps.Coord) => {
-      const { x: centerLng, y: centerLat } = center;
+  const updateUserMapLatLng = useCallback((center: naver.maps.Coord) => {
+    const { x: centerLng, y: centerLat } = center;
 
-      const direction: LEFT | RIGHT = centerLng < prevLngRef.current ? 0 : 1;
+    const direction: LEFT | RIGHT = centerLng < prevLngRef.current ? RIGHT : LEFT;
 
-      prevLngRef.current = centerLng;
+    prevLngRef.current = centerLng;
 
-      (() => {
-        if (timerRef2.current) {
-          clearTimeout(timerRef2.current);
-        }
+    (() => {
+      if (timerRef2.current) {
+        clearTimeout(timerRef2.current);
+      }
 
-        timerRef2.current = setTimeout(() => {
-          setMyMapLatLng(centerLat, centerLng);
-          setMyDirection(direction);
-        }, 100);
-      })();
+      timerRef2.current = setTimeout(() => {
+        setMyMapLatLng(centerLat, centerLng);
+        setMyDirection(direction);
+      }, 100);
+    })();
 
-      (() => {
-        if (timerRef.current) {
-          clearTimeout(timerRef.current);
-        }
+    (() => {
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
 
-        timerRef.current = setTimeout(() => {
-          updateMyLatLngMutation.mutate({ lat: centerLat, lng: centerLng, direction });
-        }, 100);
-      })();
-    },
-    // useMutation의 변화에 따라 callback 함수가 다시 생성될 필요가 없다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setMyMapLatLng /* updateMyLatLngMutation */]
-  );
+      timerRef.current = setTimeout(() => {
+        updateMyLatLngMutation.mutate({ lat: centerLat, lng: centerLng, direction });
+      }, 100);
+    })();
+  }, []);
 
   const updateNearByRestaurant = useCallback(() => {
     if (timerRef3.current) {
@@ -102,10 +92,6 @@ export function Map() {
     }
 
     timerRef3.current = setTimeout(() => {
-      if (!map) {
-        return;
-      }
-
       const { x: mapCenterLng, y: mapCenterLat } = map.getCenter();
 
       const pick = restaurants
@@ -126,7 +112,7 @@ export function Map() {
 
           return { restaurant, dist };
         })
-        .filter(({ dist }) => dist <= USER_RADIUS)
+        .filter(({ dist }) => dist <= USER_RADIUS_M)
         .sort((a, b) => (a.dist < b.dist ? -1 : 1))[0];
 
       if (!pick) {
@@ -139,24 +125,17 @@ export function Map() {
 
       setCurrentRestaurantId(pick.restaurant.id);
     }, 100);
-  }, [map, restaurants, setCurrentRestaurantId, setSheetIsOpen, currentCategory]);
+  }, [currentCategory]);
 
   /**
    * map 전역상태 초기화 및 이벤트 등록
    */
   useEffect(() => {
-    if (!map) {
-      return;
-    }
-
-    setMap(map);
-
     updateUserMapLatLng(map.getCenter());
     updateNearByRestaurant();
 
     const handleMapCenterChange = (center: naver.maps.Coord) => {
       updateUserMapLatLng(center);
-
       updateNearByRestaurant();
     };
 
@@ -173,14 +152,5 @@ export function Map() {
     };
   }, [map, setCurrentRestaurantId, setMap, setSheetIsOpen, updateNearByRestaurant, updateUserMapLatLng]);
 
-  return (
-    <>
-      <div className="size-full" id="map" />
-
-      <MapUserMarkers />
-      <MapRestaurants />
-
-      <ActivityRadius map={map} centerLatLng={new naver.maps.LatLng(lat, lng)} radius={radius * 1000} />
-    </>
-  );
+  return null;
 }

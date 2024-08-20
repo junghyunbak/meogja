@@ -4,17 +4,19 @@ import { useUpdateSelect } from '@/hooks/useUpdateSelect';
 
 import useStore from '@/store';
 
-import './index.css';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
+import { MapContext } from '../..';
+
+import './index.css';
 
 export function RestaurantController() {
-  const { restaurants, maxPickCount } = useContext(ImmutableRoomInfoContext);
   const userId = useContext(UserIdContext);
   const roomId = useContext(RoomIdContext);
+  const { restaurants, maxPickCount } = useContext(ImmutableRoomInfoContext);
+  const { map } = useContext(MapContext);
 
-  const [map] = useStore((state) => [state.map]);
   const [mySelect, setMySelect] = useStore((state) => [state.mySelect, state.setMySelect]);
   const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
   const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
@@ -41,7 +43,7 @@ export function RestaurantController() {
         return next;
       });
 
-      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
+      map.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
 
       updateMySelectMutation.mutate(restaurant.id);
     };
@@ -63,7 +65,7 @@ export function RestaurantController() {
         return next;
       });
 
-      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
+      map.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
 
       updateMySelectMutation.mutate(restaurant.id);
     };
@@ -71,7 +73,7 @@ export function RestaurantController() {
 
   const handleShowDetailButtonClick = (restaurant: Restaurant) => {
     return () => {
-      map?.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
+      map.setCenter(new naver.maps.LatLng(restaurant.lat, restaurant.lng));
 
       setSheetIsOpen(true);
     };

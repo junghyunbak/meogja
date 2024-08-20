@@ -5,17 +5,25 @@ import { RestaurantMarker } from '@/components/naverMap/overlay/marker';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 
-import useStore from '@/store';
+import useGlobalStore from '@/store';
 
-export const MapRestaurants = memo(() => {
+import { MapContext } from '../..';
+import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
+import { useStore } from 'zustand';
+
+export const MapRestaurantMarkers = () => {
+  const mutableRoomInfoStore = useContext(MutableRoomInfoStoreContext);
+
+  const [user] = useStore(mutableRoomInfoStore, (s) => [s.user]);
+
   const { restaurants } = useContext(ImmutableRoomInfoContext);
   const userId = useContext(UserIdContext);
 
-  const [map] = useStore((state) => [state.map]);
-  const [user] = useStore((state) => [state.user]);
-  const [mySelect] = useStore((state) => [state.mySelect]);
-  const [showOnlyEaten] = useStore((state) => [state.showOnlyEaten]);
-  const [currentCategory] = useStore((state) => [state.currentCategory]);
+  const { map } = useContext(MapContext);
+
+  const [mySelect] = useGlobalStore((state) => [state.mySelect]);
+  const [showOnlyEaten] = useGlobalStore((state) => [state.showOnlyEaten]);
+  const [currentCategory] = useGlobalStore((state) => [state.currentCategory]);
 
   const restaurantIdToUserIdSet = new Map<RestaurantId, Set<UserId>>();
 
@@ -57,4 +65,4 @@ export const MapRestaurants = memo(() => {
       })}
     </>
   );
-});
+};

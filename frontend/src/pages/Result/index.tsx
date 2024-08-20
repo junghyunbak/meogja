@@ -3,12 +3,13 @@ import { useNavigate } from 'react-router-dom';
 
 import { plugins, Preprocessing } from '@/components/Preprocessing';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
-import { MutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
+import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
 
 import Check from '@/assets/svgs/check.svg?react';
 import RamenNoddleNonShadow from '@/assets/svgs/ramen-noodle-non-shadow.svg?react';
 
 import * as geolib from 'geolib';
+import { useStore } from 'zustand';
 
 function Result() {
   return (
@@ -27,7 +28,11 @@ function Result() {
 
 function ResultService() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
-  const { user } = useContext(MutableRoomInfoContext);
+
+  const mutableRoomInfoStore = useContext(MutableRoomInfoStoreContext);
+
+  const [user] = useStore(mutableRoomInfoStore, (s) => [s.user]);
+
   const navigate = useNavigate();
 
   const [isCopy, setIsCopy] = useState(false);
