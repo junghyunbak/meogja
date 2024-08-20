@@ -75,12 +75,8 @@ function Loading({ maxStep, message }: LoadingProps) {
 
   return (
     <div className="flex size-full flex-col items-center justify-center gap-4">
-      <p className="text-2xl">
-        {message}
-        {Array(step)
-          .fill(null)
-          .map(() => '.')}
-      </p>
+      <p className="text-2xl">{message}</p>
+
       <div className="loading-bar">
         <div style={{ width: `${Math.floor((step / maxStep) * 100)}%` }} />
       </div>
