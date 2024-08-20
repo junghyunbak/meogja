@@ -1,13 +1,15 @@
 import { useRef, useState } from 'react';
-import { plugins, Preprocessing } from '@/components/Preprocessing';
+import { useMutation } from 'react-query';
 
 import { Map } from './_components/Map';
 import { Counter } from './_components/Counter';
 import { Category } from './_components/Category';
-import { useMutation } from 'react-query';
+
 import axios, { AxiosResponse } from 'axios';
 
 import Check from '@/assets/svgs/check.svg?react';
+
+import { plugins, Preprocessing } from '@/components/Preprocessing';
 
 export const defaultValue = {
   /**

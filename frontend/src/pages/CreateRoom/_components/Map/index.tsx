@@ -1,6 +1,9 @@
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+
 import { useNaverMap } from '@/hooks/useNaverMap';
+
 import { defaultValue } from '../..';
+
 import { getMyLatLng } from '@/utils';
 
 interface MapProps {
@@ -9,46 +12,96 @@ interface MapProps {
 }
 
 export function Map({ radius, updateLatLng }: MapProps) {
-  const { map } = useNaverMap({
+  const { map, mapRef } = useNaverMap({
     lat: defaultValue.lat,
     lng: defaultValue.lng,
-    mapId: 'create-room-map',
+    zoom: 15,
   });
 
   const [centerLatLng, setCenterLatLng] = useState(new naver.maps.LatLng(defaultValue.lat, defaultValue.lng));
 
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  return (
+    <div className="relative size-full">
+      <div className="size-full" ref={mapRef} />
 
+      {map && (
+        <>
+          <MapEvent map={map} setCenterLatLng={setCenterLatLng} updateLatLng={updateLatLng} />
+          <MapOverlays map={map} centerLatLng={centerLatLng} radius={radius} />
+          <MapGpsButton map={map} />
+        </>
+      )}
+    </div>
+  );
+}
+
+interface MapGpsButtonProps {
+  map: naver.maps.Map;
+}
+
+function MapGpsButton({ map }: MapGpsButtonProps) {
+  const [isGpsLoading, setIsGpsLoading] = useState(false);
+
+  const handleGpsButtonClick = async () => {
+    setIsGpsLoading(true);
+
+    const latLng = await getMyLatLng();
+
+    if (!latLng) {
+      return;
+    }
+
+    map.setCenter(new naver.maps.LatLng(latLng.lat, latLng.lng));
+
+    setIsGpsLoading(false);
+  };
+
+  return (
+    <div className="absolute bottom-0 left-0 m-3 cursor-pointer bg-black p-2" onClick={handleGpsButtonClick}>
+      <p className="text-sm text-white">{isGpsLoading ? '로딩 중...' : '내 위치로 이동'}</p>
+    </div>
+  );
+}
+
+interface MapEvent extends Pick<MapProps, 'updateLatLng'> {
+  map: naver.maps.Map;
+  setCenterLatLng: React.Dispatch<React.SetStateAction<naver.maps.LatLng>>;
+}
+
+function MapEvent({ map, updateLatLng, setCenterLatLng }: MapEvent) {
+  useEffect(() => {
+    const handleMapCenterChange = (center: naver.maps.Coord) => {
+      const { x: lng, y: lat } = center;
+
+      setCenterLatLng(new naver.maps.LatLng(lat, lng));
+
+      updateLatLng(lat, lng);
+    };
+
+    const centerChangedEventListener = naver.maps.Event.addListener(map, 'center_changed', handleMapCenterChange);
+
+    return () => {
+      naver.maps.Event.removeListener(centerChangedEventListener);
+    };
+  }, []);
+
+  return null;
+}
+
+interface MapOverlaysProps extends Pick<MapProps, 'radius'> {
+  map: naver.maps.Map;
+  centerLatLng: naver.maps.LatLng;
+}
+
+function MapOverlays({ map, radius, centerLatLng }: MapOverlaysProps) {
   const [circle, setCircle] = useState<naver.maps.Circle | null>(null);
   const [polyline, setPolyline] = useState<naver.maps.Polyline | null>(null);
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
-
-  const [isGpsLoading, setIsGpsLoading] = useState(false);
 
   /**
    * circle, polyline, marker 오버레이 생성
    */
   useEffect(() => {
-    if (!map) {
-      return;
-    }
-
-    const handleMapCenterChange = (center: naver.maps.Coord) => {
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-
-      timerRef.current = setTimeout(() => {
-        const { x: lng, y: lat } = center;
-
-        setCenterLatLng(new naver.maps.LatLng(lat, lng));
-
-        updateLatLng(lat, lng);
-      }, 100);
-    };
-
-    const centerChangedEventListener = naver.maps.Event.addListener(map, 'center_changed', handleMapCenterChange);
-
     const circle = new naver.maps.Circle({
       map,
       center: centerLatLng,
@@ -82,8 +135,6 @@ export function Map({ radius, updateLatLng }: MapProps) {
     setMarker(marker);
 
     return () => {
-      naver.maps.Event.removeListener(centerChangedEventListener);
-
       circle.setMap(null);
       polyline.setMap(null);
       marker.setMap(null);
@@ -91,13 +142,9 @@ export function Map({ radius, updateLatLng }: MapProps) {
   }, [map]);
 
   /**
-   * 화면 위치가 달라짐에 따라 오버레이 위치 변경
+   * 화면 위치 혹은 반경이 달라질 경우, 오버레이 위치 변경
    */
   useEffect(() => {
-    if (!map) {
-      return;
-    }
-
     if (circle) {
       circle.setRadius(radius * 1000);
       circle.setCenter(centerLatLng);
@@ -111,32 +158,7 @@ export function Map({ radius, updateLatLng }: MapProps) {
       marker.setIcon({ content: `<div class="text-xs select-none">${radius}km</div>` });
       marker.setPosition(centerLatLng.destinationPoint(90, (radius * 1000) / 2));
     }
-  }, [map, circle, polyline, centerLatLng, marker, radius]);
+  }, [circle, polyline, marker, centerLatLng, radius]);
 
-  const handleGpsButtonClick = async () => {
-    if (!map) {
-      return;
-    }
-
-    setIsGpsLoading(true);
-
-    const latLng = await getMyLatLng();
-
-    if (!latLng) {
-      return;
-    }
-
-    map.setCenter(new naver.maps.LatLng(latLng.lat, latLng.lng));
-
-    setIsGpsLoading(false);
-  };
-
-  return (
-    <div className="relative size-full">
-      <div id="create-room-map" className="size-full" />
-      <div className="absolute bottom-0 left-0 m-3 cursor-pointer bg-black p-2" onClick={handleGpsButtonClick}>
-        <p className="text-sm text-white">{isGpsLoading ? '로딩 중...' : '내 위치로 이동'}</p>
-      </div>
-    </div>
-  );
+  return null;
 }

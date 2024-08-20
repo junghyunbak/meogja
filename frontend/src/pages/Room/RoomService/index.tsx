@@ -1,3 +1,7 @@
+import { createContext, useContext } from 'react';
+
+import { useNaverMap } from '@/hooks/useNaverMap';
+
 import { Map } from './_components/Map';
 import { Geolocation } from './_components/Geolocation';
 import { ExitTimer } from './_components/ExitTimer';
@@ -6,7 +10,6 @@ import { BottomSheet } from './_components/BottomSheet';
 import { RefetchIntervalMutableRoomState } from './_components/RefetchIntervalMutableRoomState';
 import { RestaurantFilter } from './_components/RestaurantFilter';
 import { RestaurantCategoryFilter } from './_components/RestaurantCategoryFilter';
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
 import { MapUserMarkers } from './_components/MapUserMarkers';
 import { MapRestaurantMarkers } from './_components/MapRestaurantMarkers';
@@ -21,21 +24,11 @@ export const MapContext = createContext<MapContextValue>({} as MapContextValue);
 export function RoomService() {
   const { lat, lng, radius } = useContext(ImmutableRoomInfoContext);
 
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  const [map, setMap] = useState<naver.maps.Map | null>(null);
-
-  useEffect(() => {
-    if (!ref.current) {
-      return;
-    }
-
-    setMap(new naver.maps.Map(ref.current, { center: new naver.maps.LatLng(lat, lng), zoom: 16 }));
-  }, []);
+  const { map, mapRef } = useNaverMap({ lat, lng, zoom: 16 });
 
   return (
     <div className="relative size-full">
-      <div className="size-full" ref={ref} />
+      <div className="size-full" ref={mapRef} />
 
       {map && (
         <MapContext.Provider value={{ map }}>
@@ -43,6 +36,11 @@ export function RoomService() {
             <RestaurantCategoryFilter />
             <RestaurantFilter />
           </div>
+
+          <Map />
+          <MapUserMarkers />
+          <MapRestaurantMarkers />
+          <ActivityRadius map={map} centerLatLng={new naver.maps.LatLng(lat, lng)} radius={radius * 1000} />
 
           <div className="pointer-events-none absolute bottom-0 z-20 w-full">
             <RestaurantController />
@@ -52,14 +50,10 @@ export function RoomService() {
             <ExitTimer />
           </div>
 
-          <Map />
-          <MapUserMarkers />
-          <MapRestaurantMarkers />
-
-          <ActivityRadius map={map} centerLatLng={new naver.maps.LatLng(lat, lng)} radius={radius * 1000} />
-
           <BottomSheet />
+
           <Geolocation />
+
           <RefetchIntervalMutableRoomState />
         </MapContext.Provider>
       )}

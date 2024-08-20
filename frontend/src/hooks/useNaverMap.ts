@@ -1,26 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
-export function useNaverMap({
-  lat,
-  lng,
-  mapId,
-  zoom = 14,
-}: {
-  mapId: string;
-  lat: number;
-  lng: number;
-  zoom?: number;
-}) {
+export function useNaverMap({ lat, lng, zoom = 14 }: { lat: number; lng: number; zoom?: number }) {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+
   const [map, setMap] = useState<naver.maps.Map | null>(null);
 
   useEffect(() => {
-    const map = new naver.maps.Map(mapId, {
+    if (!mapRef.current) {
+      return;
+    }
+
+    const map = new naver.maps.Map(mapRef.current, {
       center: new naver.maps.LatLng(lat, lng),
       zoom,
     });
 
     setMap(map);
-  }, [setMap, lat, lng, mapId, zoom]);
+  }, []);
 
-  return { map };
+  return { map, mapRef };
 }

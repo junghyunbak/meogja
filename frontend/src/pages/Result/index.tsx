@@ -9,6 +9,7 @@ import Check from '@/assets/svgs/check.svg?react';
 import RamenNoddleNonShadow from '@/assets/svgs/ramen-noodle-non-shadow.svg?react';
 
 import * as geolib from 'geolib';
+
 import { useStore } from 'zustand';
 
 function Result() {
@@ -29,9 +30,7 @@ function Result() {
 function ResultService() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
 
-  const mutableRoomInfoStore = useContext(MutableRoomInfoStoreContext);
-
-  const [user] = useStore(mutableRoomInfoStore, (s) => [s.user]);
+  const [user] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.user]);
 
   const navigate = useNavigate();
 
