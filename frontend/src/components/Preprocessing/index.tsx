@@ -1,8 +1,13 @@
-import React, { createContext, Suspense, useContext, useMemo, useRef } from 'react';
-import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadMutableRoomData, LoadNaverMap } from './plugins';
+import React, { Suspense, useContext, useMemo } from 'react';
 import { useQuery } from 'react-query';
+
+import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadMutableRoomData, LoadNaverMap } from './plugins';
+
 import { sleep } from '@/utils';
-import { create, StoreApi, UseBoundStore, useStore } from 'zustand';
+
+import { useStore } from 'zustand';
+
+import { StepStoreContext, StepStoreProvider } from './index.context';
 
 import './index.css';
 
@@ -13,22 +18,6 @@ export type Plugin = (props: {
   time: number;
 }) => React.ReactNode;
 
-/**
- * 지역 상태를 사용할 경우,
- *
- * "Warning: Can't perform a React state update on a component that hasn't mounted yet."
- *
- * 에러가 발생하기 때문에 전역 상태를 지역 상태처럼 사용
- */
-interface StepState {
-  step: number;
-  setStep: (step: number) => void;
-}
-
-type StepStore = UseBoundStore<StoreApi<StepState>>;
-
-const StepStoreContext = createContext<StepStore>({} as StepStore);
-
 interface PreprocessingProps {
   plugins?: Plugin[];
   children?: React.ReactNode;
@@ -36,31 +25,41 @@ interface PreprocessingProps {
 }
 
 export function Preprocessing({ plugins = [], children, loadingMessage = '로딩중' }: PreprocessingProps) {
-  const store = useRef(
-    create<StepState>()((set) => ({ step: 0, setStep: (step: number) => set(() => ({ step })) }))
-  ).current;
-
-  const [setStep] = useStore(store, (s) => [s.setStep]);
-
   const time = useMemo(() => {
     return Date.now();
   }, []);
 
   return (
-    <StepStoreContext.Provider value={store}>
+    <StepStoreProvider>
       <Suspense fallback={<Loading maxStep={plugins.length} message={loadingMessage} />}>
-        {[...plugins, DelayForAnimation]
-          .map((value, i) => ({ Component: value, step: i + 1 }))
-          .reverse()
-          .reduce((result, { Component, step }) => {
-            return (
-              <Component step={step} setStep={setStep} time={time}>
-                {result}
-              </Component>
-            );
-          }, children)}
+        <Pipe plugins={plugins} time={time} target={children} />
       </Suspense>
-    </StepStoreContext.Provider>
+    </StepStoreProvider>
+  );
+}
+
+interface PipeProps {
+  plugins: Plugin[];
+  time: number;
+  target: React.ReactNode;
+}
+
+function Pipe({ plugins, time, target }: PipeProps) {
+  const [setStep] = useStore(useContext(StepStoreContext), (s) => [s.setStep]);
+
+  return (
+    <>
+      {[...plugins, DelayForAnimation]
+        .map((Component, i) => ({ Component, step: i + 1 }))
+        .reverse()
+        .reduce((result, { Component, step }) => {
+          return (
+            <Component step={step} setStep={setStep} time={time}>
+              {result}
+            </Component>
+          );
+        }, target)}
+    </>
   );
 }
 
