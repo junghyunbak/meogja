@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { renderToString } from 'react-dom/server';
 
 import ColorDove from '@/assets/svgs/color-dove.svg?react';
@@ -7,11 +7,14 @@ import './index.css';
 import { RIGHT } from '@/constants';
 
 interface UserMarkerProps {
-  userData: UserData;
   map: naver.maps.Map;
+  lat: number;
+  lng: number;
+  direction: LEFT | RIGHT;
+  userName: string;
 }
 
-export function UserMarker({ userData, map }: UserMarkerProps) {
+export const UserMarker = memo(({ map, lat, lng, direction, userName }: UserMarkerProps) => {
   const [marker, setMarker] = useState<naver.maps.Marker | null>(null);
 
   /**
@@ -20,9 +23,9 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
   useEffect(() => {
     const marker = new naver.maps.Marker({
       map,
-      position: new naver.maps.LatLng(userData.lat || 0, userData.lng || 0),
+      position: new naver.maps.LatLng(lat, lng),
       icon: {
-        content: createUserMarkerContent(userData),
+        content: createUserMarkerContent({ direction, userName }),
       },
     });
 
@@ -37,27 +40,28 @@ export function UserMarker({ userData, map }: UserMarkerProps) {
    * 위치 변경 시 마커 정보 변경
    */
   useEffect(() => {
-    if (!marker || !userData.lat || !userData.lng) {
+    if (!marker) {
       return;
     }
 
-    marker.setPosition(new naver.maps.LatLng(userData.lat, userData.lng));
+    marker.setPosition(new naver.maps.LatLng(lat, lng));
+
     marker.setIcon({
-      content: createUserMarkerContent(userData),
+      content: createUserMarkerContent({ direction, userName }),
     });
-  }, [marker, userData]);
+  }, [marker, lat, lng, direction, userName]);
 
   return null;
-}
+});
 
-function createUserMarkerContent(userData: UserData) {
+function createUserMarkerContent({ direction, userName }: { direction: LEFT | RIGHT; userName: string }) {
   return renderToString(
     <div className="user-marker flex flex-col items-center justify-center">
       <div className="user-marker-icon z-10 w-16">
-        <ColorDove className={`w-full ${userData.direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
+        <ColorDove className={`w-full ${direction === RIGHT ? 'scale-x-[-1]' : ''}`} />
       </div>
 
-      <div className="text-nowrap text-xs">{userData.userName}</div>
+      <div className="text-nowrap text-xs">{userName}</div>
     </div>
   );
 }

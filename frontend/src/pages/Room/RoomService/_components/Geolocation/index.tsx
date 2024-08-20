@@ -1,16 +1,17 @@
-import useStore from '@/store';
 import { useContext, useEffect } from 'react';
 import { getMyLatLng } from '@/utils';
 import { useMutation } from 'react-query';
 import axios, { AxiosResponse, type AxiosError } from 'axios';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
+import { useStore } from 'zustand';
+import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
 
 export function Geolocation() {
   const roomId = useContext(RoomIdContext);
-  const userId = useContext(UserIdContext);
+  const myId = useContext(UserIdContext);
 
-  const [setMyGpsLatLng] = useStore((state) => [state.setMyGpsLatLng]);
+  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser]);
 
   const updateUserGpsLatLngMutation = useMutation<undefined, AxiosError, { lat: number; lng: number }>({
     mutationKey: [],
@@ -19,10 +20,13 @@ export function Geolocation() {
         ResponseTemplate<object>,
         AxiosResponse<ResponseTemplate<object>>,
         { lat: number; lng: number; roomId: string; userId: string }
-      >('/api/update-user-gps-lat-lng', { lat, lng, roomId, userId });
+      >('/api/update-user-gps-lat-lng', { lat, lng, roomId, userId: myId });
     },
   });
 
+  /**
+   * 5초마다 현재 위치를 자동 업데이트
+   */
   useEffect(() => {
     const updateMyLatLng = async () => {
       const latLng = await getMyLatLng();
@@ -31,7 +35,15 @@ export function Geolocation() {
         return;
       }
 
-      setMyGpsLatLng(latLng);
+      setUser((prev) => {
+        const next = { ...prev };
+
+        next[myId].gpsLat = latLng.lat;
+        next[myId].gpsLng = latLng.lng;
+
+        return next;
+      });
+
       updateUserGpsLatLngMutation.mutate(latLng);
     };
 
@@ -42,7 +54,7 @@ export function Geolocation() {
     return () => {
       clearInterval(timer);
     };
-  }, [setMyGpsLatLng]);
+  }, []);
 
   return null;
 }

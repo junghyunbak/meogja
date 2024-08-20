@@ -1,28 +1,20 @@
 import { useContext } from 'react';
 import { useQuery } from 'react-query';
 
-import useGlobalStore from '@/store';
+import { useStore } from 'zustand';
 
 import axios from 'axios';
 
-import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
 import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
-import { useStore } from 'zustand';
 
 export function RefetchIntervalMutableRoomState() {
-  const mutableRoomInfoStore = useContext(MutableRoomInfoStoreContext);
-
-  const [setUser] = useStore(mutableRoomInfoStore, (s) => [s.setUser]);
-
-  const userId = useContext(UserIdContext);
   const roomId = useContext(RoomIdContext);
 
-  const mutationTime = useMutationTimeContext();
+  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser]);
 
-  const [setMySelect] = useGlobalStore((state) => [state.setMySelect]);
-  const [setMyName] = useGlobalStore((state) => [state.setMyName]);
+  const mutationTime = useMutationTimeContext();
 
   useQuery({
     queryKey: ['room-service'],
@@ -38,18 +30,11 @@ export function RefetchIntervalMutableRoomState() {
       return { sendTime, data };
     },
     onSuccess({ sendTime, data }) {
-      const { user } = data;
-
-      setUser(user);
-
       if (mutationTime.current > sendTime) {
         return;
       }
 
-      const { select, userName } = user[userId];
-
-      setMyName(userName);
-      setMySelect(select);
+      setUser(data.user);
     },
     refetchInterval: 500,
   });

@@ -3,7 +3,7 @@ import { create, type UseBoundStore, type StoreApi } from 'zustand';
 
 interface MutableRoomInfoState {
   user: User;
-  setUser: (user: User) => void;
+  setUser: (props: User | ((prev: User) => User)) => void;
 }
 
 type MutableRoomInfoStore = UseBoundStore<StoreApi<MutableRoomInfoState>>;
@@ -17,7 +17,22 @@ interface MutableRoomInfoContextProviderProps {
 
 export function MutableRoomInfoStoreContextProvider({ children, initialState }: MutableRoomInfoContextProviderProps) {
   const store = useRef(
-    create<MutableRoomInfoState>()((set) => ({ user: initialState, setUser: (user: User) => set(() => ({ user })) }))
+    create<MutableRoomInfoState>()((set) => ({
+      user: initialState,
+      setUser: (param) => {
+        if (param instanceof Function) {
+          const fn = param;
+
+          set((s) => ({ user: fn(s.user) }));
+
+          return;
+        }
+
+        const user = param;
+
+        set(() => ({ user }));
+      },
+    }))
   ).current;
 
   return <MutableRoomInfoStoreContext.Provider value={store}>{children}</MutableRoomInfoStoreContext.Provider>;

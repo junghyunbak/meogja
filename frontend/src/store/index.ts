@@ -3,25 +3,15 @@ import { shallow } from 'zustand/shallow';
 import { persist } from 'zustand/middleware';
 
 import { createRestaurantSlice } from './slices/restaurant';
-import { createMapSlice } from './slices/map';
 import { createBottomSheetSlice } from './slices/bottomSheet';
-import { createMutableRoomInfoSlice } from './slices/mutableRoomInfo';
-import { createMyRoomInfoSlice } from './slices/myRoomInfo';
 
-export type StoreState = ReturnType<typeof createRestaurantSlice> &
-  ReturnType<typeof createMapSlice> &
-  ReturnType<typeof createBottomSheetSlice> &
-  ReturnType<typeof createMutableRoomInfoSlice> &
-  ReturnType<typeof createMyRoomInfoSlice>;
+export type StoreState = ReturnType<typeof createRestaurantSlice> & ReturnType<typeof createBottomSheetSlice>;
 
 const useStoreBase = create<StoreState>()(
   persist(
     (...a) => ({
       ...createRestaurantSlice(...a),
-      ...createMapSlice(...a),
       ...createBottomSheetSlice(...a),
-      ...createMutableRoomInfoSlice(...a),
-      ...createMyRoomInfoSlice(...a),
     }),
     {
       name: 'zustandStore',

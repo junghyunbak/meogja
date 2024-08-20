@@ -2,43 +2,60 @@ import { useContext } from 'react';
 
 import { useUpdateSelect } from '@/hooks/useUpdateSelect';
 
-import useStore from '@/store';
+import { useStore } from 'zustand';
+import useGlobalStore from '@/store';
 
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
+import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
 import { MapContext } from '../..';
+
+import _ from 'lodash';
 
 import './index.css';
 
 export function RestaurantController() {
-  const userId = useContext(UserIdContext);
+  const myId = useContext(UserIdContext);
+
   const roomId = useContext(RoomIdContext);
+
   const { restaurants, maxPickCount } = useContext(ImmutableRoomInfoContext);
+
   const { map } = useContext(MapContext);
 
-  const [mySelect, setMySelect] = useStore((state) => [state.mySelect, state.setMySelect]);
-  const [currentRestaurantId] = useStore((state) => [state.currentRestaurantId]);
-  const [setSheetIsOpen] = useStore((state) => [state.setSheetIsOpen]);
+  const [user, setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.user, s.setUser]);
 
-  const { updateMySelectMutation } = useUpdateSelect({ roomId, userId });
+  const [currentRestaurantId] = useGlobalStore((state) => [state.currentRestaurantId]);
+
+  const [setSheetIsOpen] = useGlobalStore((state) => [state.setSheetIsOpen]);
+
+  const { updateMySelectMutation } = useUpdateSelect({ roomId, userId: myId });
 
   const handleSelectButtonClick = (restaurant: Restaurant) => {
     return () => {
-      if (maxPickCount - mySelect.length <= 0) {
+      const me = user[myId];
+
+      if (!me) {
         return;
       }
 
-      setMySelect((prev) => {
-        const next = [...prev];
+      if (maxPickCount - me.select.length <= 0) {
+        return;
+      }
 
-        const idx = next.indexOf(restaurant.id);
+      setUser((prev) => {
+        const next = _.cloneDeep(prev);
+
+        const { select } = next[myId];
+
+        const idx = select.indexOf(restaurant.id);
 
         if (idx !== -1) {
-          return prev;
+          return next;
         }
 
-        next.push(restaurant.id);
+        select.push(restaurant.id);
 
         return next;
       });
@@ -51,16 +68,24 @@ export function RestaurantController() {
 
   const handleUnselectButtonClick = (restaurant: Restaurant) => {
     return () => {
-      setMySelect((prev) => {
-        const next = [...prev];
+      const me = user[myId];
 
-        const idx = next.indexOf(restaurant.id);
+      if (!me) {
+        return;
+      }
+
+      setUser((prev) => {
+        const next = _.cloneDeep(prev);
+
+        const { select } = next[myId];
+
+        const idx = select.indexOf(restaurant.id);
 
         if (idx === -1) {
           return prev;
         }
 
-        next.splice(idx, 1);
+        select.splice(idx, 1);
 
         return next;
       });
@@ -85,18 +110,20 @@ export function RestaurantController() {
 
   const restaurant = restaurants.find(({ id }) => id === currentRestaurantId);
 
-  if (!restaurant) {
+  const me = user[myId];
+
+  if (!restaurant || !me) {
     return null;
   }
 
-  const remain = maxPickCount - mySelect.length;
+  const remain = maxPickCount - me.select.length;
 
   return (
     <div className="restaurant-controller">
       <div className="restaurant-controller-button">
         <p>{restaurant.name}</p>
 
-        {!mySelect.includes(restaurant.id) ? (
+        {!me.select.includes(restaurant.id) ? (
           <div
             onClick={handleSelectButtonClick(restaurant)}
             className={`${remain === 0 ? '!cursor-auto !bg-[#DDDDDD]' : ''}`}

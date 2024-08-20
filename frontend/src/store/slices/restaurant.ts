@@ -6,6 +6,9 @@ type RestaurantSlice = {
 
   currentCategory: string | null;
   setCurrentCategory: (category: string | null) => void;
+
+  showOnlyEaten: boolean;
+  setShowOnlyEaten: (showOnlyEaten: boolean) => void;
 };
 
 export const createRestaurantSlice: StateCreator<RestaurantSlice> = (set): RestaurantSlice => ({
@@ -17,5 +20,10 @@ export const createRestaurantSlice: StateCreator<RestaurantSlice> = (set): Resta
   currentCategory: null,
   setCurrentCategory: (category: string | null) => {
     set(() => ({ currentCategory: category }));
+  },
+
+  showOnlyEaten: false,
+  setShowOnlyEaten(showOnlyEaten) {
+    set(() => ({ showOnlyEaten }));
   },
 });
