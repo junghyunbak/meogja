@@ -2,8 +2,9 @@ import { useContext } from 'react';
 
 import { useUpdateSelect } from '@/hooks/useUpdateSelect';
 
-import { useStore } from 'zustand';
 import useGlobalStore from '@/store';
+import { useStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
@@ -24,7 +25,7 @@ export function RestaurantController() {
 
   const { map } = useContext(MapContext);
 
-  const [user, setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.user, s.setUser]);
+  const [user, setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.user, s.setUser], shallow);
 
   const [currentRestaurantId] = useGlobalStore((state) => [state.currentRestaurantId]);
 

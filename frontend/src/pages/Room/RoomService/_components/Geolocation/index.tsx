@@ -4,6 +4,7 @@ import { useMutation } from 'react-query';
 import { getMyLatLng } from '@/utils';
 
 import { useStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
@@ -15,7 +16,7 @@ export function Geolocation() {
   const roomId = useContext(RoomIdContext);
   const myId = useContext(UserIdContext);
 
-  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser]);
+  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser], shallow);
 
   const updateUserGpsLatLngMutation = useMutation<undefined, AxiosError, { lat: number; lng: number }>({
     mutationKey: [],

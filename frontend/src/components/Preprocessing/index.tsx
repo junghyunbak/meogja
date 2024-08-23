@@ -6,6 +6,7 @@ import { CheckRoomId, CheckUserId, LoadImmutableRoomData, LoadMutableRoomData, L
 import { sleep } from '@/utils';
 
 import { useStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 import { StepStoreContext, StepStoreProvider } from './index.context';
 
@@ -45,7 +46,7 @@ interface PipeProps {
 }
 
 function Pipe({ plugins, time, target }: PipeProps) {
-  const [setStep] = useStore(useContext(StepStoreContext), (s) => [s.setStep]);
+  const [setStep] = useStore(useContext(StepStoreContext), (s) => [s.setStep], shallow);
 
   return (
     <>

@@ -2,6 +2,7 @@ import { useEffect, useContext, useRef, useCallback } from 'react';
 
 import useGlobalStore from '@/store';
 import { useStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
@@ -28,7 +29,7 @@ export function Map() {
 
   const { map } = useContext(MapContext);
 
-  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser]);
+  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser], shallow);
 
   const [setCurrentRestaurantId] = useGlobalStore((s) => [s.setCurrentRestaurantId]);
 

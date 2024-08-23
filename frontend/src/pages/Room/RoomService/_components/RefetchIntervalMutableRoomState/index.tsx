@@ -2,6 +2,7 @@ import { useContext } from 'react';
 import { useQuery } from 'react-query';
 
 import { useStore } from 'zustand';
+import { shallow } from 'zustand/shallow';
 
 import axios from 'axios';
 
@@ -12,7 +13,7 @@ import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/
 export function RefetchIntervalMutableRoomState() {
   const roomId = useContext(RoomIdContext);
 
-  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser]);
+  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser], shallow);
 
   const mutationTime = useMutationTimeContext();
 
