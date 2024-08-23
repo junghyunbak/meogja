@@ -1,21 +1,25 @@
-import { type CacheModuleAsyncOptions } from '@nestjs/cache-manager';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { redisStore } from 'cache-manager-redis-store';
+import { Provider } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
+import { createClient } from 'redis';
 
-export const redisOptions: CacheModuleAsyncOptions = {
-  isGlobal: true,
-  imports: [ConfigModule],
-  useFactory: async (configService: ConfigService) => {
-    const store = await redisStore({
-      socket: {
-        host: configService.get<string>('REDIS_HOST'),
-        port: parseInt(configService.get<string>('REDIS_PORT')),
-      },
-    });
+export const redisProvider: Provider[] = [
+  {
+    provide: 'REDIS_CLIENT',
+    /**
+     * https://stackoverflow.com/questions/64337784/nestjs-use-configservice-in-simple-provider-class
+     */
+    inject: [ConfigService],
+    useFactory: async (configService: ConfigService) => {
+      const host = configService.get<string>('REDIS_HOST');
+      const port = configService.get<string>('REDIS_PORT');
 
-    return {
-      store: () => store,
-    };
+      const client = createClient({
+        url: `redis://${host}:${port}`,
+      });
+
+      await client.connect();
+
+      return client;
+    },
   },
-  inject: [ConfigService],
-};
+];

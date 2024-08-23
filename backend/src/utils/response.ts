@@ -1,6 +1,6 @@
-export function createCacheStoreKey(
+export function createRedisStoreKey(
   roomId: RoomId,
-  type: 'mutable' | 'immutable',
+  type: 'mutable' | 'immutable' | 'joinList',
 ) {
   return `room-id:${roomId}:room-info:${type}`;
 }

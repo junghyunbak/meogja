@@ -38,24 +38,6 @@ export class AppController {
     };
   }
 
-  @Post('join-room')
-  @HttpCode(HttpStatus.CREATED)
-  async joinRoom(
-    @Body() body: JoinRoomDto,
-  ): Promise<ResponseTemplate<{ userId: UserId }>> {
-    await this.appService.checkRoomIsExist(body.roomId);
-
-    await this.appService.checkRoomIsFull(body.roomId);
-
-    const userId = await this.appService.addUser(body.roomId);
-
-    return {
-      data: { userId },
-      code: RESPONSE_CODE.OK,
-      message: '방에 성공적으로 입장하였습니다.',
-    };
-  }
-
   @Get('check-room')
   @HttpCode(HttpStatus.OK)
   async checkRoomId(
@@ -69,6 +51,22 @@ export class AppController {
       data: {},
       code: RESPONSE_CODE.OK,
       message: '방 아이디 유효성 검사가 통과하였습니다.',
+    };
+  }
+
+  @Post('join-room')
+  @HttpCode(HttpStatus.CREATED)
+  async joinRoom(
+    @Body() body: JoinRoomDto,
+  ): Promise<ResponseTemplate<{ userId: UserId }>> {
+    await this.appService.checkRoomIsExist(body.roomId);
+
+    const userId = await this.appService.joinRoom(body.roomId);
+
+    return {
+      data: { userId },
+      code: RESPONSE_CODE.OK,
+      message: '방에 성공적으로 입장하였습니다.',
     };
   }
 

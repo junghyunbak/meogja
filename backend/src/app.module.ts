@@ -1,10 +1,9 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CacheModule } from '@nestjs/cache-manager';
-import { redisOptions } from './configs/redis';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { redisProvider } from './configs/redis';
 
 @Module({
   imports: [
@@ -17,9 +16,8 @@ import * as Joi from 'joi';
         KAKAO_REST_API_KEY: Joi.string().required(),
       }),
     }),
-    CacheModule.registerAsync(redisOptions),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, ...redisProvider],
 })
 export class AppModule {}
