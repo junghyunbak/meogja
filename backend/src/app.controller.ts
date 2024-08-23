@@ -43,9 +43,7 @@ export class AppController {
   async checkRoomId(
     @Query() query: CheckRoomDto,
   ): Promise<ResponseTemplate<object>> {
-    const { roomId } = query;
-
-    await this.appService.checkRoomIsExist(roomId);
+    await this.appService.checkRoomIsExist(query.roomId);
 
     return {
       data: {},
@@ -111,11 +109,7 @@ export class AppController {
   async getMutableRoomState(
     @Query() query: GetMutableRoomStateDto,
   ): Promise<ResponseTemplate<MutableRoomInfo>> {
-    const { roomId } = query;
-
-    await this.appService.checkRoomIsExist(roomId);
-
-    const data = await this.appService.getMutableRoomState(roomId);
+    const data = await this.appService.getMutableRoomState(query.roomId);
 
     return {
       data,
@@ -129,10 +123,6 @@ export class AppController {
   async updateUserLatLng(
     @Body() body: UpdateUserLatLngDto,
   ): Promise<ResponseTemplate<object>> {
-    await this.appService.checkRoomIsExist(body.roomId);
-
-    await this.appService.checkUserInRoom(body.roomId, body.userId);
-
     await this.appService.updateUserLatLng(
       body.roomId,
       body.userId,
@@ -153,10 +143,6 @@ export class AppController {
   async updateUserGpsLatLng(
     @Body() body: UpdateUserGpsLatLngDto,
   ): Promise<ResponseTemplate<object>> {
-    await this.appService.checkRoomIsExist(body.roomId);
-
-    await this.appService.checkUserInRoom(body.roomId, body.userId);
-
     await this.appService.updateUserGpsLatLng(
       body.roomId,
       body.userId,
@@ -176,10 +162,6 @@ export class AppController {
   async updateUserSelect(
     @Body() body: UpdateUserSelectDto,
   ): Promise<ResponseTemplate<object>> {
-    await this.appService.checkRoomIsExist(body.roomId);
-
-    await this.appService.checkUserInRoom(body.roomId, body.userId);
-
     await this.appService.updateUserSelect(
       body.roomId,
       body.userId,
