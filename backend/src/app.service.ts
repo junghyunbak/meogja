@@ -214,13 +214,15 @@ export class AppService {
 
       local index = redis.call('JSON.ARRINDEX', mutableKey, path, value)[1]
 
-      local curSelectCount = redis.call('JSON.ARRLEN', mutableKey, path)[1]
-      local maxSelectCount = redis.call('JSON.GET', immutableKey, '.maxPickCount')
+      if index == -1 then
+        local curSelectCount = redis.call('JSON.ARRLEN', mutableKey, path)[1]
+        local maxSelectCount = redis.call('JSON.GET', immutableKey, '.maxPickCount')
 
-      if curSelectCount >= tonumber(maxSelectCount) then
-        return 'error'
+        if curSelectCount >= tonumber(maxSelectCount) then
+          return 'error'
 
-      elseif index == -1 then
+        end
+
         redis.call('JSON.ARRAPPEND', mutableKey, path, value)
       
         return 'added'
@@ -228,6 +230,7 @@ export class AppService {
         redis.call('JSON.ARRPOP', mutableKey, path, index)
     
         return 'removed'
+
       end
     `;
 
