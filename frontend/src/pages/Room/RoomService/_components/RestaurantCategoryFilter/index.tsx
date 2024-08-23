@@ -1,7 +1,9 @@
+import { useContext } from 'react';
+
 import { HorizontalMouseDragScroll } from '@/components/HorizontalMouseDragScroll';
 import { ImmutableRoomInfoContext } from '@/components/Preprocessing/plugins/LoadImmutableRoomData/index.context';
-import useStore from '@/store';
-import { useContext } from 'react';
+
+import useGlobalStore from '@/store';
 
 export function RestaurantCategoryFilter() {
   const { restaurants } = useContext(ImmutableRoomInfoContext);
@@ -49,7 +51,10 @@ interface CategoryItemProps {
 }
 
 function CategoryItem({ categoryName, categoryIdentify, count }: CategoryItemProps) {
-  const [currentCategory, setCurrentCategory] = useStore((state) => [state.currentCategory, state.setCurrentCategory]);
+  const [currentCategory, setCurrentCategory] = useGlobalStore((state) => [
+    state.currentCategory,
+    state.setCurrentCategory,
+  ]);
 
   const handleCategoryClick = (category: string | null) => {
     return () => {
