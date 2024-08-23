@@ -88,7 +88,7 @@ export class AppService {
     let isSuccess = false;
 
     while (retryCount--) {
-      this.redis.watch(joinListKey);
+      await this.redis.watch(joinListKey);
 
       const immutableRoomInfo = (await this.redis.json.get(
         createRedisStoreKey(roomId, 'immutable'),
