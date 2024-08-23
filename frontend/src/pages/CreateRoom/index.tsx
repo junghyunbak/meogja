@@ -182,7 +182,7 @@ function CreateRoom() {
         </div>
 
         {createRoomMutation.isLoading ? (
-          <div className="border border-black bg-white p-3">
+          <div className="border-2 border-black bg-white p-3">
             <p>방 생성하는 중...</p>
           </div>
         ) : !createRoomMutation.isSuccess ? (
