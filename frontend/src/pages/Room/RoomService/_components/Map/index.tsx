@@ -140,7 +140,7 @@ export function Map() {
       naver.maps.Event.removeListener(clickEventListener);
       naver.maps.Event.removeListener(centerChangedEventListener);
     };
-  }, [updateUserMapLatLng]);
+  }, [updateUserMapLatLng, updateNearByRestaurant]);
 
   return null;
 }
