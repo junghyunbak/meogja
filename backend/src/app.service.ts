@@ -23,6 +23,8 @@ import { createRedisStoreKey } from './utils/response';
 
 @Injectable()
 export class AppService {
+  expireSecond = 60 * 60; // 1 hour
+
   constructor(
     @Inject('REDIS_CLIENT') private redis: RedisClientType,
     private configService: ConfigService,
@@ -42,14 +44,26 @@ export class AppService {
       immutableRoomInfo.radius,
     );
 
-    await this.redis.json.set(createRedisStoreKey(roomId, 'immutable'), '$', {
-      ...immutableRoomInfo,
-      restaurants,
-    });
+    const immutableRoomInfoKey = createRedisStoreKey(roomId, 'immutable');
 
-    await this.redis.json.set(createRedisStoreKey(roomId, 'mutable'), '$', {
-      user: {},
-    });
+    await this.redis
+      .multi()
+      .json.set(immutableRoomInfoKey, '$', {
+        ...immutableRoomInfo,
+        restaurants,
+      })
+      .expire(immutableRoomInfoKey, this.expireSecond)
+      .exec();
+
+    const mutableRoomInfoKey = createRedisStoreKey(roomId, 'mutable');
+
+    await this.redis
+      .multi()
+      .json.set(mutableRoomInfoKey, '$', {
+        user: {},
+      })
+      .expire(mutableRoomInfoKey, this.expireSecond)
+      .exec();
 
     return roomId;
   }
@@ -102,7 +116,9 @@ export class AppService {
 
       const multi = this.redis
         .multi()
-        .sAdd(createRedisStoreKey(roomId, 'joinList'), userId)
+        .sAdd(joinListKey, userId)
+        // [ ]: 입장 시 ttl이 설정되기 때문에, 다른 키들에 비해 ttl이 늦는 이슈 존재
+        .expire(joinListKey, this.expireSecond, 'NX')
         .json.set(
           createRedisStoreKey(roomId, 'mutable'),
           `$.user.${userId}`,
