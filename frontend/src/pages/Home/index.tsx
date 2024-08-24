@@ -16,7 +16,16 @@ function Home() {
 
         <div className="flex h-4 items-center gap-2 overflow-hidden [&>p]:text-base">
           <p>비둘기야 같이</p>
-          <Slider autoplay vertical slidesToShow={1} rtl speed={500} className="w-10">
+          <Slider
+            autoplay
+            autoplaySpeed={2000}
+            vertical
+            slidesToShow={1}
+            rtl
+            speed={500}
+            pauseOnHover={false}
+            className="w-10"
+          >
             <p className="text-center text-[#693939]">커피</p>
             <p className="text-center text-[#CDB8B8]">밥</p>
           </Slider>
