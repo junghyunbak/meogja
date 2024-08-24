@@ -195,7 +195,7 @@ export class AppService {
       },
       {
         key: createRedisStoreKey(roomId, 'mutable'),
-        path: `$.user.${userId}.gpsLnt`,
+        path: `$.user.${userId}.gpsLng`,
         value: lng,
       },
     ]);
