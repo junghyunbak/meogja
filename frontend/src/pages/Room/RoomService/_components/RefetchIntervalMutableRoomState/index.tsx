@@ -1,44 +1,63 @@
-import { useContext } from 'react';
-import { useQuery } from 'react-query';
+import { useContext, useEffect } from 'react';
 
 import { useStore } from 'zustand';
-import { shallow } from 'zustand/shallow';
+import { useShallow } from 'zustand/react/shallow';
 
 import axios from 'axios';
 
 import { RoomIdContext } from '@/components/Preprocessing/plugins/CheckRoomId/index.context';
 import { useMutationTimeContext } from '@/pages/Room/_components/MutationTimeProvider/index.context';
 import { MutableRoomInfoStoreContext } from '@/components/Preprocessing/plugins/LoadMutableRoomData/index.context';
+import { UserIdContext } from '@/components/Preprocessing/plugins/CheckUserId/index.context';
 
 export function RefetchIntervalMutableRoomState() {
   const roomId = useContext(RoomIdContext);
 
-  const [setUser] = useStore(useContext(MutableRoomInfoStoreContext), (s) => [s.setUser], shallow);
+  const myId = useContext(UserIdContext);
+
+  const [setUser] = useStore(
+    useContext(MutableRoomInfoStoreContext),
+    useShallow((s) => [s.setUser])
+  );
 
   const mutationTime = useMutationTimeContext();
 
-  useQuery({
-    queryKey: ['room-service'],
-    queryFn: async () => {
+  useEffect(() => {
+    const timer = setInterval(async () => {
       const sendTime = Date.now();
 
-      const {
-        data: { data },
-      } = await axios.get<ResponseTemplate<MutableRoomInfo>>('/api/mutable-room-state', {
-        params: { roomId },
-      });
+      try {
+        const {
+          data: { data },
+        } = await axios.get<ResponseTemplate<MutableRoomInfo>>('/api/mutable-room-state', {
+          params: { roomId },
+        });
 
-      return { sendTime, data };
-    },
-    onSuccess({ sendTime, data }) {
-      if (mutationTime.current > sendTime) {
-        return;
+        if (mutationTime.current > sendTime) {
+          /**
+           * 다른 사용자의 정보만 갱신
+           */
+          setUser((prev) => {
+            const next = { ...data.user };
+
+            next[myId] = prev[myId];
+
+            return next;
+          });
+
+          return;
+        }
+
+        setUser(data.user);
+      } catch (e) {
+        // do-nothing
       }
+    }, 500);
 
-      setUser(data.user);
-    },
-    refetchInterval: 500,
-  });
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
 
   return null;
 }
