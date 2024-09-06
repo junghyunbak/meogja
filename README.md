@@ -2,8 +2,6 @@
 
 # Meogja
 
-https://먹자.site/
-
 ## 서비스 흐름도
 
 ![Frame 98](https://github.com/user-attachments/assets/f15f7e34-003b-4e1b-aebf-dfe85acc207d)
